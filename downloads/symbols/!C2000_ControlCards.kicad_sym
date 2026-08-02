@@ -19,7 +19,7 @@
 			)
 		)
 		(property "Value" "C2000_M.2_ControlCard"
-			(at 0 0 0)
+			(at 0.762 -4.826 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -28,8 +28,8 @@
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 0 0 0)
+		(property "Footprint" "!C2000_ControlCards:ControlCard_M.2"
+			(at 0 -2.286 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(hide yes)
@@ -40,10 +40,9 @@
 			)
 		)
 		(property "Datasheet" "https://github.com/RpatrikR/C2000-ControlCards/wiki/M.2"
-			(at 0 -3.048 0)
+			(at 0 0 0)
 			(show_name no)
 			(do_not_autoplace no)
-			(hide yes)
 			(effects
 				(font
 					(size 1.27 1.27)
