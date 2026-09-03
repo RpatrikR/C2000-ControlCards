@@ -2,7 +2,7 @@
 	(version 20251024)
 	(generator "kicad_symbol_editor")
 	(generator_version "10.0")
-	(symbol "C2000_M.2_ControlCard"
+	(symbol "C2000_M.2_ControlCard_P650xK6"
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -18,7 +18,7 @@
 				)
 			)
 		)
-		(property "Value" "C2000_M.2_ControlCard"
+		(property "Value" "C2000_M.2_ControlCard_P650xK6"
 			(at 0.762 -4.826 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -39,7 +39,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://github.com/RpatrikR/C2000-ControlCards/wiki/M.2"
+		(property "Datasheet" "https://github.com/RpatrikR/C2000-ControlCards/wiki/M.2(P650xK6)"
 			(at 0 0 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -60,7 +60,7 @@
 				)
 			)
 		)
-		(symbol "C2000_M.2_ControlCard_1_1"
+		(symbol "C2000_M.2_ControlCard_P650xK6_1_1"
 			(rectangle
 				(start -40.64 21.59)
 				(end 40.64 -21.59)
@@ -70,6 +70,14 @@
 				)
 				(fill
 					(type background)
+				)
+			)
+			(text "(OUT)"
+				(at 30.226 -10.16 900)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
 				)
 			)
 			(pin bidirectional line
@@ -815,10 +823,10 @@
 					)
 				)
 			)
-			(pin input line
-				(at 12.7 -24.13 90)
+			(pin output line
+				(at 30.48 -24.13 90)
 				(length 2.54)
-				(name "C1"
+				(name "REF_3V0"
 					(effects
 						(font
 							(size 1.27 1.27)
@@ -852,7 +860,7 @@
 				)
 			)
 			(pin input line
-				(at 15.24 -24.13 90)
+				(at 12.7 -24.13 90)
 				(length 2.54)
 				(name "C6"
 					(effects
@@ -888,7 +896,7 @@
 				)
 			)
 			(pin input line
-				(at 17.78 -24.13 90)
+				(at 15.24 -24.13 90)
 				(length 2.54)
 				(name "C5"
 					(effects
@@ -924,7 +932,7 @@
 				)
 			)
 			(pin input line
-				(at 20.32 -24.13 90)
+				(at 17.78 -24.13 90)
 				(length 2.54)
 				(name "C4"
 					(effects
@@ -960,7 +968,7 @@
 				)
 			)
 			(pin input line
-				(at 22.86 -24.13 90)
+				(at 20.32 -24.13 90)
 				(length 2.54)
 				(name "A3"
 					(effects
@@ -996,7 +1004,7 @@
 				)
 			)
 			(pin input line
-				(at 25.4 -24.13 90)
+				(at 22.86 -24.13 90)
 				(length 2.54)
 				(name "A2"
 					(effects
@@ -1032,7 +1040,7 @@
 				)
 			)
 			(pin input line
-				(at 27.94 -24.13 90)
+				(at 25.4 -24.13 90)
 				(length 2.54)
 				(name "A1"
 					(effects
@@ -1068,7 +1076,7 @@
 				)
 			)
 			(pin input line
-				(at 30.48 -24.13 90)
+				(at 27.94 -24.13 90)
 				(length 2.54)
 				(name "A0/DACA"
 					(effects
@@ -1290,10 +1298,28 @@
 					)
 				)
 			)
+			(pin input line
+				(at 43.18 0 180)
+				(length 2.54)
+				(name "MP"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "MP"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
 		)
 		(embedded_fonts no)
 	)
-	(symbol "C2000_x16_ControlCard"
+	(symbol "C2000_x16_ControlCard_P650xK6"
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -1352,7 +1378,7 @@
 				)
 			)
 		)
-		(symbol "C2000_x16_ControlCard_1_1"
+		(symbol "C2000_x16_ControlCard_P650xK6_1_1"
 			(rectangle
 				(start -85.09 19.05)
 				(end 83.82 -19.05)
@@ -2492,11 +2518,10 @@
 					)
 				)
 			)
-			(pin no_connect line
+			(pin output line
 				(at 33.02 22.86 270)
 				(length 3.81)
-				(hide yes)
-				(name "NC"
+				(name "REF_3V0"
 					(effects
 						(font
 							(size 1.27 1.27)
