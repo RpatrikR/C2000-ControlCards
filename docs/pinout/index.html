@@ -231,7 +231,7 @@ select {
     border-radius: 7px;
     font-size: 12px;
     pointer-events: none;
-    max-width: 260px;
+    max-width: 280px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
@@ -262,8 +262,8 @@ select {
     background: white;
     border-radius: 13px;
     width: 100%;
-    max-width: 540px;
-    max-height: 85vh;
+    max-width: 850px;
+    max-height: 90vh;
     overflow-y: auto;
     padding: 24px;
     box-shadow: 0 15px 50px rgba(0,0,0,0.22);
@@ -296,7 +296,7 @@ select {
 
 .details {
     display: grid;
-    grid-template-columns: 140px 1fr;
+    grid-template-columns: 150px 1fr;
     gap: 12px;
     font-size: 13px;
     margin-bottom: 20px;
@@ -308,43 +308,69 @@ select {
 
 .detail-value {
     font-weight: 600;
+    overflow-wrap: anywhere;
 }
 
 .section-title {
-    font-size: 14px;
-    margin: 20px 0 10px;
+    font-size: 15px;
+    margin: 22px 0 10px;
 }
 
-.function-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+.table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 9px;
 }
 
-.function-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    background: #f2f6f3;
-    border: 1px solid #d5e5d8;
-    border-radius: 7px;
-    padding: 10px 12px;
-    font-family: monospace;
-    font-size: 13px;
+.function-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    min-width: 320px;
 }
 
-.function-item.primary {
-    background: #e7f0e9;
-    border-color: #a9c9af;
-}
-
-.function-tag {
-    font-family: Arial, sans-serif;
-    font-size: 10px;
-    color: #54705a;
-    font-weight: bold;
+.function-table th {
+    background: #f0f3f7;
+    color: #4b5563;
+    text-align: left;
+    padding: 11px 10px;
     white-space: nowrap;
+}
+
+.function-table td {
+    padding: 11px 10px;
+    border-top: 1px solid var(--border);
+    vertical-align: top;
+}
+
+.function-table tr.primary-row {
+    background: #edf5ef;
+}
+
+.function-name {
+    font-family: monospace;
+    font-weight: bold;
+}
+
+.primary-tag {
+    display: inline-block;
+    margin-left: 5px;
+    color: #47734f;
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    font-weight: bold;
+}
+
+.mux-value {
+    font-family: monospace;
+    background: #f0f3f7;
+    padding: 3px 6px;
+    border-radius: 4px;
+}
+
+.tbd {
+    color: #a16207;
+    font-style: italic;
 }
 
 .no-functions {
@@ -353,6 +379,12 @@ select {
     padding: 12px;
     background: #f5f7fa;
     border-radius: 7px;
+}
+
+.table-note {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 9px;
 }
 
 @media (max-width: 600px) {
@@ -371,17 +403,22 @@ select {
     .details {
         grid-template-columns: 110px 1fr;
     }
+
+    .modal {
+        padding: 16px;
+    }
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
 <header>
     <h1>M.2 Connector – P650xK6</h1>
     <div class="subtitle">
-        Interactive connector pinout and signal assignment
+        Interactive connector pinout and C2000 signal assignment
     </div>
 </header>
 
@@ -389,7 +426,7 @@ select {
     <input
         type="text"
         id="searchInput"
-        placeholder="Search pin, GPIO or function..."
+        placeholder="Search pin, GPIO, function or MCU pin..."
     >
 
     <select id="revisionSelect">
@@ -439,7 +476,7 @@ select {
 
     <div class="info">
         Hover over a contact for quick information.
-        Click a contact to view all available functions.
+        Click a contact to view MCU pin and MUX configuration.
     </div>
 </div>
 
@@ -449,6 +486,7 @@ select {
 
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
+
         <div class="modal-header">
             <h2 id="modalTitle">GPIO</h2>
             <button class="close-button" id="closeModal">&times;</button>
@@ -456,8 +494,25 @@ select {
 
         <div class="details" id="modalDetails"></div>
 
-        <h3 class="section-title">Available Functions</h3>
-        <div class="function-list" id="functionList"></div>
+        <h3 class="section-title">Available Functions and MUX Configuration</h3>
+
+        <div class="table-wrapper">
+            <table class="function-table">
+                <thead>
+                    <tr>
+                        <th>Function</th>
+                        <th>MUX Value</th>
+                    </tr>
+                </thead>
+                <tbody id="functionTableBody"></tbody>
+            </table>
+        </div>
+
+        <div class="table-note">
+            MUX values and registers must be verified against the datasheet
+            and technical reference manual of the selected C2000 device.
+        </div>
+
     </div>
 </div>
 
@@ -467,14 +522,18 @@ select {
 =========================================================
 PIN DATA
 
-Each pin supports:
-- pin: physical pin number
-- signal: signal name
-- type: GPIO / Power / Analog / Reset
-- function: primary function
-- alternatives: any number of alternative functions
+Card pin:
+    Physical contact number on the M.2 card.
 
-Add or remove alternative functions directly in this array.
+MCU pin:
+    Physical package pin / ball designation of the C2000 MCU.
+
+Each alternative function supports:
+    name
+    muxRegister
+    muxValue
+
+Use "TBD" for data that has not yet been verified.
 =========================================================
 */
 
@@ -485,41 +544,68 @@ const topPins = [
         signal: "GPIO4",
         type: "GPIO",
         function: "ePWM3A",
-        alternatives: ["GPIO4", "ePWM3A"]
+        mcuPin: "89",
+        alternatives: [
+            { name: "GPIO4", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
+            { name: "ePWM3A", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
+            { name: "OUTPUTXBAR3", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
+            { name: "CANA_TX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
+            { name: "MCANA_TX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "9" },
+            { name: "ESC_GPI4", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
+            { name: "FSIRXA_D1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" }
+            
+        ]
     },
     {
         pin: 3,
         signal: "GPIO3",
         type: "GPIO",
         function: "ePWM2B",
-        alternatives: ["GPIO3", "ePWM2B"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO3", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "ePWM2B", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 5,
         signal: "GPIO2",
         type: "GPIO",
         function: "ePWM2A",
-        alternatives: ["GPIO2", "ePWM2A"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ePWM2A", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "GPIO2", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 7,
         signal: "GPIO1",
         type: "GPIO",
         function: "ePWM1B",
-        alternatives: ["GPIO1", "ePWM1B"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO1", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "ePWM1B", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 9,
         signal: "GPIO0",
         type: "GPIO",
         function: "ePWM1A",
-        alternatives: ["GPIO0", "ePWM1A"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO0", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "ePWM1A", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 11,
         signal: "GND",
         type: "Power",
         function: "Ground",
+        mcuPin: "N/A",
         alternatives: []
     },
     {
@@ -527,6 +613,7 @@ const topPins = [
         signal: "GND",
         type: "Power",
         function: "Ground",
+        mcuPin: "N/A",
         alternatives: []
     },
     {
@@ -534,94 +621,136 @@ const topPins = [
         signal: "GPIO90",
         type: "GPIO",
         function: "GPIO90",
+        mcuPin: "TBD",
         revisionFunctions: {
             "1.0": "GPIO86",
             "1.1": "GPIO90"
         },
-        alternatives: ["GPIO90"]
+        alternatives: [
+            { name: "GPIO90", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 17,
         signal: "GPIO85",
         type: "GPIO",
         function: "ePWM13A",
-        alternatives: ["GPIO85", "ePWM13A"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO85", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "ePWM13A", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 19,
         signal: "GPIO25",
         type: "GPIO",
         function: "Digital I/O",
-        alternatives: ["GPIO25"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO25", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 21,
         signal: "GPIO80",
         type: "GPIO",
         function: "Digital I/O",
-        alternatives: ["GPIO80"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO80", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 23,
         signal: "GPIO78",
         type: "GPIO",
         function: "Digital I/O",
-        alternatives: ["GPIO78"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO78", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 25,
         signal: "GPIO73",
         type: "GPIO",
         function: "Digital I/O",
-        alternatives: ["GPIO73"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO73", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 27,
         signal: "GPIO71",
         type: "GPIO",
         function: "SCIB_RX",
-        alternatives: ["GPIO71", "SCIB_RX"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO71", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "SCIB_RX", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 29,
         signal: "GPIO70",
         type: "GPIO",
         function: "SCIB_TX",
-        alternatives: ["GPIO70", "SCIB_TX"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO70", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "SCIB_TX", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 31,
         signal: "GPIO47",
         type: "GPIO",
         function: "Digital I/O",
-        alternatives: ["GPIO47"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO47", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 33,
         signal: "GPIO42",
         type: "GPIO",
         function: "I2CA_SDA",
-        alternatives: ["GPIO42", "I2CA_SDA"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO42", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "I2CA_SDA", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 35,
         signal: "GPIO69",
         type: "GPIO",
         function: "Digital I/O",
-        alternatives: ["GPIO69"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO69", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 37,
         signal: "GPIO43",
         type: "GPIO",
         function: "I2CA_SCL",
-        alternatives: ["GPIO43", "I2CA_SCL"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO43", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "I2CA_SCL", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 39,
         signal: "GND",
         type: "Power",
         function: "Ground",
+        mcuPin: "N/A",
         alternatives: []
     },
     {
@@ -629,62 +758,88 @@ const topPins = [
         signal: "A14/B14/C14",
         type: "Analog",
         function: "ADC",
-        alternatives: ["ADC"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 43,
         signal: "A15/B15/C15",
         type: "Analog",
         function: "ADC",
-        alternatives: ["ADC"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 45,
         signal: "B1/DACC",
         type: "Analog",
         function: "ADC / DAC",
-        alternatives: ["ADC", "DAC"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "DAC", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 47,
         signal: "B6",
         type: "Analog",
         function: "ADC",
-        alternatives: ["ADC"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 49,
         signal: "B7",
         type: "Analog",
         function: "ADC",
-        alternatives: ["ADC"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 51,
         signal: "A6",
         type: "Analog",
         function: "ADC",
-        alternatives: ["ADC"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 53,
         signal: "A10",
         type: "Analog",
         function: "ADC",
-        alternatives: ["ADC"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 55,
         signal: "A11",
         type: "Analog",
         function: "ADC",
-        alternatives: ["ADC"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 57,
         signal: "GND",
         type: "Power",
         function: "Ground",
+        mcuPin: "N/A",
         alternatives: []
     },
     {
@@ -692,13 +847,17 @@ const topPins = [
         signal: "XRSn",
         type: "Reset",
         function: "Reset input",
-        alternatives: ["XRSn"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "XRSn", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 69,
         signal: "3V3",
         type: "Power",
         function: "3.3 V supply",
+        mcuPin: "N/A",
         alternatives: []
     },
     {
@@ -706,6 +865,7 @@ const topPins = [
         signal: "3V3",
         type: "Power",
         function: "3.3 V supply",
+        mcuPin: "N/A",
         alternatives: []
     },
     {
@@ -713,6 +873,7 @@ const topPins = [
         signal: "3V3",
         type: "Power",
         function: "3.3 V supply",
+        mcuPin: "N/A",
         alternatives: []
     },
     {
@@ -720,9 +881,9 @@ const topPins = [
         signal: "3V3",
         type: "Power",
         function: "3.3 V supply",
+        mcuPin: "N/A",
         alternatives: []
     }
-
 ];
 
 const bottomPins = [
@@ -732,48 +893,73 @@ const bottomPins = [
         signal: "GPIO10",
         type: "GPIO",
         function: "ePWM6A",
-        alternatives: ["GPIO10", "ePWM6A"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO10", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "ePWM6A", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 4,
         signal: "GPIO11",
         type: "GPIO",
         function: "ePWM6B",
-        alternatives: ["GPIO11", "ePWM6B"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO11", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "ePWM6B", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 6,
         signal: "GPIO12",
         type: "GPIO",
         function: "ePWM7A",
-        alternatives: ["GPIO12", "ePWM7A"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO12", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "ePWM7A", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 8,
         signal: "GPIO13",
         type: "GPIO",
         function: "ePWM7B",
-        alternatives: ["GPIO13", "ePWM7B"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO13", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "ePWM7B", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 10,
         signal: "GPIO14",
         type: "GPIO",
         function: "ePWM8A",
-        alternatives: ["GPIO14", "ePWM8A"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO14", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "ePWM8A", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 12,
         signal: "GPIO15",
         type: "GPIO",
         function: "ePWM8B",
-        alternatives: ["GPIO15", "ePWM8B"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO15", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "ePWM8B", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 14,
         signal: "GND",
         type: "Power",
         function: "Ground",
+        mcuPin: "N/A",
         alternatives: []
     },
     {
@@ -781,90 +967,135 @@ const bottomPins = [
         signal: "GPIO92",
         type: "GPIO",
         function: "I2CA_SCL",
-        alternatives: ["GPIO92", "I2CA_SCL"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO92", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "I2CA_SCL", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 18,
         signal: "GPIO91",
         type: "GPIO",
         function: "I2CA_SDA",
-        alternatives: ["GPIO91", "I2CA_SDA"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO91", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "I2CA_SDA", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 20,
         signal: "GPIO61",
         type: "GPIO",
         function: "Digital I/O",
-        alternatives: ["GPIO61"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO61", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 22,
         signal: "GPIO62",
         type: "GPIO",
         function: "eQEP_3A",
-        alternatives: ["GPIO62", "eQEP_3A"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO62", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "eQEP_3A", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 24,
         signal: "GPIO63",
         type: "GPIO",
         function: "eQEP_3B",
-        alternatives: ["GPIO63", "eQEP_3B"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO63", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "eQEP_3B", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 26,
         signal: "GPIO64",
         type: "GPIO",
         function: "eQEP_3S",
-        alternatives: ["GPIO64", "eQEP_3S"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO64", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "eQEP_3S", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 28,
         signal: "GPIO65",
         type: "GPIO",
         function: "eQEP_3I",
-        alternatives: ["GPIO65", "eQEP_3I"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO65", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "eQEP_3I", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 30,
         signal: "GPIO66",
         type: "GPIO",
         function: "Digital I/O",
-        alternatives: ["GPIO66"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO66", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 32,
         signal: "GPIO60",
         type: "GPIO",
         function: "Digital I/O",
-        alternatives: ["GPIO60"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO60", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 34,
         signal: "GPIO59",
         type: "GPIO",
         function: "CANA_TX",
-        alternatives: ["GPIO59", "CANA_TX"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO59", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "CANA_TX", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 36,
         signal: "GPIO58",
         type: "GPIO",
         function: "CANA_RX",
-        alternatives: ["GPIO58", "CANA_RX"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO58", muxRegister: "TBD", muxValue: "TBD" },
+            { name: "CANA_RX", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 38,
         signal: "GPIO41",
         type: "GPIO",
         function: "Digital I/O",
-        alternatives: ["GPIO41"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "GPIO41", muxRegister: "TBD", muxValue: "TBD" }
+        ]
     },
     {
         pin: 40,
         signal: "GND",
         type: "Power",
         function: "Ground",
+        mcuPin: "N/A",
         alternatives: []
     },
     {
@@ -872,62 +1103,88 @@ const bottomPins = [
         signal: "REF_3V0",
         type: "Analog",
         function: "3.0 V reference output",
-        alternatives: ["REF_3V0"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "REF_3V0", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 44,
         signal: "C6",
         type: "Analog",
         function: "ADC",
-        alternatives: ["ADC"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 46,
         signal: "C5",
         type: "Analog",
         function: "ADC",
-        alternatives: ["ADC"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 48,
         signal: "C4",
         type: "Analog",
         function: "ADC",
-        alternatives: ["ADC"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 50,
         signal: "A3",
         type: "Analog",
         function: "ADC",
-        alternatives: ["ADC"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 52,
         signal: "A2",
         type: "Analog",
         function: "ADC",
-        alternatives: ["ADC"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 54,
         signal: "A1",
         type: "Analog",
         function: "ADC",
-        alternatives: ["ADC"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 56,
         signal: "A0/DACA",
         type: "Analog",
         function: "ADC / DAC",
-        alternatives: ["ADC", "DAC"]
+        mcuPin: "TBD",
+        alternatives: [
+            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "DAC", muxRegister: "N/A", muxValue: "N/A" }
+        ]
     },
     {
         pin: 58,
         signal: "GND",
         type: "Power",
         function: "Ground",
+        mcuPin: "N/A",
         alternatives: []
     },
     {
@@ -935,6 +1192,7 @@ const bottomPins = [
         signal: "GND",
         type: "Power",
         function: "Ground",
+        mcuPin: "N/A",
         alternatives: []
     },
     {
@@ -942,6 +1200,7 @@ const bottomPins = [
         signal: "GND",
         type: "Power",
         function: "Ground",
+        mcuPin: "N/A",
         alternatives: []
     },
     {
@@ -949,6 +1208,7 @@ const bottomPins = [
         signal: "GND",
         type: "Power",
         function: "Ground",
+        mcuPin: "N/A",
         alternatives: []
     },
     {
@@ -956,6 +1216,7 @@ const bottomPins = [
         signal: "GND",
         type: "Power",
         function: "Ground",
+        mcuPin: "N/A",
         alternatives: []
     }
 
@@ -1004,23 +1265,49 @@ function getPinSignal(pin) {
 }
 
 function getAllFunctions(pin) {
-    const functions = pin.alternatives || [];
+    return pin.alternatives || [];
+}
 
-    const primary = getPinFunction(pin);
+function getPinMuxRegister(pin) {
+    const registers = [...new Set(
+        getAllFunctions(pin)
+            .map(fn => fn.muxRegister)
+            .filter(register => register && register !== "TBD" && register !== "N/A")
+    )];
 
-    return [...new Set([primary, ...functions].filter(Boolean))];
+    if (registers.length > 0) {
+        return registers.join(" / ");
+    }
+
+    const alternatives = getAllFunctions(pin);
+
+    if (alternatives.length === 0 ||
+        alternatives.every(fn => fn.muxRegister === "N/A")) {
+        return "N/A";
+    }
+
+    return "TBD";
 }
 
 function matchesSearch(pin, query) {
     if (!query) return true;
+
+    const alternatives = getAllFunctions(pin)
+        .map(fn => [
+            fn.name,
+            fn.muxRegister,
+            fn.muxValue
+        ].join(" "))
+        .join(" ");
 
     const text = [
         pin.pin,
         pin.signal,
         getPinSignal(pin),
         pin.type,
+        pin.mcuPin,
         getPinFunction(pin),
-        ...(pin.alternatives || [])
+        alternatives
     ].join(" ").toLowerCase();
 
     return text.includes(query.toLowerCase());
@@ -1035,7 +1322,6 @@ function createPinElement(pin, query) {
         element.classList.add("filtered");
     }
 
-    // Only physical pin number is displayed.
     element.textContent = pin.pin;
 
     element.addEventListener("mouseenter", event => {
@@ -1077,15 +1363,12 @@ function renderGrid(grid, pins, isTop, query) {
         pins.map(pin => [pin.pin, pin])
     );
 
-    const maxPin = isTop ? 75 : 74;
-
     for (let position = 1; position <= 38; position++) {
 
         const physicalPin = isTop
             ? position * 2 - 1
             : position * 2;
 
-        // M.2 key area
         if (physicalPin >= 59 && physicalPin <= 66) {
             grid.appendChild(createKeyElement());
             continue;
@@ -1109,11 +1392,10 @@ function render() {
 }
 
 function showTooltip(event, pin) {
-    const signal = getPinSignal(pin);
-
     tooltip.innerHTML = `
-        <strong>Pin ${pin.pin}: ${signal}</strong>
-        ${pin.type}<br>
+        <strong>Card pin ${pin.pin}: ${getPinSignal(pin)}</strong>
+        MCU pin: ${pin.mcuPin || "TBD"}<br>
+        Type: ${pin.type}<br>
         Function: ${getPinFunction(pin)}
     `;
 
@@ -1127,12 +1409,12 @@ function moveTooltip(event) {
     let x = event.clientX + margin;
     let y = event.clientY + margin;
 
-    if (x + 280 > window.innerWidth) {
-        x = event.clientX - 280;
+    if (x + 290 > window.innerWidth) {
+        x = event.clientX - 290;
     }
 
-    if (y + 100 > window.innerHeight) {
-        y = event.clientY - 100;
+    if (y + 110 > window.innerHeight) {
+        y = event.clientY - 110;
     }
 
     tooltip.style.left = x + "px";
@@ -1141,6 +1423,8 @@ function moveTooltip(event) {
 
 function openModal(pin) {
 
+    tooltip.style.display = "none";
+
     const signal = getPinSignal(pin);
     const primaryFunction = getPinFunction(pin);
     const alternatives = getAllFunctions(pin);
@@ -1148,8 +1432,11 @@ function openModal(pin) {
     document.getElementById("modalTitle").textContent = signal;
 
     document.getElementById("modalDetails").innerHTML = `
-        <div class="detail-label">Physical pin</div>
+        <div class="detail-label">Card pin</div>
         <div class="detail-value">${pin.pin}</div>
+
+        <div class="detail-label">MCU physical pin</div>
+        <div class="detail-value">${pin.mcuPin || "TBD"}</div>
 
         <div class="detail-label">Signal</div>
         <div class="detail-value">${signal}</div>
@@ -1160,44 +1447,77 @@ function openModal(pin) {
         <div class="detail-label">Primary function</div>
         <div class="detail-value">${primaryFunction}</div>
 
+        <div class="detail-label">MUX Register</div>
+        <div class="detail-value">${getPinMuxRegister(pin)}</div>
+
         <div class="detail-label">Hardware revision</div>
         <div class="detail-value">${currentRevision}</div>
     `;
 
-    const functionList = document.getElementById("functionList");
-
-    functionList.innerHTML = "";
+    const tableBody = document.getElementById("functionTableBody");
+    tableBody.innerHTML = "";
 
     if (alternatives.length === 0) {
-        functionList.innerHTML = `
-            <div class="no-functions">
-                No alternative functions defined for this pin.
-            </div>
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="2">
+                    <div class="no-functions">
+                        No alternative functions defined for this pin.
+                    </div>
+                </td>
+            </tr>
         `;
     } else {
 
-        alternatives.forEach((fn, index) => {
+        alternatives.forEach(fn => {
 
-            const item = document.createElement("div");
+            const row = document.createElement("tr");
 
-            item.className = "function-item";
-
-            if (fn === primaryFunction) {
-                item.classList.add("primary");
+            if (fn.name === primaryFunction) {
+                row.classList.add("primary-row");
             }
 
-            const name = document.createElement("span");
-            name.textContent = fn;
+            const values = [
+                fn.name || "TBD",
+                fn.muxValue ?? "TBD"
+            ];
 
-            const tag = document.createElement("span");
-            tag.className = "function-tag";
-            tag.textContent =
-                fn === primaryFunction ? "PRIMARY" : "ALTERNATIVE";
+            values.forEach((value, index) => {
 
-            item.appendChild(name);
-            item.appendChild(tag);
+                const cell = document.createElement("td");
 
-            functionList.appendChild(item);
+                if (index === 0) {
+                    const name = document.createElement("span");
+                    name.className = "function-name";
+                    name.textContent = value;
+                    cell.appendChild(name);
+
+                    if (fn.name === primaryFunction) {
+                        const tag = document.createElement("span");
+                        tag.className = "primary-tag";
+                        tag.textContent = "PRIMARY";
+                        cell.appendChild(tag);
+                    }
+                } else {
+                    cell.textContent = value;
+
+                    if (value === "TBD") {
+                        cell.classList.add("tbd");
+                    }
+
+                    if (index === 1 && value !== "TBD" && value !== "N/A") {
+                        cell.innerHTML = "";
+                        const code = document.createElement("span");
+                        code.className = "mux-value";
+                        code.textContent = value;
+                        cell.appendChild(code);
+                    }
+                }
+
+                row.appendChild(cell);
+            });
+
+            tableBody.appendChild(row);
         });
     }
 
