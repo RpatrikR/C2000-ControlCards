@@ -630,7 +630,7 @@ const topPins = [
         pin: 11,
         signal: "GND",
         type: "Power",
-        direction: "N/A",
+        direction: "Input",
         function: "Ground",
         mcuPin: "N/A",
         alternatives: []
@@ -639,7 +639,7 @@ const topPins = [
         pin: 13,
         signal: "GND",
         type: "Power",
-        direction: "N/A",
+        direction: "Input",
         function: "Ground",
         mcuPin: "N/A",
         alternatives: []
@@ -907,7 +907,7 @@ const topPins = [
         pin: 39,
         signal: "GND",
         type: "Power",
-        direction: "N/A",
+        direction: "Input",
         function: "Ground",
         mcuPin: "N/A",
         alternatives: []
@@ -1034,7 +1034,7 @@ const topPins = [
         pin: 57,
         signal: "GND",
         type: "Power",
-        direction: "N/A",
+        direction: "Input",
         function: "Ground",
         mcuPin: "N/A",
         alternatives: []
@@ -1053,7 +1053,7 @@ const topPins = [
         signal: "3V3",
         type: "Power",
         direction: "Input",
-        function: "3.3 V supply",
+        function: "Board power supply",
         mcuPin: "N/A",
         alternatives: []
     },
@@ -1062,7 +1062,7 @@ const topPins = [
         signal: "3V3",
         type: "Power",
         direction: "Input",
-        function: "3.3 V supply",
+        function: "Board power supply",
         mcuPin: "N/A",
         alternatives: []
     },
@@ -1071,7 +1071,7 @@ const topPins = [
         signal: "3V3",
         type: "Power",
         direction: "Input",
-        function: "3.3 V supply",
+        function: "Board power supply",
         mcuPin: "N/A",
         alternatives: []
     },
@@ -1080,7 +1080,7 @@ const topPins = [
         signal: "3V3",
         type: "Power",
         direction: "Input",
-        function: "3.3 V supply",
+        function: "Board power supply",
         mcuPin: "N/A",
         alternatives: []
     }
@@ -1659,7 +1659,7 @@ function render() {
 function showTooltip(event, pin) {
     tooltip.innerHTML = `
         <strong>Card pin ${pin.pin}: ${getPinSignal(pin)}</strong>
-        MCU pin: ${pin.mcuPin || "TBD"}<br>
+        ${pin.type !== "Power" ? `<br>MCU Pin: ${getMcuPin(pin)}` : ""}<br>
         Type: ${pin.type}<br>
         Function: ${getPinFunction(pin)}
     `;
@@ -1667,6 +1667,16 @@ function showTooltip(event, pin) {
     tooltip.style.display = "block";
     moveTooltip(event);
 }
+
+function getMcuPin(pin) {
+    if (pin.revisionMcuPin && pin.revisionMcuPin[currentRevision]) {
+        return pin.revisionMcuPin[currentRevision];
+    }
+
+    return pin.mcuPin || "N/A";
+}
+
+
 
 function moveTooltip(event) {
     const margin = 14;
@@ -1701,8 +1711,10 @@ function openModal(pin) {
         <div class="detail-label">Card pin</div>
         <div class="detail-value">${pin.pin}</div>
 
+        ${pin.type !== "Power" ? `
         <div class="detail-label">MCU physical pin</div>
         <div class="detail-value">${mcuPin}</div>
+        ` : ""}
         
         <div class="detail-label">Direction</div>
         <div class="detail-value">${pin.direction || "N/A"}</div>
@@ -1718,7 +1730,7 @@ function openModal(pin) {
         <div class="detail-label">Primary function</div>
         <div class="detail-value">${primaryFunction}</div>
 
-        ${pin.type !== "Analog" ? `
+        ${pin.type !== "Analog" && pin.type !== "Power" ? `
             <div class="detail-label">MUX Register</div>
             <div class="detail-value">${getPinMuxRegister(pin)}</div>
         ` : ""}
