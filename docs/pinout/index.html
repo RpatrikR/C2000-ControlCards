@@ -3,745 +3,1236 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>C2000 Control Card - M.2 Pinout</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P650xK6 – M.2 Pinout</title>
 
 <style>
 :root {
-  --bg: #111827;
-  --panel: #1f2937;
-  --text: #e5e7eb;
-  --muted: #94a3b8;
-  --blue: #38bdf8;
+    --bg: #f5f7fa;
+    --panel: #ffffff;
+    --text: #202938;
+    --muted: #697586;
+    --border: #dce2e9;
+
+    --gpio: #b7d9bd;
+    --gpio-border: #78aa82;
+    --gnd: #b8d3ed;
+    --gnd-border: #82acd4;
+    --power: #edbcbc;
+    --power-border: #d99595;
+    --analog: #f1dfaa;
+    --analog-border: #d4bd76;
+    --reset: #d0d3d8;
+    --reset-border: #9ca3af;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  padding: 30px 18px;
-  font-family: Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
+    margin: 0;
+    padding: 24px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .container {
-  max-width: 1450px;
-  margin: auto;
+    max-width: 1450px;
+    margin: auto;
 }
 
 header {
-  margin-bottom: 25px;
+    margin-bottom: 22px;
 }
 
 h1 {
-  margin-bottom: 6px;
-  font-size: 28px;
+    margin: 0 0 8px;
+    font-size: 27px;
 }
 
 .subtitle {
-  color: var(--muted);
-  font-size: 14px;
+    color: var(--muted);
+    font-size: 14px;
 }
 
-.controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin: 25px 0;
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
 }
 
-select, input {
-  padding: 11px 14px;
-  border-radius: 6px;
-  border: 1px solid #475569;
-  background: var(--panel);
-  color: white;
-  font-size: 14px;
+input, select {
+    padding: 11px 13px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    color: var(--text);
+    font-size: 14px;
 }
 
 input {
-  flex: 1;
-  min-width: 200px;
+    width: min(340px, 100%);
 }
 
-.connector-wrapper {
-  background: #0b1220;
-  border: 1px solid #374151;
-  border-radius: 12px;
-  padding: 20px;
-  overflow-x: auto;
+select {
+    min-width: 130px;
 }
 
-.connector {
-  min-width: 1050px;
-  max-width: 1300px;
-  margin: auto;
-  background: #1a2638;
-  padding: 18px;
-  border-radius: 8px;
-  border: 1px solid #475569;
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.035);
 }
 
 .connector-title {
-  text-align: center;
-  color: var(--muted);
-  font-size: 12px;
-  letter-spacing: 2px;
-  margin-bottom: 18px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 18px;
+    font-size: 17px;
 }
 
-.side {
-  margin-bottom: 7px;
+.row-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--muted);
+    margin: 12px 0 7px;
 }
 
-.side-label {
-  color: #cbd5e1;
-  font-size: 11px;
-  font-weight: bold;
-  letter-spacing: 1.5px;
-  margin-bottom: 7px;
+.pin-scroll {
+    overflow-x: auto;
+    padding-bottom: 10px;
 }
 
-.pins {
-  display: grid;
-  grid-template-columns: repeat(38, minmax(0, 1fr));
-  gap: 3px;
-  width: 100%;
+.pin-grid {
+    display: grid;
+    grid-template-columns: repeat(38, 1fr);
+    gap: 4px;
+    min-width: 1050px;
 }
-
-/* PIN CONTACTS */
 
 .pin {
-  height: 52px;
-  min-width: 0;
-  border: 1px solid;
-  border-radius: 2px;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: bold;
-  transition: 0.12s;
+    height: 52px;
+    min-width: 0;
+    border: 1px solid;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.12s, box-shadow 0.12s;
+    position: relative;
 }
 
-/* GPIO - GREEN */
+.pin:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 9px rgba(0,0,0,0.18);
+    z-index: 2;
+}
+
 .pin.gpio {
-  background: #b7d9bd;
-  border-color: #78aa82;
-  color: #173d20;
+    background: var(--gpio);
+    border-color: var(--gpio-border);
+    color: #173d20;
 }
 
-/* GND - BLUE */
 .pin.gnd {
-  background: #b8d3ed;
-  border-color: #82acd4;
-  color: #173b5c;
+    background: var(--gnd);
+    border-color: var(--gnd-border);
+    color: #173b5c;
 }
 
-/* 3V3 - RED */
 .pin.power {
-  background: #edbcbc;
-  border-color: #d99595;
-  color: #652727;
+    background: var(--power);
+    border-color: var(--power-border);
+    color: #652727;
 }
 
-/* ANALOG / ADC - YELLOW */
 .pin.analog {
-  background: #f1dfaa;
-  border-color: #d4bd76;
-  color: #594719;
+    background: var(--analog);
+    border-color: var(--analog-border);
+    color: #594719;
 }
 
-/* RESET - GREY */
 .pin.reset {
-  background: #d0d3d8;
-  border-color: #9ca3af;
-  color: #374151;
+    background: var(--reset);
+    border-color: var(--reset-border);
+    color: #374151;
 }
 
-.pin:hover,
-.pin:focus-visible {
-  filter: brightness(1.12);
-  border: 2px solid white;
-  outline: none;
-  transform: translateY(-3px);
-  z-index: 3;
+.pin.empty {
+    visibility: hidden;
+    pointer-events: none;
 }
 
-.pin-gap {
-  height: 52px;
-  background: #0b1220;
-  border: 1px dashed #334155;
-  border-radius: 2px;
+.pin.key {
+    background: #e8ebef;
+    border: 1px dashed #aab2bd;
+    color: #697586;
+    cursor: default;
+    font-size: 10px;
 }
 
-.key-area {
-  height: 14px;
-  background: #080d16;
-  border-top: 1px solid #475569;
-  border-bottom: 1px solid #475569;
-  margin: 8px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #94a3b8;
-  font-size: 9px;
-  letter-spacing: 2px;
+.pin.key:hover {
+    transform: none;
+    box-shadow: none;
 }
 
-/* LEGEND */
+.pin.filtered {
+    opacity: 0.12;
+}
 
 .legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-  margin-top: 20px;
-  justify-content: center;
-  color: var(--muted);
-  font-size: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 17px;
+    margin-top: 22px;
+    justify-content: center;
 }
 
 .legend-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--muted);
 }
 
 .legend-color {
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
+    width: 15px;
+    height: 15px;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 3px;
 }
 
-/* TOOLTIP */
-
-#tooltip {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  width: 260px;
-  background: #020617;
-  border: 1px solid var(--blue);
-  border-radius: 8px;
-  padding: 13px;
-  pointer-events: none;
-  box-shadow: 0 8px 30px #0009;
-  font-size: 12px;
+.info {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 15px;
+    text-align: center;
 }
 
-#tooltip strong {
-  color: var(--blue);
-  font-size: 16px;
+/* Tooltip */
+
+.tooltip {
+    position: fixed;
+    display: none;
+    z-index: 100;
+    background: #202938;
+    color: white;
+    padding: 9px 12px;
+    border-radius: 7px;
+    font-size: 12px;
+    pointer-events: none;
+    max-width: 260px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-/* MODAL */
-
-#modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 2000;
-  background: #000b;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+.tooltip strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
 }
 
-.modal-content {
-  width: 100%;
-  max-width: 440px;
-  background: #1f2937;
-  border: 1px solid #475569;
-  border-radius: 12px;
-  padding: 22px;
-  box-shadow: 0 15px 50px #0009;
+/* Modal */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 30, 45, 0.48);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 16px;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: white;
+    border-radius: 13px;
+    width: 100%;
+    max-width: 540px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 24px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.22);
 }
 
 .modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+    margin-bottom: 18px;
 }
 
 .modal-header h2 {
-  color: var(--blue);
-  font-size: 21px;
-  margin: 0;
+    margin: 0;
+    font-size: 22px;
 }
 
-.close {
-  background: transparent;
-  color: white;
-  border: none;
-  font-size: 25px;
-  cursor: pointer;
+.close-button {
+    border: none;
+    background: #eef1f5;
+    border-radius: 7px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 20px;
 }
 
-.detail-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  padding: 10px 0;
-  border-bottom: 1px solid #374151;
-  font-size: 13px;
+.details {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 12px;
+    font-size: 13px;
+    margin-bottom: 20px;
 }
 
-.detail-row span:first-child {
-  color: var(--muted);
+.detail-label {
+    color: var(--muted);
 }
 
-.detail-row span:last-child {
-  text-align: right;
-  font-weight: bold;
+.detail-value {
+    font-weight: 600;
 }
 
-.warning {
-  margin-top: 22px;
-  padding: 12px;
-  background: #422006;
-  border: 1px solid #92400e;
-  border-radius: 6px;
-  color: #fcd34d;
-  font-size: 12px;
-  text-align: center;
+.section-title {
+    font-size: 14px;
+    margin: 20px 0 10px;
 }
 
-footer {
-  text-align: center;
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 25px;
+.function-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-@media(max-width:600px) {
-  body {
-    padding: 15px 8px;
-  }
+.function-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: #f2f6f3;
+    border: 1px solid #d5e5d8;
+    border-radius: 7px;
+    padding: 10px 12px;
+    font-family: monospace;
+    font-size: 13px;
+}
 
-  .connector-wrapper {
-    padding: 8px;
-  }
+.function-item.primary {
+    background: #e7f0e9;
+    border-color: #a9c9af;
+}
+
+.function-tag {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    color: #54705a;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.no-functions {
+    color: var(--muted);
+    font-size: 13px;
+    padding: 12px;
+    background: #f5f7fa;
+    border-radius: 7px;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 12px;
+    }
+
+    .panel {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    .details {
+        grid-template-columns: 110px 1fr;
+    }
 }
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
 <header>
-  <h1>C2000 Control Card</h1>
-  <div class="subtitle">
-    Custom M.2 Key M Interface – P650xK6
-  </div>
+    <h1>M.2 Connector – P650xK6</h1>
+    <div class="subtitle">
+        Interactive connector pinout and signal assignment
+    </div>
 </header>
 
-<div class="controls">
+<div class="toolbar">
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Search pin, GPIO or function..."
+    >
 
-  <select id="revision">
-    <option value="1.0">Hardware Revision 1.0</option>
-    <option value="1.1" selected>Hardware Revision 1.1</option>
-  </select>
-
-  <input
-    id="search"
-    type="text"
-    placeholder="Search pin, GPIO or signal..."
-  >
-
+    <select id="revisionSelect">
+        <option value="1.0">Hardware Revision 1.0</option>
+        <option value="1.1" selected>Hardware Revision 1.1</option>
+    </select>
 </div>
 
-<div class="connector-wrapper">
-
-  <div class="connector">
+<div class="panel">
 
     <div class="connector-title">
-      M.2 CONNECTOR – CUSTOM PINOUT
+        M.2 Connector – P650xK6
     </div>
 
-    <div class="side">
-      <div class="side-label">
-        TOP SIDE – ODD PINS
-      </div>
-      <div id="top" class="pins"></div>
+    <div class="row-title">TOP SIDE</div>
+    <div class="pin-scroll">
+        <div class="pin-grid" id="topGrid"></div>
     </div>
 
-    <div class="key-area">
-      M.2 CONNECTOR
+    <div class="row-title">BOTTOM SIDE</div>
+    <div class="pin-scroll">
+        <div class="pin-grid" id="bottomGrid"></div>
     </div>
 
-    <div class="side">
-      <div class="side-label">
-        BOTTOM SIDE – EVEN PINS
-      </div>
-      <div id="bottom" class="pins"></div>
+    <div class="legend">
+        <div class="legend-item">
+            <span class="legend-color" style="background:var(--gpio)"></span>
+            GPIO
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background:var(--gnd)"></span>
+            GND
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background:var(--power)"></span>
+            3V3
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background:var(--analog)"></span>
+            Analog
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background:var(--reset)"></span>
+            RESET
+        </div>
     </div>
 
-  </div>
+    <div class="info">
+        Hover over a contact for quick information.
+        Click a contact to view all available functions.
+    </div>
+</div>
 
 </div>
 
-<div class="legend">
+<div class="tooltip" id="tooltip"></div>
 
-  <div class="legend-item">
-    <div class="legend-color" style="background:#b7d9bd"></div>
-    GPIO / Digital
-  </div>
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modalTitle">GPIO</h2>
+            <button class="close-button" id="closeModal">&times;</button>
+        </div>
 
-  <div class="legend-item">
-    <div class="legend-color" style="background:#b8d3ed"></div>
-    GND
-  </div>
+        <div class="details" id="modalDetails"></div>
 
-  <div class="legend-item">
-    <div class="legend-color" style="background:#edbcbc"></div>
-    3V3
-  </div>
-
-  <div class="legend-item">
-    <div class="legend-color" style="background:#f1dfaa"></div>
-    Analog / ADC
-  </div>
-
-  <div class="legend-item">
-    <div class="legend-color" style="background:#d0d3d8"></div>
-    RESET
-  </div>
-
-</div>
-
-<div class="warning">
-  CUSTOM PINOUT – NOT M.2 STANDARD COMPATIBLE
-</div>
-
-<footer>
-  C2000 Control Cards | P650xK6 | Interactive Pinout
-</footer>
-
-</div>
-
-<div id="tooltip"></div>
-
-<div id="modal">
-  <div class="modal-content">
-
-    <div class="modal-header">
-      <h2 id="modal-title">Pin details</h2>
-      <button class="close" onclick="closeModal()">&times;</button>
+        <h3 class="section-title">Available Functions</h3>
+        <div class="function-list" id="functionList"></div>
     </div>
-
-    <div id="modal-details"></div>
-
-  </div>
 </div>
 
 <script>
 
-/* =====================================
-   PIN DATABASE
-   ===================================== */
+/*
+=========================================================
+PIN DATA
+
+Each pin supports:
+- pin: physical pin number
+- signal: signal name
+- type: GPIO / Power / Analog / Reset
+- function: primary function
+- alternatives: any number of alternative functions
+
+Add or remove alternative functions directly in this array.
+=========================================================
+*/
 
 const topPins = [
-[1,"GPIO4","GPIO","ePWM3A"],
-[3,"GPIO3","GPIO","ePWM2B"],
-[5,"GPIO2","GPIO","ePWM2A"],
-[7,"GPIO1","GPIO","ePWM1B"],
-[9,"GPIO0","GPIO","ePWM1A"],
-[11,"GND","Power","Ground"],
-[13,"GND","Power","Ground"],
-[15,"GPIO90","GPIO","GPIO86 on Rev. 1.0 / GPIO90 on Rev. 1.1"],
-[17,"GPIO85","GPIO","ePWM13A"],
-[19,"GPIO25","GPIO","Digital I/O"],
-[21,"GPIO80","GPIO","Digital I/O"],
-[23,"GPIO78","GPIO","Digital I/O"],
-[25,"GPIO73","GPIO","Digital I/O"],
-[27,"GPIO71","GPIO","SCIB_RX"],
-[29,"GPIO70","GPIO","SCIB_TX"],
-[31,"GPIO47","GPIO","Digital I/O"],
-[33,"GPIO42","GPIO","I2CA_SDA"],
-[35,"GPIO69","GPIO","Digital I/O"],
-[37,"GPIO43","GPIO","I2CA_SCL"],
-[39,"GND","Power","Ground"],
-[41,"A14/B14/C14","Analog","ADC"],
-[43,"A15/B15/C15","Analog","ADC"],
-[45,"B1/DACC","Analog","ADC / DAC"],
-[47,"B6","Analog","ADC"],
-[49,"B7","Analog","ADC"],
-[51,"A6","Analog","ADC"],
-[53,"A10","Analog","ADC"],
-[55,"A11","Analog","ADC"],
-[57,"GND","Power","Ground"],
-[67,"XRSn","Reset","Reset input"],
-[69,"3V3","Power","3.3 V supply"],
-[71,"3V3","Power","3.3 V supply"],
-[73,"3V3","Power","3.3 V supply"],
-[75,"3V3","Power","3.3 V supply"]
+
+    {
+        pin: 1,
+        signal: "GPIO4",
+        type: "GPIO",
+        function: "ePWM3A",
+        alternatives: ["GPIO4", "ePWM3A"]
+    },
+    {
+        pin: 3,
+        signal: "GPIO3",
+        type: "GPIO",
+        function: "ePWM2B",
+        alternatives: ["GPIO3", "ePWM2B"]
+    },
+    {
+        pin: 5,
+        signal: "GPIO2",
+        type: "GPIO",
+        function: "ePWM2A",
+        alternatives: ["GPIO2", "ePWM2A"]
+    },
+    {
+        pin: 7,
+        signal: "GPIO1",
+        type: "GPIO",
+        function: "ePWM1B",
+        alternatives: ["GPIO1", "ePWM1B"]
+    },
+    {
+        pin: 9,
+        signal: "GPIO0",
+        type: "GPIO",
+        function: "ePWM1A",
+        alternatives: ["GPIO0", "ePWM1A"]
+    },
+    {
+        pin: 11,
+        signal: "GND",
+        type: "Power",
+        function: "Ground",
+        alternatives: []
+    },
+    {
+        pin: 13,
+        signal: "GND",
+        type: "Power",
+        function: "Ground",
+        alternatives: []
+    },
+    {
+        pin: 15,
+        signal: "GPIO90",
+        type: "GPIO",
+        function: "GPIO90",
+        revisionFunctions: {
+            "1.0": "GPIO86",
+            "1.1": "GPIO90"
+        },
+        alternatives: ["GPIO90"]
+    },
+    {
+        pin: 17,
+        signal: "GPIO85",
+        type: "GPIO",
+        function: "ePWM13A",
+        alternatives: ["GPIO85", "ePWM13A"]
+    },
+    {
+        pin: 19,
+        signal: "GPIO25",
+        type: "GPIO",
+        function: "Digital I/O",
+        alternatives: ["GPIO25"]
+    },
+    {
+        pin: 21,
+        signal: "GPIO80",
+        type: "GPIO",
+        function: "Digital I/O",
+        alternatives: ["GPIO80"]
+    },
+    {
+        pin: 23,
+        signal: "GPIO78",
+        type: "GPIO",
+        function: "Digital I/O",
+        alternatives: ["GPIO78"]
+    },
+    {
+        pin: 25,
+        signal: "GPIO73",
+        type: "GPIO",
+        function: "Digital I/O",
+        alternatives: ["GPIO73"]
+    },
+    {
+        pin: 27,
+        signal: "GPIO71",
+        type: "GPIO",
+        function: "SCIB_RX",
+        alternatives: ["GPIO71", "SCIB_RX"]
+    },
+    {
+        pin: 29,
+        signal: "GPIO70",
+        type: "GPIO",
+        function: "SCIB_TX",
+        alternatives: ["GPIO70", "SCIB_TX"]
+    },
+    {
+        pin: 31,
+        signal: "GPIO47",
+        type: "GPIO",
+        function: "Digital I/O",
+        alternatives: ["GPIO47"]
+    },
+    {
+        pin: 33,
+        signal: "GPIO42",
+        type: "GPIO",
+        function: "I2CA_SDA",
+        alternatives: ["GPIO42", "I2CA_SDA"]
+    },
+    {
+        pin: 35,
+        signal: "GPIO69",
+        type: "GPIO",
+        function: "Digital I/O",
+        alternatives: ["GPIO69"]
+    },
+    {
+        pin: 37,
+        signal: "GPIO43",
+        type: "GPIO",
+        function: "I2CA_SCL",
+        alternatives: ["GPIO43", "I2CA_SCL"]
+    },
+    {
+        pin: 39,
+        signal: "GND",
+        type: "Power",
+        function: "Ground",
+        alternatives: []
+    },
+    {
+        pin: 41,
+        signal: "A14/B14/C14",
+        type: "Analog",
+        function: "ADC",
+        alternatives: ["ADC"]
+    },
+    {
+        pin: 43,
+        signal: "A15/B15/C15",
+        type: "Analog",
+        function: "ADC",
+        alternatives: ["ADC"]
+    },
+    {
+        pin: 45,
+        signal: "B1/DACC",
+        type: "Analog",
+        function: "ADC / DAC",
+        alternatives: ["ADC", "DAC"]
+    },
+    {
+        pin: 47,
+        signal: "B6",
+        type: "Analog",
+        function: "ADC",
+        alternatives: ["ADC"]
+    },
+    {
+        pin: 49,
+        signal: "B7",
+        type: "Analog",
+        function: "ADC",
+        alternatives: ["ADC"]
+    },
+    {
+        pin: 51,
+        signal: "A6",
+        type: "Analog",
+        function: "ADC",
+        alternatives: ["ADC"]
+    },
+    {
+        pin: 53,
+        signal: "A10",
+        type: "Analog",
+        function: "ADC",
+        alternatives: ["ADC"]
+    },
+    {
+        pin: 55,
+        signal: "A11",
+        type: "Analog",
+        function: "ADC",
+        alternatives: ["ADC"]
+    },
+    {
+        pin: 57,
+        signal: "GND",
+        type: "Power",
+        function: "Ground",
+        alternatives: []
+    },
+    {
+        pin: 67,
+        signal: "XRSn",
+        type: "Reset",
+        function: "Reset input",
+        alternatives: ["XRSn"]
+    },
+    {
+        pin: 69,
+        signal: "3V3",
+        type: "Power",
+        function: "3.3 V supply",
+        alternatives: []
+    },
+    {
+        pin: 71,
+        signal: "3V3",
+        type: "Power",
+        function: "3.3 V supply",
+        alternatives: []
+    },
+    {
+        pin: 73,
+        signal: "3V3",
+        type: "Power",
+        function: "3.3 V supply",
+        alternatives: []
+    },
+    {
+        pin: 75,
+        signal: "3V3",
+        type: "Power",
+        function: "3.3 V supply",
+        alternatives: []
+    }
+
 ];
 
 const bottomPins = [
-[2,"GPIO10","GPIO","ePWM6A"],
-[4,"GPIO11","GPIO","ePWM6B"],
-[6,"GPIO12","GPIO","ePWM7A"],
-[8,"GPIO13","GPIO","ePWM7B"],
-[10,"GPIO14","GPIO","ePWM8A"],
-[12,"GPIO15","GPIO","ePWM8B"],
-[14,"GND","Power","Ground"],
-[16,"GPIO92","GPIO","I2CA_SCL"],
-[18,"GPIO91","GPIO","I2CA_SDA"],
-[20,"GPIO61","GPIO","Digital I/O"],
-[22,"GPIO62","GPIO","eQEP_3A"],
-[24,"GPIO63","GPIO","eQEP_3B"],
-[26,"GPIO64","GPIO","eQEP_3S"],
-[28,"GPIO65","GPIO","eQEP_3I"],
-[30,"GPIO66","GPIO","Digital I/O"],
-[32,"GPIO60","GPIO","Digital I/O"],
-[34,"GPIO59","GPIO","CANA_TX"],
-[36,"GPIO58","GPIO","CANA_RX"],
-[38,"GPIO41","GPIO","Digital I/O"],
-[40,"GND","Power","Ground"],
-[42,"REF_3V0","Analog","3.0 V reference output"],
-[44,"C6","Analog","ADC"],
-[46,"C5","Analog","ADC"],
-[48,"C4","Analog","ADC"],
-[50,"A3","Analog","ADC"],
-[52,"A2","Analog","ADC"],
-[54,"A1","Analog","ADC"],
-[56,"A0/DACA","Analog","ADC"],
-[58,"GND","Power","Ground"],
-[68,"GND","Power","Ground"],
-[70,"GND","Power","Ground"],
-[72,"GND","Power","Ground"],
-[74,"GND","Power","Ground"]
+
+    {
+        pin: 2,
+        signal: "GPIO10",
+        type: "GPIO",
+        function: "ePWM6A",
+        alternatives: ["GPIO10", "ePWM6A"]
+    },
+    {
+        pin: 4,
+        signal: "GPIO11",
+        type: "GPIO",
+        function: "ePWM6B",
+        alternatives: ["GPIO11", "ePWM6B"]
+    },
+    {
+        pin: 6,
+        signal: "GPIO12",
+        type: "GPIO",
+        function: "ePWM7A",
+        alternatives: ["GPIO12", "ePWM7A"]
+    },
+    {
+        pin: 8,
+        signal: "GPIO13",
+        type: "GPIO",
+        function: "ePWM7B",
+        alternatives: ["GPIO13", "ePWM7B"]
+    },
+    {
+        pin: 10,
+        signal: "GPIO14",
+        type: "GPIO",
+        function: "ePWM8A",
+        alternatives: ["GPIO14", "ePWM8A"]
+    },
+    {
+        pin: 12,
+        signal: "GPIO15",
+        type: "GPIO",
+        function: "ePWM8B",
+        alternatives: ["GPIO15", "ePWM8B"]
+    },
+    {
+        pin: 14,
+        signal: "GND",
+        type: "Power",
+        function: "Ground",
+        alternatives: []
+    },
+    {
+        pin: 16,
+        signal: "GPIO92",
+        type: "GPIO",
+        function: "I2CA_SCL",
+        alternatives: ["GPIO92", "I2CA_SCL"]
+    },
+    {
+        pin: 18,
+        signal: "GPIO91",
+        type: "GPIO",
+        function: "I2CA_SDA",
+        alternatives: ["GPIO91", "I2CA_SDA"]
+    },
+    {
+        pin: 20,
+        signal: "GPIO61",
+        type: "GPIO",
+        function: "Digital I/O",
+        alternatives: ["GPIO61"]
+    },
+    {
+        pin: 22,
+        signal: "GPIO62",
+        type: "GPIO",
+        function: "eQEP_3A",
+        alternatives: ["GPIO62", "eQEP_3A"]
+    },
+    {
+        pin: 24,
+        signal: "GPIO63",
+        type: "GPIO",
+        function: "eQEP_3B",
+        alternatives: ["GPIO63", "eQEP_3B"]
+    },
+    {
+        pin: 26,
+        signal: "GPIO64",
+        type: "GPIO",
+        function: "eQEP_3S",
+        alternatives: ["GPIO64", "eQEP_3S"]
+    },
+    {
+        pin: 28,
+        signal: "GPIO65",
+        type: "GPIO",
+        function: "eQEP_3I",
+        alternatives: ["GPIO65", "eQEP_3I"]
+    },
+    {
+        pin: 30,
+        signal: "GPIO66",
+        type: "GPIO",
+        function: "Digital I/O",
+        alternatives: ["GPIO66"]
+    },
+    {
+        pin: 32,
+        signal: "GPIO60",
+        type: "GPIO",
+        function: "Digital I/O",
+        alternatives: ["GPIO60"]
+    },
+    {
+        pin: 34,
+        signal: "GPIO59",
+        type: "GPIO",
+        function: "CANA_TX",
+        alternatives: ["GPIO59", "CANA_TX"]
+    },
+    {
+        pin: 36,
+        signal: "GPIO58",
+        type: "GPIO",
+        function: "CANA_RX",
+        alternatives: ["GPIO58", "CANA_RX"]
+    },
+    {
+        pin: 38,
+        signal: "GPIO41",
+        type: "GPIO",
+        function: "Digital I/O",
+        alternatives: ["GPIO41"]
+    },
+    {
+        pin: 40,
+        signal: "GND",
+        type: "Power",
+        function: "Ground",
+        alternatives: []
+    },
+    {
+        pin: 42,
+        signal: "REF_3V0",
+        type: "Analog",
+        function: "3.0 V reference output",
+        alternatives: ["REF_3V0"]
+    },
+    {
+        pin: 44,
+        signal: "C6",
+        type: "Analog",
+        function: "ADC",
+        alternatives: ["ADC"]
+    },
+    {
+        pin: 46,
+        signal: "C5",
+        type: "Analog",
+        function: "ADC",
+        alternatives: ["ADC"]
+    },
+    {
+        pin: 48,
+        signal: "C4",
+        type: "Analog",
+        function: "ADC",
+        alternatives: ["ADC"]
+    },
+    {
+        pin: 50,
+        signal: "A3",
+        type: "Analog",
+        function: "ADC",
+        alternatives: ["ADC"]
+    },
+    {
+        pin: 52,
+        signal: "A2",
+        type: "Analog",
+        function: "ADC",
+        alternatives: ["ADC"]
+    },
+    {
+        pin: 54,
+        signal: "A1",
+        type: "Analog",
+        function: "ADC",
+        alternatives: ["ADC"]
+    },
+    {
+        pin: 56,
+        signal: "A0/DACA",
+        type: "Analog",
+        function: "ADC / DAC",
+        alternatives: ["ADC", "DAC"]
+    },
+    {
+        pin: 58,
+        signal: "GND",
+        type: "Power",
+        function: "Ground",
+        alternatives: []
+    },
+    {
+        pin: 68,
+        signal: "GND",
+        type: "Power",
+        function: "Ground",
+        alternatives: []
+    },
+    {
+        pin: 70,
+        signal: "GND",
+        type: "Power",
+        function: "Ground",
+        alternatives: []
+    },
+    {
+        pin: 72,
+        signal: "GND",
+        type: "Power",
+        function: "Ground",
+        alternatives: []
+    },
+    {
+        pin: 74,
+        signal: "GND",
+        type: "Power",
+        function: "Ground",
+        alternatives: []
+    }
+
 ];
 
-/* =====================================
-   PIN COLOR CLASSIFICATION
-   ===================================== */
 
-function getPinClass(signal, type) {
+/*
+=========================================================
+APPLICATION LOGIC
+=========================================================
+*/
 
-  if(signal === "GND") return "gnd";
-  if(signal === "3V3") return "power";
-  if(type === "Analog") return "analog";
-  if(type === "Reset") return "reset";
+const topGrid = document.getElementById("topGrid");
+const bottomGrid = document.getElementById("bottomGrid");
+const searchInput = document.getElementById("searchInput");
+const revisionSelect = document.getElementById("revisionSelect");
 
-  return "gpio";
+const tooltip = document.getElementById("tooltip");
+const modalOverlay = document.getElementById("modalOverlay");
+
+let currentRevision = revisionSelect.value;
+
+function getPinClass(pin) {
+    if (pin.signal === "GND") return "gnd";
+    if (pin.signal === "3V3") return "power";
+    if (pin.type === "Analog") return "analog";
+    if (pin.type === "Reset") return "reset";
+    return "gpio";
 }
 
-/* =====================================
-   RENDER CONNECTOR
-   ===================================== */
+function getPinFunction(pin) {
+    if (pin.revisionFunctions &&
+        pin.revisionFunctions[currentRevision]) {
+        return pin.revisionFunctions[currentRevision];
+    }
+
+    return pin.function;
+}
+
+function getPinSignal(pin) {
+    if (pin.pin === 15 && pin.revisionFunctions) {
+        return pin.revisionFunctions[currentRevision];
+    }
+
+    return pin.signal;
+}
+
+function getAllFunctions(pin) {
+    const functions = pin.alternatives || [];
+
+    const primary = getPinFunction(pin);
+
+    return [...new Set([primary, ...functions].filter(Boolean))];
+}
+
+function matchesSearch(pin, query) {
+    if (!query) return true;
+
+    const text = [
+        pin.pin,
+        pin.signal,
+        getPinSignal(pin),
+        pin.type,
+        getPinFunction(pin),
+        ...(pin.alternatives || [])
+    ].join(" ").toLowerCase();
+
+    return text.includes(query.toLowerCase());
+}
+
+function createPinElement(pin, query) {
+    const element = document.createElement("div");
+
+    element.className = "pin " + getPinClass(pin);
+
+    if (!matchesSearch(pin, query)) {
+        element.classList.add("filtered");
+    }
+
+    // Only physical pin number is displayed.
+    element.textContent = pin.pin;
+
+    element.addEventListener("mouseenter", event => {
+        showTooltip(event, pin);
+    });
+
+    element.addEventListener("mousemove", event => {
+        moveTooltip(event);
+    });
+
+    element.addEventListener("mouseleave", () => {
+        tooltip.style.display = "none";
+    });
+
+    element.addEventListener("click", () => {
+        openModal(pin);
+    });
+
+    return element;
+}
+
+function createEmptyElement() {
+    const element = document.createElement("div");
+    element.className = "pin empty";
+    return element;
+}
+
+function createKeyElement() {
+    const element = document.createElement("div");
+    element.className = "pin key";
+    element.textContent = "KEY";
+    return element;
+}
+
+function renderGrid(grid, pins, isTop, query) {
+    grid.innerHTML = "";
+
+    const pinMap = new Map(
+        pins.map(pin => [pin.pin, pin])
+    );
+
+    const maxPin = isTop ? 75 : 74;
+
+    for (let position = 1; position <= 38; position++) {
+
+        const physicalPin = isTop
+            ? position * 2 - 1
+            : position * 2;
+
+        // M.2 key area
+        if (physicalPin >= 59 && physicalPin <= 66) {
+            grid.appendChild(createKeyElement());
+            continue;
+        }
+
+        const pin = pinMap.get(physicalPin);
+
+        if (pin) {
+            grid.appendChild(createPinElement(pin, query));
+        } else {
+            grid.appendChild(createEmptyElement());
+        }
+    }
+}
 
 function render() {
+    const query = searchInput.value.trim();
 
-  const rev =
-    document.getElementById("revision").value;
+    renderGrid(topGrid, topPins, true, query);
+    renderGrid(bottomGrid, bottomPins, false, query);
+}
 
-  const search =
-    document.getElementById("search")
-      .value.toLowerCase();
+function showTooltip(event, pin) {
+    const signal = getPinSignal(pin);
 
-  function draw(data, target, parity) {
+    tooltip.innerHTML = `
+        <strong>Pin ${pin.pin}: ${signal}</strong>
+        ${pin.type}<br>
+        Function: ${getPinFunction(pin)}
+    `;
 
-    const container =
-      document.getElementById(target);
+    tooltip.style.display = "block";
+    moveTooltip(event);
+}
 
-    container.innerHTML = "";
+function moveTooltip(event) {
+    const margin = 14;
 
-    const count = parity === 1 ? 38 : 37;
+    let x = event.clientX + margin;
+    let y = event.clientY + margin;
 
-    for(let i = 0; i < count; i++) {
-
-      const pinNumber = i * 2 + parity;
-
-      const pinData =
-        data.find(p => p[0] === pinNumber);
-
-      if(!pinData) {
-
-        const gap = document.createElement("div");
-        gap.className = "pin-gap";
-        container.appendChild(gap);
-        continue;
-      }
-
-      let [num, signal, type, fn] = pinData;
-
-      if(num === 15) {
-        signal = rev === "1.0"
-          ? "GPIO86"
-          : "GPIO90";
-      }
-
-      const content =
-        `${num} ${signal} ${type} ${fn}`;
-
-      if(!content.toLowerCase().includes(search)) {
-
-        const gap = document.createElement("div");
-        gap.className = "pin-gap";
-        container.appendChild(gap);
-        continue;
-      }
-
-      const pin = document.createElement("button");
-
-      pin.className = "pin " + getPinClass(signal, type);
-
-      // Display only physical connector pin number
-      pin.textContent = num;
-
-      pin.dataset.info = JSON.stringify({
-        number: num,
-        signal,
-        type,
-        fn,
-        revision: rev
-      });
-
-      pin.title = `Pin ${num}`;
-
-      pin.addEventListener("mouseenter", showTooltip);
-      pin.addEventListener("mousemove", moveTooltip);
-      pin.addEventListener("mouseleave", hideTooltip);
-
-      pin.addEventListener("focus", showTooltip);
-      pin.addEventListener("blur", hideTooltip);
-
-      pin.addEventListener("click", () => {
-        hideTooltip();
-        openModal(pin.dataset.info);
-      });
-
-      container.appendChild(pin);
+    if (x + 280 > window.innerWidth) {
+        x = event.clientX - 280;
     }
-  }
 
-  draw(topPins, "top", 1);
-  draw(bottomPins, "bottom", 2);
+    if (y + 100 > window.innerHeight) {
+        y = event.clientY - 100;
+    }
+
+    tooltip.style.left = x + "px";
+    tooltip.style.top = y + "px";
 }
 
-/* =====================================
-   TOOLTIP
-   ===================================== */
+function openModal(pin) {
 
-const tooltip =
-  document.getElementById("tooltip");
+    const signal = getPinSignal(pin);
+    const primaryFunction = getPinFunction(pin);
+    const alternatives = getAllFunctions(pin);
 
-function showTooltip(e) {
+    document.getElementById("modalTitle").textContent = signal;
 
-  const d =
-    JSON.parse(e.currentTarget.dataset.info);
+    document.getElementById("modalDetails").innerHTML = `
+        <div class="detail-label">Physical pin</div>
+        <div class="detail-value">${pin.pin}</div>
 
-  tooltip.innerHTML = `
-    <strong>Pin ${d.number}: ${d.signal}</strong>
-    <hr>
-    <b>Type:</b> ${d.type}<br>
-    <b>Function:</b> ${d.fn}<br>
-    <b>Revision:</b> ${d.revision}
-  `;
+        <div class="detail-label">Signal</div>
+        <div class="detail-value">${signal}</div>
 
-  tooltip.style.display = "block";
-  moveTooltip(e);
-}
+        <div class="detail-label">Signal type</div>
+        <div class="detail-value">${pin.type}</div>
 
-function moveTooltip(e) {
+        <div class="detail-label">Primary function</div>
+        <div class="detail-value">${primaryFunction}</div>
 
-  const x = Math.min(
-    e.clientX + 15,
-    window.innerWidth - 275
-  );
+        <div class="detail-label">Hardware revision</div>
+        <div class="detail-value">${currentRevision}</div>
+    `;
 
-  const y = Math.min(
-    e.clientY + 15,
-    window.innerHeight - 130
-  );
+    const functionList = document.getElementById("functionList");
 
-  tooltip.style.left = Math.max(5, x) + "px";
-  tooltip.style.top = Math.max(5, y) + "px";
-}
+    functionList.innerHTML = "";
 
-function hideTooltip() {
-  tooltip.style.display = "none";
-}
+    if (alternatives.length === 0) {
+        functionList.innerHTML = `
+            <div class="no-functions">
+                No alternative functions defined for this pin.
+            </div>
+        `;
+    } else {
 
-/* =====================================
-   DETAIL MODAL
-   ===================================== */
+        alternatives.forEach((fn, index) => {
 
-function openModal(json) {
+            const item = document.createElement("div");
 
-  const d = JSON.parse(json);
+            item.className = "function-item";
 
-  document.getElementById("modal-title").textContent =
-    `Pin ${d.number} – ${d.signal}`;
+            if (fn === primaryFunction) {
+                item.classList.add("primary");
+            }
 
-  document.getElementById("modal-details").innerHTML = `
-    <div class="detail-row">
-      <span>Connector pin</span>
-      <span>${d.number}</span>
-    </div>
+            const name = document.createElement("span");
+            name.textContent = fn;
 
-    <div class="detail-row">
-      <span>Signal / GPIO</span>
-      <span>${d.signal}</span>
-    </div>
+            const tag = document.createElement("span");
+            tag.className = "function-tag";
+            tag.textContent =
+                fn === primaryFunction ? "PRIMARY" : "ALTERNATIVE";
 
-    <div class="detail-row">
-      <span>Type</span>
-      <span>${d.type}</span>
-    </div>
+            item.appendChild(name);
+            item.appendChild(tag);
 
-    <div class="detail-row">
-      <span>Function</span>
-      <span>${d.fn}</span>
-    </div>
+            functionList.appendChild(item);
+        });
+    }
 
-    <div class="detail-row">
-      <span>Hardware revision</span>
-      <span>${d.revision}</span>
-    </div>
-  `;
-
-  document.getElementById("modal").style.display =
-    "flex";
+    modalOverlay.classList.add("active");
+    tooltip.style.display = "none";
 }
 
 function closeModal() {
-  document.getElementById("modal").style.display =
-    "none";
+    modalOverlay.classList.remove("active");
 }
 
-document.getElementById("modal")
-  .addEventListener("click", e => {
-    if(e.target.id === "modal") closeModal();
-  });
+document.getElementById("closeModal")
+    .addEventListener("click", closeModal);
 
-/* =====================================
-   CONTROLS
-   ===================================== */
-
-document.getElementById("revision")
-  .addEventListener("change", render);
-
-document.getElementById("search")
-  .addEventListener("input", render);
-
-document.addEventListener("keydown", e => {
-  if(e.key === "Escape") closeModal();
+modalOverlay.addEventListener("click", event => {
+    if (event.target === modalOverlay) {
+        closeModal();
+    }
 });
 
-/* INITIALIZE */
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+        closeModal();
+    }
+});
+
+searchInput.addEventListener("input", render);
+
+revisionSelect.addEventListener("change", () => {
+    currentRevision = revisionSelect.value;
+    render();
+});
 
 render();
 
 </script>
-
 </body>
 </html>
