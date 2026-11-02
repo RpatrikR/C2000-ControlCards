@@ -4,148 +4,449 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>C2000 M.2 Pinout</title>
+<title>C2000 Control Card - M.2 Pinout</title>
 
 <style>
+:root {
+  --bg: #111827;
+  --panel: #1f2937;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  --blue: #38bdf8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background: #111827;
-  color: #e5e7eb;
   margin: 0;
-  padding: 30px;
+  padding: 30px 18px;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
 
 .container {
-  max-width: 1050px;
+  max-width: 1450px;
   margin: auto;
 }
 
-h1 { color: white; }
+header {
+  margin-bottom: 25px;
+}
+
+h1 {
+  margin-bottom: 6px;
+  font-size: 28px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 14px;
+}
 
 .controls {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
-  margin: 20px 0;
+  margin: 25px 0;
 }
 
 select, input {
-  padding: 10px;
+  padding: 11px 14px;
   border-radius: 6px;
   border: 1px solid #475569;
-  background: #1f2937;
+  background: var(--panel);
   color: white;
+  font-size: 14px;
 }
 
-.sides {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
+input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.connector-wrapper {
+  background: #0b1220;
+  border: 1px solid #374151;
+  border-radius: 12px;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.connector {
+  min-width: 1050px;
+  max-width: 1300px;
+  margin: auto;
+  background: #1a2638;
+  padding: 18px;
+  border-radius: 8px;
+  border: 1px solid #475569;
+}
+
+.connector-title {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin-bottom: 18px;
 }
 
 .side {
-  background: #1f2937;
-  padding: 16px;
-  border-radius: 12px;
+  margin-bottom: 7px;
+}
+
+.side-label {
+  color: #cbd5e1;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  margin-bottom: 7px;
 }
 
 .pins {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 7px;
+  grid-template-columns: repeat(38, minmax(0, 1fr));
+  gap: 3px;
+  width: 100%;
 }
 
+/* PIN CONTACTS */
+
 .pin {
-  position: relative;
-  background: #334155;
-  border: 1px solid #64748b;
-  border-radius: 5px;
-  padding: 9px 5px;
-  text-align: center;
+  height: 52px;
+  min-width: 0;
+  border: 1px solid;
+  border-radius: 2px;
+  padding: 0;
   cursor: pointer;
-  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+  transition: 0.12s;
+}
+
+/* GPIO - GREEN */
+.pin.gpio {
+  background: #b7d9bd;
+  border-color: #78aa82;
+  color: #173d20;
+}
+
+/* GND - BLUE */
+.pin.gnd {
+  background: #b8d3ed;
+  border-color: #82acd4;
+  color: #173b5c;
+}
+
+/* 3V3 - RED */
+.pin.power {
+  background: #edbcbc;
+  border-color: #d99595;
+  color: #652727;
+}
+
+/* ANALOG / ADC - YELLOW */
+.pin.analog {
+  background: #f1dfaa;
+  border-color: #d4bd76;
+  color: #594719;
+}
+
+/* RESET - GREY */
+.pin.reset {
+  background: #d0d3d8;
+  border-color: #9ca3af;
+  color: #374151;
+}
+
+.pin:hover,
+.pin:focus-visible {
+  filter: brightness(1.12);
+  border: 2px solid white;
+  outline: none;
+  transform: translateY(-3px);
+  z-index: 3;
+}
+
+.pin-gap {
+  height: 52px;
+  background: #0b1220;
+  border: 1px dashed #334155;
+  border-radius: 2px;
+}
+
+.key-area {
+  height: 14px;
+  background: #080d16;
+  border-top: 1px solid #475569;
+  border-bottom: 1px solid #475569;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+/* LEGEND */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 20px;
+  justify-content: center;
+  color: var(--muted);
   font-size: 12px;
 }
 
-.pin:hover, .pin:focus {
-  outline: 2px solid #38bdf8;
-  background: #2563eb;
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.pin.power { background: #7f1d1d; }
-.pin.gnd { background: #374151; }
-.pin.analog { background: #854d0e; }
-.pin.reset { background: #713f12; }
-
-.pin small {
-  display: block;
-  color: #cbd5e1;
-  margin-top: 3px;
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
 }
+
+/* TOOLTIP */
 
 #tooltip {
   display: none;
   position: fixed;
-  z-index: 100;
+  z-index: 1000;
+  width: 260px;
   background: #020617;
-  border: 1px solid #38bdf8;
+  border: 1px solid var(--blue);
   border-radius: 8px;
-  padding: 14px;
-  width: 240px;
+  padding: 13px;
   pointer-events: none;
-  box-shadow: 0 5px 25px #0008;
-  font-size: 13px;
+  box-shadow: 0 8px 30px #0009;
+  font-size: 12px;
 }
 
 #tooltip strong {
-  color: #38bdf8;
-  font-size: 17px;
+  color: var(--blue);
+  font-size: 16px;
 }
 
-.key {
-  text-align: center;
+/* MODAL */
+
+#modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: #000b;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 440px;
+  background: #1f2937;
+  border: 1px solid #475569;
+  border-radius: 12px;
+  padding: 22px;
+  box-shadow: 0 15px 50px #0009;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.modal-header h2 {
+  color: var(--blue);
+  font-size: 21px;
+  margin: 0;
+}
+
+.close {
+  background: transparent;
+  color: white;
+  border: none;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 10px 0;
+  border-bottom: 1px solid #374151;
+  font-size: 13px;
+}
+
+.detail-row span:first-child {
+  color: var(--muted);
+}
+
+.detail-row span:last-child {
+  text-align: right;
+  font-weight: bold;
+}
+
+.warning {
+  margin-top: 22px;
   padding: 12px;
-  background: #020617;
-  border: 1px dashed #64748b;
-  margin: 10px 0;
-  color: #fbbf24;
+  background: #422006;
+  border: 1px solid #92400e;
+  border-radius: 6px;
+  color: #fcd34d;
+  font-size: 12px;
+  text-align: center;
 }
 
-@media(max-width:700px) {
-  .sides { grid-template-columns: 1fr; }
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 25px;
+}
+
+@media(max-width:600px) {
+  body {
+    padding: 15px 8px;
+  }
+
+  .connector-wrapper {
+    padding: 8px;
+  }
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
-<h1>C2000 M.2 Control Card</h1>
-<p>TMS320F28P650SK6 / TMS320F28P650DK6</p>
+<header>
+  <h1>C2000 Control Card</h1>
+  <div class="subtitle">
+    Custom M.2 Key M Interface – P650xK6
+  </div>
+</header>
 
 <div class="controls">
+
   <select id="revision">
-    <option value="1.0">Hardware Rev. 1.0</option>
-    <option value="1.1" selected>Hardware Rev. 1.1</option>
+    <option value="1.0">Hardware Revision 1.0</option>
+    <option value="1.1" selected>Hardware Revision 1.1</option>
   </select>
-  <input id="search" placeholder="Search GPIO / signal...">
+
+  <input
+    id="search"
+    type="text"
+    placeholder="Search pin, GPIO or signal..."
+  >
+
 </div>
 
-<div class="sides">
-  <div class="side">
-    <h2>TOP SIDE – Odd pins</h2>
-    <div id="top" class="pins"></div>
+<div class="connector-wrapper">
+
+  <div class="connector">
+
+    <div class="connector-title">
+      M.2 CONNECTOR – CUSTOM PINOUT
+    </div>
+
+    <div class="side">
+      <div class="side-label">
+        TOP SIDE – ODD PINS
+      </div>
+      <div id="top" class="pins"></div>
+    </div>
+
+    <div class="key-area">
+      M.2 CONNECTOR
+    </div>
+
+    <div class="side">
+      <div class="side-label">
+        BOTTOM SIDE – EVEN PINS
+      </div>
+      <div id="bottom" class="pins"></div>
+    </div>
+
   </div>
 
-  <div class="side">
-    <h2>BOTTOM SIDE – Even pins</h2>
-    <div id="bottom" class="pins"></div>
+</div>
+
+<div class="legend">
+
+  <div class="legend-item">
+    <div class="legend-color" style="background:#b7d9bd"></div>
+    GPIO / Digital
   </div>
+
+  <div class="legend-item">
+    <div class="legend-color" style="background:#b8d3ed"></div>
+    GND
+  </div>
+
+  <div class="legend-item">
+    <div class="legend-color" style="background:#edbcbc"></div>
+    3V3
+  </div>
+
+  <div class="legend-item">
+    <div class="legend-color" style="background:#f1dfaa"></div>
+    Analog / ADC
+  </div>
+
+  <div class="legend-item">
+    <div class="legend-color" style="background:#d0d3d8"></div>
+    RESET
+  </div>
+
+</div>
+
+<div class="warning">
+  CUSTOM PINOUT – NOT M.2 STANDARD COMPATIBLE
+</div>
+
+<footer>
+  C2000 Control Cards | P650xK6 | Interactive Pinout
+</footer>
+
 </div>
 
 <div id="tooltip"></div>
+
+<div id="modal">
+  <div class="modal-content">
+
+    <div class="modal-header">
+      <h2 id="modal-title">Pin details</h2>
+      <button class="close" onclick="closeModal()">&times;</button>
+    </div>
+
+    <div id="modal-details"></div>
+
+  </div>
 </div>
 
 <script>
+
+/* =====================================
+   PIN DATABASE
+   ===================================== */
+
 const topPins = [
 [1,"GPIO4","GPIO","ePWM3A"],
 [3,"GPIO3","GPIO","ePWM2B"],
@@ -154,7 +455,7 @@ const topPins = [
 [9,"GPIO0","GPIO","ePWM1A"],
 [11,"GND","Power","Ground"],
 [13,"GND","Power","Ground"],
-[15,"GPIO90","GPIO","Revision 1.1: GPIO90 / Revision 1.0: GPIO86"],
+[15,"GPIO90","GPIO","GPIO86 on Rev. 1.0 / GPIO90 on Rev. 1.1"],
 [17,"GPIO85","GPIO","ePWM13A"],
 [19,"GPIO25","GPIO","Digital I/O"],
 [21,"GPIO80","GPIO","Digital I/O"],
@@ -211,7 +512,7 @@ const bottomPins = [
 [50,"A3","Analog","ADC"],
 [52,"A2","Analog","ADC"],
 [54,"A1","Analog","ADC"],
-[56,"A0/DACA","Analog","ADC / DAC"],
+[56,"A0/DACA","Analog","ADC"],
 [58,"GND","Power","Ground"],
 [68,"GND","Power","Ground"],
 [70,"GND","Power","Ground"],
@@ -219,77 +520,228 @@ const bottomPins = [
 [74,"GND","Power","Ground"]
 ];
 
+/* =====================================
+   PIN COLOR CLASSIFICATION
+   ===================================== */
+
+function getPinClass(signal, type) {
+
+  if(signal === "GND") return "gnd";
+  if(signal === "3V3") return "power";
+  if(type === "Analog") return "analog";
+  if(type === "Reset") return "reset";
+
+  return "gpio";
+}
+
+/* =====================================
+   RENDER CONNECTOR
+   ===================================== */
+
 function render() {
-  const rev = document.getElementById("revision").value;
-  const search = document.getElementById("search").value.toLowerCase();
 
-  function draw(data, target) {
-    document.getElementById(target).innerHTML = "";
+  const rev =
+    document.getElementById("revision").value;
 
-    data.forEach(([num, signal, type, fn]) => {
-      if (num === 15 && rev === "1.0") {
-        signal = "GPIO86";
+  const search =
+    document.getElementById("search")
+      .value.toLowerCase();
+
+  function draw(data, target, parity) {
+
+    const container =
+      document.getElementById(target);
+
+    container.innerHTML = "";
+
+    const count = parity === 1 ? 38 : 37;
+
+    for(let i = 0; i < count; i++) {
+
+      const pinNumber = i * 2 + parity;
+
+      const pinData =
+        data.find(p => p[0] === pinNumber);
+
+      if(!pinData) {
+
+        const gap = document.createElement("div");
+        gap.className = "pin-gap";
+        container.appendChild(gap);
+        continue;
       }
 
-      const content = `${num} ${signal} ${type} ${fn}`;
+      let [num, signal, type, fn] = pinData;
 
-      if (!content.toLowerCase().includes(search)) return;
+      if(num === 15) {
+        signal = rev === "1.0"
+          ? "GPIO86"
+          : "GPIO90";
+      }
+
+      const content =
+        `${num} ${signal} ${type} ${fn}`;
+
+      if(!content.toLowerCase().includes(search)) {
+
+        const gap = document.createElement("div");
+        gap.className = "pin-gap";
+        container.appendChild(gap);
+        continue;
+      }
 
       const pin = document.createElement("button");
-      pin.className = "pin " + (
-        type === "Power" ? "power" :
-        type === "Analog" ? "analog" :
-        type === "Reset" ? "reset" : ""
-      );
 
-      pin.innerHTML = `${num}<small>${signal}</small>`;
+      pin.className = "pin " + getPinClass(signal, type);
+
+      // Display only physical connector pin number
+      pin.textContent = num;
 
       pin.dataset.info = JSON.stringify({
         number: num,
-        signal, type, fn, revision: rev
+        signal,
+        type,
+        fn,
+        revision: rev
       });
+
+      pin.title = `Pin ${num}`;
 
       pin.addEventListener("mouseenter", showTooltip);
       pin.addEventListener("mousemove", moveTooltip);
       pin.addEventListener("mouseleave", hideTooltip);
+
       pin.addEventListener("focus", showTooltip);
       pin.addEventListener("blur", hideTooltip);
 
-      document.getElementById(target).appendChild(pin);
-    });
+      pin.addEventListener("click", () => {
+        hideTooltip();
+        openModal(pin.dataset.info);
+      });
+
+      container.appendChild(pin);
+    }
   }
 
-  draw(topPins, "top");
-  draw(bottomPins, "bottom");
+  draw(topPins, "top", 1);
+  draw(bottomPins, "bottom", 2);
 }
 
-const tooltip = document.getElementById("tooltip");
+/* =====================================
+   TOOLTIP
+   ===================================== */
+
+const tooltip =
+  document.getElementById("tooltip");
 
 function showTooltip(e) {
-  const d = JSON.parse(e.currentTarget.dataset.info);
+
+  const d =
+    JSON.parse(e.currentTarget.dataset.info);
+
   tooltip.innerHTML = `
-    <strong>Pin ${d.number}: ${d.signal}</strong><hr>
+    <strong>Pin ${d.number}: ${d.signal}</strong>
+    <hr>
     <b>Type:</b> ${d.type}<br>
     <b>Function:</b> ${d.fn}<br>
     <b>Revision:</b> ${d.revision}
   `;
+
   tooltip.style.display = "block";
   moveTooltip(e);
 }
 
 function moveTooltip(e) {
-  tooltip.style.left = Math.min(e.clientX + 15, innerWidth - 265) + "px";
-  tooltip.style.top = Math.min(e.clientY + 15, innerHeight - 140) + "px";
+
+  const x = Math.min(
+    e.clientX + 15,
+    window.innerWidth - 275
+  );
+
+  const y = Math.min(
+    e.clientY + 15,
+    window.innerHeight - 130
+  );
+
+  tooltip.style.left = Math.max(5, x) + "px";
+  tooltip.style.top = Math.max(5, y) + "px";
 }
 
 function hideTooltip() {
   tooltip.style.display = "none";
 }
 
-document.getElementById("revision").addEventListener("change", render);
-document.getElementById("search").addEventListener("input", render);
+/* =====================================
+   DETAIL MODAL
+   ===================================== */
+
+function openModal(json) {
+
+  const d = JSON.parse(json);
+
+  document.getElementById("modal-title").textContent =
+    `Pin ${d.number} – ${d.signal}`;
+
+  document.getElementById("modal-details").innerHTML = `
+    <div class="detail-row">
+      <span>Connector pin</span>
+      <span>${d.number}</span>
+    </div>
+
+    <div class="detail-row">
+      <span>Signal / GPIO</span>
+      <span>${d.signal}</span>
+    </div>
+
+    <div class="detail-row">
+      <span>Type</span>
+      <span>${d.type}</span>
+    </div>
+
+    <div class="detail-row">
+      <span>Function</span>
+      <span>${d.fn}</span>
+    </div>
+
+    <div class="detail-row">
+      <span>Hardware revision</span>
+      <span>${d.revision}</span>
+    </div>
+  `;
+
+  document.getElementById("modal").style.display =
+    "flex";
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display =
+    "none";
+}
+
+document.getElementById("modal")
+  .addEventListener("click", e => {
+    if(e.target.id === "modal") closeModal();
+  });
+
+/* =====================================
+   CONTROLS
+   ===================================== */
+
+document.getElementById("revision")
+  .addEventListener("change", render);
+
+document.getElementById("search")
+  .addEventListener("input", render);
+
+document.addEventListener("keydown", e => {
+  if(e.key === "Escape") closeModal();
+});
+
+/* INITIALIZE */
 
 render();
+
 </script>
+
 </body>
 </html>
