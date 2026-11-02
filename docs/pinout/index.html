@@ -470,7 +470,7 @@ select {
         </div>
         <div class="legend-item">
             <span class="legend-color" style="background:var(--reset)"></span>
-            RESET
+            Reset
         </div>
     </div>
 
@@ -494,14 +494,14 @@ select {
 
         <div class="details" id="modalDetails"></div>
 
-        <h3 class="section-title">Available Functions and MUX Configuration</h3>
+        <h3 class="section-title" id="availableFunctionsTitle"> Available Functions and MUX Configuration</h3>
 
         <div class="table-wrapper">
             <table class="function-table">
                 <thead>
                     <tr>
                         <th>Function</th>
-                        <th>MUX Value</th>
+                        <th id="muxValueHeader">MUX Value</th>
                     </tr>
                 </thead>
                 <tbody id="functionTableBody"></tbody>
@@ -908,11 +908,12 @@ const topPins = [
         pin: 43,
         signal: "A15/B15/C15",
         type: "Analog",
-        function: "ADC",
+        function: "Analog",
         mcuPin: "27",
         alternatives: [
             { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "COMPARATOR", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP4_HP0", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP4_LP0", muxRegister: "N/A", muxValue: "N/A" },
             { name: "AIO226", muxRegister: "N/A", muxValue: "0" }
         ]
     },
@@ -924,8 +925,9 @@ const topPins = [
         mcuPin: "29",
         alternatives: [
             { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP3_HP2", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP3_LP2", muxRegister: "N/A", muxValue: "N/A" },
             { name: "DACC_OUT", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "COMPARATOR", muxRegister: "N/A", muxValue: "N/A" },
             { name: "AIO234", muxRegister: "N/A", muxValue: "0" }
         ]
     },
@@ -937,7 +939,10 @@ const topPins = [
         mcuPin: "36",
         alternatives: [
             { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "COMPARATOR", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP7_HN1", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP7_HP1", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP7_LN1", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP7_LP1", muxRegister: "N/A", muxValue: "N/A" },
             { name: "AIO207", muxRegister: "N/A", muxValue: "0" }
         ]
     },
@@ -949,7 +954,10 @@ const topPins = [
         mcuPin: "37",
         alternatives: [
             { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "COMPARATOR", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP3_HN1", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP3_LN1", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP7_HP2", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP7_LP2", muxRegister: "N/A", muxValue: "N/A" },
             { name: "AIO208", muxRegister: "N/A", muxValue: "0" }
         ]
     },
@@ -961,7 +969,8 @@ const topPins = [
         mcuPin: "38",
         alternatives: [
             { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "COMPARATOR", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP7_HP0", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP7_LP0", muxRegister: "N/A", muxValue: "N/A" },
             { name: "AIO209", muxRegister: "N/A", muxValue: "0" }
         ]
     },
@@ -973,7 +982,10 @@ const topPins = [
         mcuPin: "39",
         alternatives: [
             { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "COMPARATOR", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP8_HN1", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP8_HP1", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP8_LN1", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP8_LP1", muxRegister: "N/A", muxValue: "N/A" },
             { name: "AIO213", muxRegister: "N/A", muxValue: "0" }
         ]
     },
@@ -985,7 +997,8 @@ const topPins = [
         mcuPin: "40",
         alternatives: [
             { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "COMPARATOR", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP8_HP2", muxRegister: "N/A", muxValue: "N/A" },
+            { name: "CMP8_LP2", muxRegister: "N/A", muxValue: "N/A" },
             { name: "AIO214", muxRegister: "N/A", muxValue: "0" }
         ]
     },
@@ -1002,10 +1015,8 @@ const topPins = [
         signal: "XRSn",
         type: "Reset",
         function: "Reset input",
-        mcuPin: "TBD",
-        alternatives: [
-            { name: "XRSn", muxRegister: "N/A", muxValue: "N/A" }
-        ]
+        mcuPin: "69",
+        alternatives: []
     },
     {
         pin: 69,
@@ -1048,10 +1059,21 @@ const bottomPins = [
         signal: "GPIO10",
         type: "GPIO",
         function: "ePWM6A",
-        mcuPin: "TBD",
+        mcuPin: "100",
         alternatives: [
-            { name: "GPIO10", muxRegister: "TBD", muxValue: "TBD" },
-            { name: "ePWM6A", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO10", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
+            { name: "ePWM6A", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
+            { name: "EMIF1_CAS", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "2" },
+            { name: "ADCSOCBO", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "3" },
+            { name: "EQEP1_A", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
+            { name: "SCIB_TX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
+            { name: "SD4_C1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "7" },
+            { name: "MCANA_RX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "9" },
+            { name: "CLB_OUTPUTXBAR5", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
+            { name: "ESC_TX0_DATA0", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "11" },
+            { name: "FSIRXB_D1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" },
+            { name: "FSITXA_CLK", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "14" },
+            { name: "FSIRXA_D1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "15" }
         ]
     },
     {
@@ -1059,10 +1081,19 @@ const bottomPins = [
         signal: "GPIO11",
         type: "GPIO",
         function: "ePWM6B",
-        mcuPin: "TBD",
+        mcuPin: "1",
         alternatives: [
-            { name: "GPIO11", muxRegister: "TBD", muxValue: "TBD" },
-            { name: "ePWM6B", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO11", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
+            { name: "ePWM6B", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
+            { name: "SCIB_RX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "2 or 6" },
+            { name: "OUTPUTXBAR7", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "3" },
+            { name: "EQEP1_B", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
+            { name: "SD4_D1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "7" },
+            { name: "ESC_GPO3", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
+            { name: "ESC_TX0_DATA1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "11" },
+            { name: "FSIRXB_CLK", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" },
+            { name: "FSIRXA_D1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "14" },
+            { name: "PMBUSA_ALERT", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "15" },
         ]
     },
     {
@@ -1070,10 +1101,21 @@ const bottomPins = [
         signal: "GPIO12",
         type: "GPIO",
         function: "ePWM7A",
-        mcuPin: "TBD",
+        mcuPin: "3",
         alternatives: [
-            { name: "GPIO12", muxRegister: "TBD", muxValue: "TBD" },
-            { name: "ePWM7A", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO12", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
+            { name: "ePWM7A", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
+            { name: "CLB_OUTPUTXBAR6", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "2" },
+            { name: "ADCSOCAO", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "3" },
+            { name: "EQEP1_STROBE", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
+            { name: "SCIA_TX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
+            { name: "SD4_C2", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "7" },
+            { name: "EMIF1_A1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "9" },
+            { name: "ESC_GPO4", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
+            { name: "ESC_TX0_DATA2", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "11" },
+            { name: "FSIRXC_D0", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" },
+            { name: "FSIRXA_D0", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "14" },
+            { name: "PMBUSA_CTL", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "15" }
         ]
     },
     {
@@ -1081,10 +1123,21 @@ const bottomPins = [
         signal: "GPIO13",
         type: "GPIO",
         function: "ePWM7B",
-        mcuPin: "TBD",
+        mcuPin: "4",
         alternatives: [
-            { name: "GPIO13", muxRegister: "TBD", muxValue: "TBD" },
-            { name: "ePWM7B", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO13", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
+            { name: "ePWM7B", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
+            { name: "CLB_OUTPUTXBAR7", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "2" },
+            { name: "EQEP5_STROBE", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "3" },
+            { name: "EQEP1_INDEX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
+            { name: "SCIA_RX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
+            { name: "SD4_D2", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "7" },
+            { name: "EMIF1_CS0n", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "9" },
+            { name: "ESC_GPO5", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
+            { name: "ESC_TX0_DATA3", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "11" },
+            { name: "FSIRXC_D1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" },
+            { name: "FSIRXA_CLK", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "14" },
+            { name: "PMBUSA_SDA", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "15" }
         ]
     },
     {
@@ -1092,10 +1145,20 @@ const bottomPins = [
         signal: "GPIO14",
         type: "GPIO",
         function: "ePWM8A",
-        mcuPin: "TBD",
+        mcuPin: "5",
         alternatives: [
-            { name: "GPIO14", muxRegister: "TBD", muxValue: "TBD" },
-            { name: "ePWM8A", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO14", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
+            { name: "ePWM8A", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
+            { name: "SCIB_TX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "2" },
+            { name: "EQEP5_INDEX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "3" },
+            { name: "LINA_TX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
+            { name: "OUTPUTXBAR3", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
+            { name: "OUTPUTXBAR8", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "7" },
+            { name: "ESC_GPO6", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
+            { name: "ESC_PHY_LINKSTATUS", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "11" },
+            { name: "FSIRXC_CLK", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" },
+            { name: "EMIF1_D17", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "14" },
+            { name: "PMBUSA_SCL", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "15" }
         ]
     },
     {
@@ -1103,10 +1166,18 @@ const bottomPins = [
         signal: "GPIO15",
         type: "GPIO",
         function: "ePWM8B",
-        mcuPin: "TBD",
+        mcuPin: "6",
         alternatives: [
-            { name: "GPIO15", muxRegister: "TBD", muxValue: "TBD" },
-            { name: "ePWM8B", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO15", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
+            { name: "ePWM8B", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
+            { name: "SCIB_RX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "2" },
+            { name: "LINA_RX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
+            { name: "OUTPUTXBAR4", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
+            { name: "CLB_OUTPUTXBAR8", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "7" },
+            { name: "ESC_GPO7", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
+            { name: "EQEP5_A", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "11" },
+            { name: "FSIRXD_D0", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" },
+            { name: "EMIF1_DQM2", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "15" }
         ]
     },
     {
@@ -1122,7 +1193,7 @@ const bottomPins = [
         signal: "GPIO92",
         type: "GPIO",
         function: "I2CA_SCL",
-        mcuPin: "TBD",
+        mcuPin: "99",
         alternatives: [
             { name: "GPIO92", muxRegister: "TBD", muxValue: "TBD" },
             { name: "I2CA_SCL", muxRegister: "TBD", muxValue: "TBD" }
@@ -1259,9 +1330,7 @@ const bottomPins = [
         type: "Analog",
         function: "3.0 V reference output",
         mcuPin: "TBD",
-        alternatives: [
-            { name: "REF_3V0", muxRegister: "N/A", muxValue: "N/A" }
-        ]
+        alternatives: []
     },
     {
         pin: 44,
@@ -1612,14 +1681,21 @@ function openModal(pin) {
         <div class="detail-label">Primary function</div>
         <div class="detail-value">${primaryFunction}</div>
 
-        <div class="detail-label">MUX Register</div>
-        <div class="detail-value">${getPinMuxRegister(pin)}</div>
+        ${pin.type !== "Analog" ? `
+            <div class="detail-label">MUX Register</div>
+            <div class="detail-value">${getPinMuxRegister(pin)}</div>
+        ` : ""}
 
         <div class="detail-label">Hardware revision</div>
         <div class="detail-value">${currentRevision}</div>
     `;
 
     const tableBody = document.getElementById("functionTableBody");
+    const isAnalog = pin.type === "Analog";
+    document.getElementById("availableFunctionsTitle").textContent = isAnalog
+    ? "Available Functions"
+    : "Available Functions and MUX Configuration";
+    document.getElementById("muxValueHeader").style.display = isAnalog ? "none" : "";
     tableBody.innerHTML = "";
 
     if (alternatives.length === 0) {
@@ -1642,10 +1718,9 @@ function openModal(pin) {
                 row.classList.add("primary-row");
             }
 
-            const values = [
-                fn.name || "TBD",
-                fn.muxValue ?? "TBD"
-            ];
+            const values = isAnalog
+                ? [fn.name || "TBD"]
+                : [fn.name || "TBD", fn.muxValue ?? "TBD"];
 
             values.forEach((value, index) => {
 
