@@ -1052,8 +1052,8 @@ const topPins = [
         info: [
             "This pin has an RC filter (100R / 1nF).",
             "Pin operates as an output when DACC_OUT is selected."
-        
         ],
+        warning: "Slightly increased parasitic capacitance due to the pin's additional DAC functionality.",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP3_HP2", muxValue: "N/A" },
@@ -1755,6 +1755,7 @@ const bottomPins = [
             "This pin has an RC filter (100R / 1nF).",
             "Pin operates as an output when DACA_OUT is selected."
             ],
+        warning: "Slightly increased parasitic capacitance due to the pin's additional DAC functionality.",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP1_HP1", muxValue: "N/A" },
