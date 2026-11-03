@@ -423,6 +423,44 @@ select {
     padding-top: 5px;
 }
 
+/* Informational notes */
+.pin-infos {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 18px;
+}
+
+.pin-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 10px 12px;
+    border: 1px solid #9ac9a2;
+    border-radius: 8px;
+    background: #edf8ef;
+    color: #285b32;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.info-icon {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #3b9650;
+    color: #fff;
+    font-size: 12px;
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-weight: bold;
+    line-height: 1;
+}
+
 @media (max-width: 600px) {
     body {
         padding: 12px;
@@ -530,6 +568,7 @@ select {
 
         <div class="details" id="modalDetails"></div>
         <div class="pin-warnings" id="pinWarnings"></div>
+        <div class="pin-infos" id="pinInfos"></div>
 
         <h3 class="section-title" id="availableFunctionsTitle"> Available Functions and MUX Configuration</h3>
 
@@ -976,6 +1015,8 @@ const topPins = [
         function: "ADC",
         mcuPin: "26",
         muxRegister: "N/A",
+        info: "This pin has an RC filter (100R / 1nF).",
+
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "COMPARATOR", muxValue: "N/A" },
@@ -990,6 +1031,7 @@ const topPins = [
         function: "ADC",
         mcuPin: "27",
         muxRegister: "N/A",
+        info: "This pin has an RC filter (100R / 1nF).",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP4_HP0", muxValue: "N/A" },
@@ -1005,6 +1047,7 @@ const topPins = [
         function: "ADC",
         mcuPin: "29",
         muxRegister: "N/A",
+        info: "This pin has an RC filter (100R / 1nF).",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP3_HP2", muxValue: "N/A" },
@@ -1021,6 +1064,7 @@ const topPins = [
         function: "ADC",
         mcuPin: "36",
         muxRegister: "N/A",
+        info: "This pin has an RC filter (100R / 1nF).",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP7_HN1", muxValue: "N/A" },
@@ -1038,6 +1082,7 @@ const topPins = [
         function: "ADC",
         mcuPin: "37",
         muxRegister: "N/A",
+        info: "This pin has an RC filter (100R / 1nF).",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP3_HN1", muxValue: "N/A" },
@@ -1055,6 +1100,7 @@ const topPins = [
         function: "ADC",
         mcuPin: "38",
         muxRegister: "N/A",
+        info: "This pin has an RC filter (100R / 1nF).",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP7_HP0", muxValue: "N/A" },
@@ -1070,6 +1116,7 @@ const topPins = [
         function: "ADC",
         mcuPin: "39",
         muxRegister: "N/A",
+        info: "This pin has an RC filter (100R / 1nF).",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP8_HN1", muxValue: "N/A" },
@@ -1087,6 +1134,7 @@ const topPins = [
         function: "ADC",
         mcuPin: "40",
         muxRegister: "N/A",
+        info: "This pin has an RC filter (100R / 1nF).",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP8_HP2", muxValue: "N/A" },
@@ -1593,6 +1641,7 @@ const bottomPins = [
         function: "ADC",
         mcuPin: "11",
         muxRegister: "N/A",
+        info: "This pin has an RC filter (100R / 1nF).",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP10_HP1", muxValue: "N/A" },
@@ -1608,6 +1657,7 @@ const bottomPins = [
         function: "ADC",
         mcuPin: "12",
         muxRegister: "N/A",
+        info: "This pin has an RC filter (100R / 1nF).",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP2_LP3", muxValue: "N/A" },
@@ -1624,6 +1674,7 @@ const bottomPins = [
         function: "ADC",
         mcuPin: "13",
         muxRegister: "N/A",
+        info: "This pin has an RC filter (100R / 1nF).",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP5_HP0", muxValue: "N/A" },
@@ -1641,6 +1692,7 @@ const bottomPins = [
         function: "ADC",
         mcuPin: "22",
         muxRegister: "N/A",
+        info: "This pin has an RC filter (100R / 1nF).",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP1_HN0", muxValue: "N/A" },
@@ -1657,6 +1709,7 @@ const bottomPins = [
         function: "ADC",
         mcuPin: "23",
         muxRegister: "N/A",
+        info: "This pin has an RC filter (100R / 1nF).",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP1_HP0", muxValue: "N/A" },
@@ -1674,6 +1727,7 @@ const bottomPins = [
         function: "ADC",
         mcuPin: "24",
         muxRegister: "N/A",
+        info: "This pin has an RC filter (100R / 1nF).",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP1_HN1", muxValue: "N/A" },
@@ -1691,6 +1745,7 @@ const bottomPins = [
         function: "ADC",
         mcuPin: "25",
         muxRegister: "N/A",
+        info: "This pin has an RC filter (100R / 1nF).",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP1_HP1", muxValue: "N/A" },
@@ -2018,6 +2073,36 @@ function openModal(pin) {
     });
 
     warningsContainer.style.display = validWarnings.length > 0 ? "flex" : "none";
+
+    // Supports either one info string or an array of info strings.
+    const infosContainer = document.getElementById("pinInfos");
+    infosContainer.innerHTML = "";
+
+    const infos = Array.isArray(pin.info)
+        ? pin.info
+        : (typeof pin.info === "string" ? [pin.info] : []);
+
+    const validInfos = infos
+        .filter(info => typeof info === "string" && info.trim() !== "");
+
+    validInfos.forEach(info => {
+        const infoItem = document.createElement("div");
+        infoItem.className = "pin-info";
+
+        const infoIcon = document.createElement("span");
+        infoIcon.className = "info-icon";
+        infoIcon.textContent = "i";
+        infoIcon.setAttribute("aria-hidden", "true");
+
+        const infoText = document.createElement("span");
+        infoText.textContent = info;
+
+        infoItem.appendChild(infoIcon);
+        infoItem.appendChild(infoText);
+        infosContainer.appendChild(infoItem);
+    });
+
+    infosContainer.style.display = validInfos.length > 0 ? "flex" : "none";
 
     const tableBody = document.getElementById("functionTableBody");
     const isAnalog = pin.type === "Analog";
