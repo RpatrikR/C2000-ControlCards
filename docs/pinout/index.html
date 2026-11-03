@@ -1986,20 +1986,28 @@ function getMcuPin(pin) {
 
 function moveTooltip(event) {
     const margin = 14;
+    const edge = 8;
 
     let x = event.clientX + margin;
     let y = event.clientY + margin;
 
-    if (x + 290 > window.innerWidth) {
-        x = event.clientX - 290;
-    }
-
-    if (y + 110 > window.innerHeight) {
-        y = event.clientY - 110;
-    }
-
+    // Dočasne nastav pozíciu, aby sme zistili skutočnú veľkosť tooltipu.
     tooltip.style.left = x + "px";
     tooltip.style.top = y + "px";
+
+    const rect = tooltip.getBoundingClientRect();
+
+    // Posun iba o nevyhnutnú vzdialenosť, aby tooltip zostal na obrazovke.
+    if (x + rect.width > window.innerWidth - edge) {
+        x = window.innerWidth - rect.width - edge;
+    }
+
+    if (y + rect.height > window.innerHeight - edge) {
+        y = window.innerHeight - rect.height - edge;
+    }
+
+    tooltip.style.left = Math.max(edge, x) + "px";
+    tooltip.style.top = Math.max(edge, y) + "px";
 }
 
 function openModal(pin) {
