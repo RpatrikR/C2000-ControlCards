@@ -387,6 +387,42 @@ select {
     margin-top: 9px;
 }
 
+.pin-warnings {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 18px;
+}
+
+.pin-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 10px 12px;
+    border: 1px solid #e7c65c;
+    border-radius: 8px;
+    background: #fff8dc;
+    color: #765600;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.warning-icon {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #e5ad19;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    padding-top: 5px;
+}
+
 @media (max-width: 600px) {
     body {
         padding: 12px;
@@ -493,6 +529,7 @@ select {
         </div>
 
         <div class="details" id="modalDetails"></div>
+        <div class="pin-warnings" id="pinWarnings"></div>
 
         <h3 class="section-title" id="availableFunctionsTitle"> Available Functions and MUX Configuration</h3>
 
@@ -528,9 +565,11 @@ Card pin:
 MCU pin:
     Physical package pin / ball designation of the C2000 MCU.
 
+Each pin defines:
+    muxRegister
+
 Each alternative function supports:
     name
-    muxRegister
     muxValue
 
 Use "TBD" for data that has not yet been verified.
@@ -546,14 +585,15 @@ const topPins = [
         direction: "Bidirectional",
         function: "ePWM3A",
         mcuPin: "89",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            { name: "GPIO4", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
-            { name: "ePWM3A", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
-            { name: "OUTPUTXBAR3", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
-            { name: "CANA_TX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
-            { name: "MCANA_TX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "9" },
-            { name: "ESC_GPI4", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
-            { name: "FSIRXA_D1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" }
+            { name: "GPIO4", muxValue: "0" },
+            { name: "ePWM3A", muxValue: "1" },
+            { name: "OUTPUTXBAR3", muxValue: "5" },
+            { name: "CANA_TX", muxValue: "6" },
+            { name: "MCANA_TX", muxValue: "9" },
+            { name: "ESC_GPI4", muxValue: "10" },
+            { name: "FSIRXA_D1", muxValue: "13" }
             
         ]
     },
@@ -564,14 +604,15 @@ const topPins = [
         direction: "Bidirectional",
         function: "ePWM2B",
         mcuPin: "92",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            { name: "GPIO3", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
-            { name: "ePWM2B", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
-            { name: "OUTPUTXBAR2", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "2 or 5" },
-            { name: "I2CB_SCL", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
-            { name: "UARTA_RX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "7" },
-            { name: "ESC_GPI3", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
-            { name: "FSIRXA_D0", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" }
+            { name: "GPIO3", muxValue: "0" },
+            { name: "ePWM2B", muxValue: "1" },
+            { name: "OUTPUTXBAR2", muxValue: "2 or 5" },
+            { name: "I2CB_SCL", muxValue: "6" },
+            { name: "UARTA_RX", muxValue: "7" },
+            { name: "ESC_GPI3", muxValue: "10" },
+            { name: "FSIRXA_D0", muxValue: "13" }
         ]
     },
     {
@@ -581,15 +622,16 @@ const topPins = [
         direction: "Bidirectional",
         function: "ePWM2A",
         mcuPin: "91",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            { name: "GPIO2", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
-            { name: "ePWM2A", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
-            { name: "OUTPUTXBAR1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
-            { name: "I2CB_SDA", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
-            { name: "UARTA_TX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "7" },
-            { name: "EMIF1_A15", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "9" },
-            { name: "ESC_GPI2", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
-            { name: "FSITXA_CLK", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" }
+            { name: "GPIO2", muxValue: "0" },
+            { name: "ePWM2A", muxValue: "1" },
+            { name: "OUTPUTXBAR1", muxValue: "5" },
+            { name: "I2CB_SDA", muxValue: "6" },
+            { name: "UARTA_TX", muxValue: "7" },
+            { name: "EMIF1_A15", muxValue: "9" },
+            { name: "ESC_GPI2", muxValue: "10" },
+            { name: "FSITXA_CLK", muxValue: "13" }
         ]
     },
     {
@@ -599,14 +641,15 @@ const topPins = [
         direction: "Bidirectional",
         function: "ePWM1B",
         mcuPin: "90",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            { name: "GPIO1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
-            { name: "ePWM1B", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
-            { name: "CLB_OUTPUTXBAR2", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
-            { name: "I2CA_SCL", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
-            { name: "EMIF1_A14", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "9" },
-            { name: "ESC_GPI1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
-            { name: "FSITXA_D1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" }
+            { name: "GPIO1", muxValue: "0" },
+            { name: "ePWM1B", muxValue: "1" },
+            { name: "CLB_OUTPUTXBAR2", muxValue: "5" },
+            { name: "I2CA_SCL", muxValue: "6" },
+            { name: "EMIF1_A14", muxValue: "9" },
+            { name: "ESC_GPI1", muxValue: "10" },
+            { name: "FSITXA_D1", muxValue: "13" }
         ]
     },
     {
@@ -616,14 +659,15 @@ const topPins = [
         direction: "Bidirectional",
         function: "ePWM1A",
         mcuPin: "89",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            { name: "GPIO0", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "TBD" },
-            { name: "ePWM1A", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "TBD" },
-            { name: "CLB_OUTPUTXBAR1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
-            { name: "I2CA_SDA", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
-            { name: "EMIF1_A13", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "9" },
-            { name: "ESC_GPI0", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
-            { name: "FSITXA_D0", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" }
+            { name: "GPIO0", muxValue: "TBD" },
+            { name: "ePWM1A", muxValue: "TBD" },
+            { name: "CLB_OUTPUTXBAR1", muxValue: "5" },
+            { name: "I2CA_SDA", muxValue: "6" },
+            { name: "EMIF1_A13", muxValue: "9" },
+            { name: "ESC_GPI0", muxValue: "10" },
+            { name: "FSITXA_D0", muxValue: "13" }
         ]
     },
     {
@@ -649,6 +693,7 @@ const topPins = [
         signal: "GPIO90",
         type: "GPIO",
         direction: "Bidirectional",
+        muxRegister: "GPCGMUX2 / GPCMUX2",
         function: "GPIO90",
         
         revisionMcuPin: {
@@ -663,25 +708,25 @@ const topPins = [
     
         revisionAlternatives: {
             "1.0": [
-                { name: "GPIO86", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "0" },
-                { name: "EPWM13B", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "1" },
-                { name: "EMIF1_A13", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "2" },
-                { name: "EMIF1_CAS", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "3" },
-                { name: "SCIB_TX", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "5" },
-                { name: "EQEP6_STROBE", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "6" },
-                { name: "SD3_C3", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "13" },
-                { name: "ESC0_PHY0_LINKSTATUS", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "14" }
+                { name: "GPIO86", muxValue: "0" },
+                { name: "EPWM13B", muxValue: "1" },
+                { name: "EMIF1_A13", muxValue: "2" },
+                { name: "EMIF1_CAS", muxValue: "3" },
+                { name: "SCIB_TX", muxValue: "5" },
+                { name: "EQEP6_STROBE", muxValue: "6" },
+                { name: "SD3_C3", muxValue: "13" },
+                { name: "ESC0_PHY0_LINKSTATUS", muxValue: "14" }
             ],
             "1.1": [
-                { name: "GPIO90", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "0" },
-                { name: "EPWM15B", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "1" },
-                { name: "EMIF1_A17", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "2" },
-                { name: "EMIF1_DQM2", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "3" },
-                { name: "SD1_C3", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "7" },
-                { name: "EMIF1_RAS", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "9" },
-                { name: "SD4_C1", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "13" },
-                { name: "ESC_TX0_DATA3", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "14" },
-                { name: "SPID_CLK", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "15" }
+                { name: "GPIO90", muxValue: "0" },
+                { name: "EPWM15B", muxValue: "1" },
+                { name: "EMIF1_A17", muxValue: "2" },
+                { name: "EMIF1_DQM2", muxValue: "3" },
+                { name: "SD1_C3", muxValue: "7" },
+                { name: "EMIF1_RAS", muxValue: "9" },
+                { name: "SD4_C1", muxValue: "13" },
+                { name: "ESC_TX0_DATA3", muxValue: "14" },
+                { name: "SPID_CLK", muxValue: "15" }
             ]
         }
     },
@@ -692,17 +737,18 @@ const topPins = [
         direction: "Bidirectional",
         function: "ePWM13A",
         mcuPin: "86",
+        muxRegister: "GPCGMUX2 / GPCMUX2",
         alternatives: [
-            { name: "GPIO85", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "0" },
-            { name: "ePWM13A", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "1" },
-            { name: "EMIF1_D0", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "2" },
-            { name: "SCIA_RX", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "5" },
-            { name: "EQEP6_B", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "6" },
-            { name: "SD3_D1", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "7" },
-            { name: "UARTA_RX", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "11" },
-            { name: "SD3_D3", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "13" },
-            { name: "ESC_TX0_CLK", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "14" },
-            { name: "EMIF1_DQM2", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "15" }
+            { name: "GPIO85", muxValue: "0" },
+            { name: "ePWM13A", muxValue: "1" },
+            { name: "EMIF1_D0", muxValue: "2" },
+            { name: "SCIA_RX", muxValue: "5" },
+            { name: "EQEP6_B", muxValue: "6" },
+            { name: "SD3_D1", muxValue: "7" },
+            { name: "UARTA_RX", muxValue: "11" },
+            { name: "SD3_D3", muxValue: "13" },
+            { name: "ESC_TX0_CLK", muxValue: "14" },
+            { name: "EMIF1_DQM2", muxValue: "15" }
         ]
     },
     {
@@ -712,19 +758,20 @@ const topPins = [
         direction: "Bidirectional",
         function: "GPIO25",
         mcuPin: "84",
+        muxRegister: "GPAGMUX2 / GPAMUX2",
         alternatives: [
-            { name: "GPIO25", muxRegister: "GPAGMUX2 / GPAMUX2", muxValue: "0" },
-            { name: "OUTPUTXBAR2", muxRegister: "GPAGMUX2 / GPAMUX2", muxValue: "1" },
-            { name: "EQEP2_B", muxRegister: "GPAGMUX2 / GPAMUX2", muxValue: "2" },
-            { name: "LINB_RX", muxRegister: "GPAGMUX2 / GPAMUX2", muxValue: "5" },
-            { name: "SPIB_POCI", muxRegister: "GPAGMUX2 / GPAMUX2", muxValue: "6" },
-            { name: "SD2_C1", muxRegister: "GPAGMUX2 / GPAMUX2", muxValue: "7" },
-            { name: "PMBUSA_SDA", muxRegister: "GPAGMUX2 / GPAMUX2", muxValue: "9" },
-            { name: "EMIF1_DQM1", muxRegister: "GPAGMUX2 / GPAMUX2", muxValue: "10" },
-            { name: "EQEP5_B", muxRegister: "GPAGMUX2 / GPAMUX2", muxValue: "11" },
-            { name: "EPWM13B", muxRegister: "GPAGMUX2 / GPAMUX2", muxValue: "13" },
-            { name: "FSITXA_D1", muxRegister: "GPAGMUX2 / GPAMUX2", muxValue: "14" },
-            { name: "ESC_RX0_DV", muxRegister: "GPAGMUX2 / GPAMUX2", muxValue: "15" }
+            { name: "GPIO25", muxValue: "0" },
+            { name: "OUTPUTXBAR2", muxValue: "1" },
+            { name: "EQEP2_B", muxValue: "2" },
+            { name: "LINB_RX", muxValue: "5" },
+            { name: "SPIB_POCI", muxValue: "6" },
+            { name: "SD2_C1", muxValue: "7" },
+            { name: "PMBUSA_SDA", muxValue: "9" },
+            { name: "EMIF1_DQM1", muxValue: "10" },
+            { name: "EQEP5_B", muxValue: "11" },
+            { name: "EPWM13B", muxValue: "13" },
+            { name: "FSITXA_D1", muxValue: "14" },
+            { name: "ESC_RX0_DV", muxValue: "15" }
             
         ]
     },
@@ -735,16 +782,17 @@ const topPins = [
         direction: "Bidirectional",
         function: "GPIO80",
         mcuPin: "83",
+        muxRegister: "GPCGMUX2 / GPCMUX2",
         alternatives: [
-            { name: "GPIO80", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "0" },
-            { name: "ePWM11A", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "1" },
-            { name: "EMIF1_D4", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "2" },
-            { name: "ERRORSTS", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "5" },
-            { name: "EQEP2_STROBE", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "6" },
-            { name: "SD3_C3", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "7" },
-            { name: "SD1_C4", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "10" },
-            { name: "SD2_C1", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "13" },
-            { name: "ESC_RX0_DATA0", muxRegister: "GPCGMUX2 / GPCMUX2", muxValue: "14" }
+            { name: "GPIO80", muxValue: "0" },
+            { name: "ePWM11A", muxValue: "1" },
+            { name: "EMIF1_D4", muxValue: "2" },
+            { name: "ERRORSTS", muxValue: "5" },
+            { name: "EQEP2_STROBE", muxValue: "6" },
+            { name: "SD3_C3", muxValue: "7" },
+            { name: "SD1_C4", muxValue: "10" },
+            { name: "SD2_C1", muxValue: "13" },
+            { name: "ESC_RX0_DATA0", muxValue: "14" }
         ]
     },
     {
@@ -754,15 +802,16 @@ const topPins = [
         direction: "Bidirectional",
         function: "GPIO78",
         mcuPin: "82",
+        muxRegister: "GPCGMUX1 / GPCMUX1",
         alternatives: [
-            { name: "GPIO78", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "0" },
-            { name: "EPWM10A", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "1" },
-            { name: "EMIF1_D6", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "2" },
-            { name: "EQEP2_A", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "6" },
-            { name: "SD3_C2", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "7" },
-            { name: "SD4_D4", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "10" },
-            { name: "SD2_C4", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "13" },
-            { name: "ESC_RX0_DV", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "14" }
+            { name: "GPIO78", muxValue: "0" },
+            { name: "EPWM10A", muxValue: "1" },
+            { name: "EMIF1_D6", muxValue: "2" },
+            { name: "EQEP2_A", muxValue: "6" },
+            { name: "SD3_C2", muxValue: "7" },
+            { name: "SD4_D4", muxValue: "10" },
+            { name: "SD2_C4", muxValue: "13" },
+            { name: "ESC_RX0_DV", muxValue: "14" }
         ]
     },
     {
@@ -772,18 +821,19 @@ const topPins = [
         direction: "Bidirectional",
         function: "GPIO73",
         mcuPin: "81",
+        muxRegister: "GPCGMUX1 / GPCMUX1",
         alternatives: [
-            { name: "GPIO73", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "0" },
-            { name: "EQEP6_INDEX", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "1" },
-            { name: "EMIF1_D11", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "2" },
-            { name: "XCLKOUT", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "3" },
-            { name: "OUTPUTXBAR6", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "5" },
-            { name: "UARTA_RX", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "6" },
-            { name: "EPWM5B", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "7" },
-            { name: "MCANB_TX", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "9" },
-            { name: "SD4_D4", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "10" },
-            { name: "SD2_D2", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "13" },
-            { name: "ESC_TX1_DATA2", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "14" }
+            { name: "GPIO73", muxValue: "0" },
+            { name: "EQEP6_INDEX", muxValue: "1" },
+            { name: "EMIF1_D11", muxValue: "2" },
+            { name: "XCLKOUT", muxValue: "3" },
+            { name: "OUTPUTXBAR6", muxValue: "5" },
+            { name: "UARTA_RX", muxValue: "6" },
+            { name: "EPWM5B", muxValue: "7" },
+            { name: "MCANB_TX", muxValue: "9" },
+            { name: "SD4_D4", muxValue: "10" },
+            { name: "SD2_D2", muxValue: "13" },
+            { name: "ESC_TX1_DATA2", muxValue: "14" }
         ]
     },
     {
@@ -793,17 +843,18 @@ const topPins = [
         direction: "Bidirectional",
         function: "SCIB_RX",
         mcuPin: "77",
+        muxRegister: "GPCGMUX1 / GPCMUX1",
         alternatives: [
-            { name: "GPIO71", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "0" },
-            { name: "EMIF1_D13", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "2" },
-            { name: "EPWM12A", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "3" },
-            { name: "CANA_TX", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "5" },
-            { name: "SCIB_RX", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "6" },
-            { name: "UARTB_RX", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "7" },
-            { name: "MCANA_TX", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "9" },
-            { name: "SD3_D1", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "13" },
-            { name: "ESC_RX1_ERR", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "14" },
-            { name: "SPIC_CLK", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "15" }
+            { name: "GPIO71", muxValue: "0" },
+            { name: "EMIF1_D13", muxValue: "2" },
+            { name: "EPWM12A", muxValue: "3" },
+            { name: "CANA_TX", muxValue: "5" },
+            { name: "SCIB_RX", muxValue: "6" },
+            { name: "UARTB_RX", muxValue: "7" },
+            { name: "MCANA_TX", muxValue: "9" },
+            { name: "SD3_D1", muxValue: "13" },
+            { name: "ESC_RX1_ERR", muxValue: "14" },
+            { name: "SPIC_CLK", muxValue: "15" }
         ]
     },
     {
@@ -813,18 +864,19 @@ const topPins = [
         direction: "Bidirectional",
         function: "SCIB_TX",
         mcuPin: "76",
+        muxRegister: "GPCGMUX1 / GPCMUX1",
         alternatives: [
-            { name: "GPIO70", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "0" },
-            { name: "EMIF1_D14", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "2" },
-            { name: "EPWM11B", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "3" },
-            { name: "CANA_RX", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "5" },
-            { name: "SCIB_TX", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "6" },
-            { name: "UARTB_TX", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "7" },
-            { name: "MCANA_RX", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "9" },
-            { name: "FSIRXB_D0", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "11" },
-            { name: "SD1_C4", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "13" },
-            { name: "ESC_RX1_DV", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "14" },
-            { name: "SPIC_POCI", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "15" }
+            { name: "GPIO70", muxValue: "0" },
+            { name: "EMIF1_D14", muxValue: "2" },
+            { name: "EPWM11B", muxValue: "3" },
+            { name: "CANA_RX", muxValue: "5" },
+            { name: "SCIB_TX", muxValue: "6" },
+            { name: "UARTB_TX", muxValue: "7" },
+            { name: "MCANA_RX", muxValue: "9" },
+            { name: "FSIRXB_D0", muxValue: "11" },
+            { name: "SD1_C4", muxValue: "13" },
+            { name: "ESC_RX1_DV", muxValue: "14" },
+            { name: "SPIC_POCI", muxValue: "15" }
         ]
     },
     {
@@ -834,14 +886,15 @@ const topPins = [
         direction: "Bidirectional",
         function: "GPIO47",
         mcuPin: "72",
+        muxRegister: "GPBGMUX1 / GPBMUX1",
         alternatives: [
-            { name: "GPIO47", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "0" },
-            { name: "EPWM4B", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "1" },
-            { name: "EMIF1_A7", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "2" },
-            { name: "EPWM14B", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "3" },
-            { name: "SCIA_TX", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "6" },
-            { name: "SD4_C3", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "7" },
-            { name: "ESC_MDIO_DATA", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "14" },
+            { name: "GPIO47", muxValue: "0" },
+            { name: "EPWM4B", muxValue: "1" },
+            { name: "EMIF1_A7", muxValue: "2" },
+            { name: "EPWM14B", muxValue: "3" },
+            { name: "SCIA_TX", muxValue: "6" },
+            { name: "SD4_C3", muxValue: "7" },
+            { name: "ESC_MDIO_DATA", muxValue: "14" },
             
         ]
     },
@@ -852,17 +905,18 @@ const topPins = [
         direction: "Bidirectional",
         function: "I2CA_SDA",
         mcuPin: "73",
+        muxRegister: "GPBGMUX1 / GPBMUX1",
         alternatives: [
-            { name: "GPIO42", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "0" },
-            { name: "EPWM14A", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "3" },
-            { name: "EQEP4_A", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "5" },
-            { name: "I2CA_SDA", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "6" },
-            { name: "SD4_C4", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "7" },
-            { name: "CLB_OUTPUTXBAR5", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "10" },
-            { name: "UARTA_TX", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "11" },
-            { name: "FSIRXD_D0", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "14" },
-            { name: "SCIA_TX", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "15" },
-            { name: "USB0DM", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "ALT" },
+            { name: "GPIO42", muxValue: "0" },
+            { name: "EPWM14A", muxValue: "3" },
+            { name: "EQEP4_A", muxValue: "5" },
+            { name: "I2CA_SDA", muxValue: "6" },
+            { name: "SD4_C4", muxValue: "7" },
+            { name: "CLB_OUTPUTXBAR5", muxValue: "10" },
+            { name: "UARTA_TX", muxValue: "11" },
+            { name: "FSIRXD_D0", muxValue: "14" },
+            { name: "SCIA_TX", muxValue: "15" },
+            { name: "USB0DM", muxValue: "ALT" },
         ]
     },
     {
@@ -872,15 +926,16 @@ const topPins = [
         direction: "Bidirectional",
         function: "GPIO69",
         mcuPin: "75",
+        muxRegister: "GPCGMUX1 / GPCMUX1",
         alternatives: [
-            { name: "GPIO69", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "0" },
-            { name: "EMIF1_D15", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "2" },
-            { name: "EPWM11A", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "3" },
-            { name: "I2CB_SCL", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "6" },
-            { name: "FSITXD_D0", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "11" },
-            { name: "SD1_D4", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "13" },
-            { name: "ESC_RX1_CLK", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "14" },
-            { name: "SPIC_PICO", muxRegister: "GPCGMUX1 / GPCMUX1", muxValue: "15" }
+            { name: "GPIO69", muxValue: "0" },
+            { name: "EMIF1_D15", muxValue: "2" },
+            { name: "EPWM11A", muxValue: "3" },
+            { name: "I2CB_SCL", muxValue: "6" },
+            { name: "FSITXD_D0", muxValue: "11" },
+            { name: "SD1_D4", muxValue: "13" },
+            { name: "ESC_RX1_CLK", muxValue: "14" },
+            { name: "SPIC_PICO", muxValue: "15" }
         ]
     },
     {
@@ -890,17 +945,18 @@ const topPins = [
         direction: "Bidirectional",
         function: "I2CA_SCL",
         mcuPin: "74",
+        muxRegister: "GPBGMUX1 / GPBMUX1",
         alternatives: [
-            { name: "GPIO43", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "0" },
-            { name: "EPWM14B", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "3" },
-            { name: "EQEP4_B", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "5" },
-            { name: "I2CA_SCL", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "6" },
-            { name: "SD4_D4", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "7" },
-            { name: "CLB_OUTPUTXBAR6", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "10" },
-            { name: "UARTA_RX", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "11" },
-            { name: "FSIRXD_D1", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "14" },
-            { name: "SCIA_RX", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "15" },
-            { name: "USB0DP", muxRegister: "GPBGMUX1 / GPBMUX1", muxValue: "ALT" },
+            { name: "GPIO43", muxValue: "0" },
+            { name: "EPWM14B", muxValue: "3" },
+            { name: "EQEP4_B", muxValue: "5" },
+            { name: "I2CA_SCL", muxValue: "6" },
+            { name: "SD4_D4", muxValue: "7" },
+            { name: "CLB_OUTPUTXBAR6", muxValue: "10" },
+            { name: "UARTA_RX", muxValue: "11" },
+            { name: "FSIRXD_D1", muxValue: "14" },
+            { name: "SCIA_RX", muxValue: "15" },
+            { name: "USB0DP", muxValue: "ALT" },
         ]
     },
     {
@@ -919,10 +975,11 @@ const topPins = [
         direction: "Input",
         function: "ADC",
         mcuPin: "26",
+        muxRegister: "N/A",
         alternatives: [
-            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "COMPARATOR", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "AIO225", muxRegister: "N/A", muxValue: "0" }
+            { name: "ADC", muxValue: "N/A" },
+            { name: "COMPARATOR", muxValue: "N/A" },
+            { name: "AIO225", muxValue: "0" }
         ]
     },
     {
@@ -930,13 +987,14 @@ const topPins = [
         signal: "A15/B15/C15",
         type: "Analog",
         direction: "Input",
-        function: "Analog",
+        function: "ADC",
         mcuPin: "27",
+        muxRegister: "N/A",
         alternatives: [
-            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP4_HP0", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP4_LP0", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "AIO226", muxRegister: "N/A", muxValue: "0" }
+            { name: "ADC", muxValue: "N/A" },
+            { name: "CMP4_HP0", muxValue: "N/A" },
+            { name: "CMP4_LP0", muxValue: "N/A" },
+            { name: "AIO226", muxValue: "0" }
         ]
     },
     {
@@ -946,12 +1004,13 @@ const topPins = [
         direction: "Input",
         function: "ADC",
         mcuPin: "29",
+        muxRegister: "N/A",
         alternatives: [
-            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP3_HP2", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP3_LP2", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "DACC_OUT", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "AIO234", muxRegister: "N/A", muxValue: "0" }
+            { name: "ADC", muxValue: "N/A" },
+            { name: "CMP3_HP2", muxValue: "N/A" },
+            { name: "CMP3_LP2", muxValue: "N/A" },
+            { name: "DACC_OUT", muxValue: "N/A" },
+            { name: "AIO234", muxValue: "0" }
         ]
     },
     {
@@ -961,13 +1020,14 @@ const topPins = [
         direction: "Input",
         function: "ADC",
         mcuPin: "36",
+        muxRegister: "N/A",
         alternatives: [
-            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP7_HN1", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP7_HP1", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP7_LN1", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP7_LP1", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "AIO207", muxRegister: "N/A", muxValue: "0" }
+            { name: "ADC", muxValue: "N/A" },
+            { name: "CMP7_HN1", muxValue: "N/A" },
+            { name: "CMP7_HP1", muxValue: "N/A" },
+            { name: "CMP7_LN1", muxValue: "N/A" },
+            { name: "CMP7_LP1", muxValue: "N/A" },
+            { name: "AIO207", muxValue: "0" }
         ]
     },
     {
@@ -977,13 +1037,14 @@ const topPins = [
         direction: "Input",
         function: "ADC",
         mcuPin: "37",
+        muxRegister: "N/A",
         alternatives: [
-            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP3_HN1", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP3_LN1", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP7_HP2", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP7_LP2", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "AIO208", muxRegister: "N/A", muxValue: "0" }
+            { name: "ADC", muxValue: "N/A" },
+            { name: "CMP3_HN1", muxValue: "N/A" },
+            { name: "CMP3_LN1", muxValue: "N/A" },
+            { name: "CMP7_HP2", muxValue: "N/A" },
+            { name: "CMP7_LP2", muxValue: "N/A" },
+            { name: "AIO208", muxValue: "0" }
         ]
     },
     {
@@ -993,11 +1054,12 @@ const topPins = [
         direction: "Input",
         function: "ADC",
         mcuPin: "38",
+        muxRegister: "N/A",
         alternatives: [
-            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP7_HP0", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP7_LP0", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "AIO209", muxRegister: "N/A", muxValue: "0" }
+            { name: "ADC", muxValue: "N/A" },
+            { name: "CMP7_HP0", muxValue: "N/A" },
+            { name: "CMP7_LP0", muxValue: "N/A" },
+            { name: "AIO209", muxValue: "0" }
         ]
     },
     {
@@ -1007,13 +1069,14 @@ const topPins = [
         direction: "Input",
         function: "ADC",
         mcuPin: "39",
+        muxRegister: "N/A",
         alternatives: [
-            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP8_HN1", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP8_HP1", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP8_LN1", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP8_LP1", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "AIO213", muxRegister: "N/A", muxValue: "0" }
+            { name: "ADC", muxValue: "N/A" },
+            { name: "CMP8_HN1", muxValue: "N/A" },
+            { name: "CMP8_HP1", muxValue: "N/A" },
+            { name: "CMP8_LN1", muxValue: "N/A" },
+            { name: "CMP8_LP1", muxValue: "N/A" },
+            { name: "AIO213", muxValue: "0" }
         ]
     },
     {
@@ -1023,11 +1086,12 @@ const topPins = [
         direction: "Input",
         function: "ADC",
         mcuPin: "40",
+        muxRegister: "N/A",
         alternatives: [
-            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP8_HP2", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "CMP8_LP2", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "AIO214", muxRegister: "N/A", muxValue: "0" }
+            { name: "ADC", muxValue: "N/A" },
+            { name: "CMP8_HP2", muxValue: "N/A" },
+            { name: "CMP8_LP2", muxValue: "N/A" },
+            { name: "AIO214", muxValue: "0" }
         ]
     },
     {
@@ -1092,132 +1156,145 @@ const bottomPins = [
         pin: 2,
         signal: "GPIO10",
         type: "GPIO",
+        direction: "Bidirectional",
         function: "ePWM6A",
         mcuPin: "100",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            { name: "GPIO10", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
-            { name: "ePWM6A", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
-            { name: "EMIF1_CAS", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "2" },
-            { name: "ADCSOCBO", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "3" },
-            { name: "EQEP1_A", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
-            { name: "SCIB_TX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
-            { name: "SD4_C1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "7" },
-            { name: "MCANA_RX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "9" },
-            { name: "CLB_OUTPUTXBAR5", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
-            { name: "ESC_TX0_DATA0", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "11" },
-            { name: "FSIRXB_D1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" },
-            { name: "FSITXA_CLK", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "14" },
-            { name: "FSIRXA_D1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "15" }
+            { name: "GPIO10", muxValue: "0" },
+            { name: "ePWM6A", muxValue: "1" },
+            { name: "EMIF1_CAS", muxValue: "2" },
+            { name: "ADCSOCBO", muxValue: "3" },
+            { name: "EQEP1_A", muxValue: "5" },
+            { name: "SCIB_TX", muxValue: "6" },
+            { name: "SD4_C1", muxValue: "7" },
+            { name: "MCANA_RX", muxValue: "9" },
+            { name: "CLB_OUTPUTXBAR5", muxValue: "10" },
+            { name: "ESC_TX0_DATA0", muxValue: "11" },
+            { name: "FSIRXB_D1", muxValue: "13" },
+            { name: "FSITXA_CLK", muxValue: "14" },
+            { name: "FSIRXA_D1", muxValue: "15" }
         ]
     },
     {
         pin: 4,
         signal: "GPIO11",
         type: "GPIO",
+        direction: "Bidirectional",
         function: "ePWM6B",
         mcuPin: "1",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            { name: "GPIO11", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
-            { name: "ePWM6B", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
-            { name: "SCIB_RX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "2 or 6" },
-            { name: "OUTPUTXBAR7", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "3" },
-            { name: "EQEP1_B", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
-            { name: "SD4_D1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "7" },
-            { name: "ESC_GPO3", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
-            { name: "ESC_TX0_DATA1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "11" },
-            { name: "FSIRXB_CLK", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" },
-            { name: "FSIRXA_D1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "14" },
-            { name: "PMBUSA_ALERT", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "15" },
+            { name: "GPIO11", muxValue: "0" },
+            { name: "ePWM6B", muxValue: "1" },
+            { name: "SCIB_RX", muxValue: "2 or 6" },
+            { name: "OUTPUTXBAR7", muxValue: "3" },
+            { name: "EQEP1_B", muxValue: "5" },
+            { name: "SD4_D1", muxValue: "7" },
+            { name: "ESC_GPO3", muxValue: "10" },
+            { name: "ESC_TX0_DATA1", muxValue: "11" },
+            { name: "FSIRXB_CLK", muxValue: "13" },
+            { name: "FSIRXA_D1", muxValue: "14" },
+            { name: "PMBUSA_ALERT", muxValue: "15" },
         ]
     },
     {
         pin: 6,
         signal: "GPIO12",
         type: "GPIO",
+        direction: "Bidirectional",
         function: "ePWM7A",
         mcuPin: "3",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            { name: "GPIO12", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
-            { name: "ePWM7A", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
-            { name: "CLB_OUTPUTXBAR6", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "2" },
-            { name: "ADCSOCAO", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "3" },
-            { name: "EQEP1_STROBE", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
-            { name: "SCIA_TX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
-            { name: "SD4_C2", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "7" },
-            { name: "EMIF1_A1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "9" },
-            { name: "ESC_GPO4", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
-            { name: "ESC_TX0_DATA2", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "11" },
-            { name: "FSIRXC_D0", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" },
-            { name: "FSIRXA_D0", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "14" },
-            { name: "PMBUSA_CTL", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "15" }
+            { name: "GPIO12", muxValue: "0" },
+            { name: "ePWM7A", muxValue: "1" },
+            { name: "CLB_OUTPUTXBAR6", muxValue: "2" },
+            { name: "ADCSOCAO", muxValue: "3" },
+            { name: "EQEP1_STROBE", muxValue: "5" },
+            { name: "SCIA_TX", muxValue: "6" },
+            { name: "SD4_C2", muxValue: "7" },
+            { name: "EMIF1_A1", muxValue: "9" },
+            { name: "ESC_GPO4", muxValue: "10" },
+            { name: "ESC_TX0_DATA2", muxValue: "11" },
+            { name: "FSIRXC_D0", muxValue: "13" },
+            { name: "FSIRXA_D0", muxValue: "14" },
+            { name: "PMBUSA_CTL", muxValue: "15" }
         ]
     },
     {
         pin: 8,
         signal: "GPIO13",
         type: "GPIO",
+        direction: "Bidirectional",
         function: "ePWM7B",
         mcuPin: "4",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            { name: "GPIO13", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
-            { name: "ePWM7B", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
-            { name: "CLB_OUTPUTXBAR7", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "2" },
-            { name: "EQEP5_STROBE", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "3" },
-            { name: "EQEP1_INDEX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
-            { name: "SCIA_RX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
-            { name: "SD4_D2", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "7" },
-            { name: "EMIF1_CS0n", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "9" },
-            { name: "ESC_GPO5", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
-            { name: "ESC_TX0_DATA3", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "11" },
-            { name: "FSIRXC_D1", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" },
-            { name: "FSIRXA_CLK", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "14" },
-            { name: "PMBUSA_SDA", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "15" }
+            { name: "GPIO13", muxValue: "0" },
+            { name: "ePWM7B", muxValue: "1" },
+            { name: "CLB_OUTPUTXBAR7", muxValue: "2" },
+            { name: "EQEP5_STROBE", muxValue: "3" },
+            { name: "EQEP1_INDEX", muxValue: "5" },
+            { name: "SCIA_RX", muxValue: "6" },
+            { name: "SD4_D2", muxValue: "7" },
+            { name: "EMIF1_CS0n", muxValue: "9" },
+            { name: "ESC_GPO5", muxValue: "10" },
+            { name: "ESC_TX0_DATA3", muxValue: "11" },
+            { name: "FSIRXC_D1", muxValue: "13" },
+            { name: "FSIRXA_CLK", muxValue: "14" },
+            { name: "PMBUSA_SDA", muxValue: "15" }
         ]
     },
     {
         pin: 10,
         signal: "GPIO14",
         type: "GPIO",
+        direction: "Bidirectional",
         function: "ePWM8A",
         mcuPin: "5",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            { name: "GPIO14", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
-            { name: "ePWM8A", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
-            { name: "SCIB_TX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "2" },
-            { name: "EQEP5_INDEX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "3" },
-            { name: "LINA_TX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
-            { name: "OUTPUTXBAR3", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
-            { name: "OUTPUTXBAR8", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "7" },
-            { name: "ESC_GPO6", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
-            { name: "ESC_PHY_LINKSTATUS", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "11" },
-            { name: "FSIRXC_CLK", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" },
-            { name: "EMIF1_D17", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "14" },
-            { name: "PMBUSA_SCL", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "15" }
+            { name: "GPIO14", muxValue: "0" },
+            { name: "ePWM8A", muxValue: "1" },
+            { name: "SCIB_TX", muxValue: "2" },
+            { name: "EQEP5_INDEX", muxValue: "3" },
+            { name: "LINA_TX", muxValue: "5" },
+            { name: "OUTPUTXBAR3", muxValue: "6" },
+            { name: "OUTPUTXBAR8", muxValue: "7" },
+            { name: "ESC_GPO6", muxValue: "10" },
+            { name: "ESC_PHY_LINKSTATUS", muxValue: "11" },
+            { name: "FSIRXC_CLK", muxValue: "13" },
+            { name: "EMIF1_D17", muxValue: "14" },
+            { name: "PMBUSA_SCL", muxValue: "15" }
         ]
     },
     {
         pin: 12,
         signal: "GPIO15",
         type: "GPIO",
+        direction: "Bidirectional",
         function: "ePWM8B",
         mcuPin: "6",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            { name: "GPIO15", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "0" },
-            { name: "ePWM8B", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "1" },
-            { name: "SCIB_RX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "2" },
-            { name: "LINA_RX", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "5" },
-            { name: "OUTPUTXBAR4", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "6" },
-            { name: "CLB_OUTPUTXBAR8", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "7" },
-            { name: "ESC_GPO7", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "10" },
-            { name: "EQEP5_A", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "11" },
-            { name: "FSIRXD_D0", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "13" },
-            { name: "EMIF1_DQM2", muxRegister: "GPAGMUX1 / GPAMUX1", muxValue: "15" }
+            { name: "GPIO15", muxValue: "0" },
+            { name: "ePWM8B", muxValue: "1" },
+            { name: "SCIB_RX", muxValue: "2" },
+            { name: "LINA_RX", muxValue: "5" },
+            { name: "OUTPUTXBAR4", muxValue: "6" },
+            { name: "CLB_OUTPUTXBAR8", muxValue: "7" },
+            { name: "ESC_GPO7", muxValue: "10" },
+            { name: "EQEP5_A", muxValue: "11" },
+            { name: "FSIRXD_D0", muxValue: "13" },
+            { name: "EMIF1_DQM2", muxValue: "15" }
         ]
     },
     {
         pin: 14,
         signal: "GND",
         type: "Power",
+        direction: "Input",
         function: "Ground",
         mcuPin: "N/A",
         alternatives: []
@@ -1226,134 +1303,271 @@ const bottomPins = [
         pin: 16,
         signal: "GPIO92",
         type: "GPIO",
+        direction: "Bidirectional",
         function: "I2CA_SCL",
         mcuPin: "99",
+        muxRegister: "GPCGMUX2 / GPCMUX2",
         alternatives: [
-            { name: "GPIO92", muxRegister: "TBD", muxValue: "TBD" },
-            { name: "I2CA_SCL", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO92", muxValue: "0" },
+            { name: "EPWM16B", muxValue: "1" },
+            { name: "EMIF1_A19", muxValue: "2" },
+            { name: "EMIF1_BA1", muxValue: "3" },
+            { name: "I2CA_SCL", muxValue: "6" },
+            { name: "SD4_C2", muxValue: "7" },
+            { name: "EMIF1_DQM0", muxValue: "9" },
+            { name: "PMBUSA_SDA", muxValue: "10" },
+            { name: "FSIRXD_CLK", muxValue: "11" },
+            { name: "CLB_OUTPUTXBAR2", muxValue: "14" },
+            { name: "SPID_POCI", muxValue: "15" },
         ]
     },
     {
         pin: 18,
         signal: "GPIO91",
         type: "GPIO",
+        direction: "Bidirectional",
         function: "I2CA_SDA",
-        mcuPin: "TBD",
+        mcuPin: "98",
+        muxRegister: "GPCGMUX2 / GPCMUX2",
         alternatives: [
-            { name: "GPIO91", muxRegister: "TBD", muxValue: "TBD" },
-            { name: "I2CA_SDA", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO91", muxValue: "0" },
+            { name: "EPWM16A", muxValue: "1" },
+            { name: "EMIF1_A18", muxValue: "2" },
+            { name: "EMIF1_DQM3", muxValue: "3" },
+            { name: "I2CA_SDA", muxValue: "6" },
+            { name: "SD4_D2", muxValue: "7" },
+            { name: "EMIF1_DQM2", muxValue: "9" },
+            { name: "PMBUSA_SCL", muxValue: "10" },
+            { name: "CLB_OUTPUTXBAR1", muxValue: "14" },
+            { name: "SPID_PICO", muxValue: "15" },
         ]
     },
     {
         pin: 20,
         signal: "GPIO61",
         type: "GPIO",
-        function: "Digital I/O",
-        mcuPin: "TBD",
+        direction: "Bidirectional",
+        function: "GPIO61",
+        mcuPin: "56",
+        muxRegister: "GPBGMUX2 / GPMBUX2",
         alternatives: [
-            { name: "GPIO61", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO61", muxValue: "0" },
+            { name: "EPWM17B", muxValue: "1" },
+            { name: "EMIF1_D23", muxValue: "2" },
+            { name: "ESC_LATCH1", muxValue: "3" },
+            { name: "OUTPUTXBAR4", muxValue: "5" },
+            { name: "SPIB_POCI", muxValue: "6" },
+            { name: "SD2_C3", muxValue: "7" },
+            { name: "EMIF1_D6", muxValue: "9" },
+            { name: "ESC_LED_RUN", muxValue: "10" },
+            { name: "CANA_RX", muxValue: "14" },
+            { name: "SPIA_PTE", muxValue: "15" }
         ]
     },
     {
         pin: 22,
         signal: "GPIO62",
         type: "GPIO",
-        function: "eQEP_3A",
-        mcuPin: "TBD",
+        direction: "Bidirectional",
+        function: "EQEP3_A",
+        mcuPin: "57",
+        muxRegister: "GPBGMUX2 / GPMBUX2",
         alternatives: [
-            { name: "GPIO62", muxRegister: "TBD", muxValue: "TBD" },
-            { name: "eQEP_3A", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO62", muxValue: "0" },
+            { name: "SCIA_RX", muxValue: "1" },
+            { name: "EMIF1_D22", muxValue: "2" },
+            { name: "ESC_MDIO_CLK", muxValue: "3" },
+            { name: "EQEP3_A", muxValue: "5" },
+            { name: "CANA_RX", muxValue: "6" },
+            { name: "SD2_D4", muxValue: "7" },
+            { name: "EMIF1_D7", muxValue: "9" },
+            { name: "ESC_LED_STATE_RUN", muxValue: "10" },
+            { name: "CANA_TX", muxValue: "14" }
         ]
     },
     {
         pin: 24,
         signal: "GPIO63",
         type: "GPIO",
-        function: "eQEP_3B",
-        mcuPin: "TBD",
+        direction: "Bidirectional",
+        function: "EQEP3_B",
+        mcuPin: "58",
+        muxRegister: "GPBGMUX2 / GPMBUX2",
         alternatives: [
-            { name: "GPIO63", muxRegister: "TBD", muxValue: "TBD" },
-            { name: "eQEP_3B", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO63", muxValue: "0" },
+            { name: "SCIA_TX", muxValue: "1" },
+            { name: "EMIF1_D21", muxValue: "2" },
+            { name: "EPWM9A", muxValue: "3" },
+            { name: "EQEP3_B", muxValue: "5" },
+            { name: "CANA_TX", muxValue: "6" },
+            { name: "SD2_C4", muxValue: "7" },
+            { name: "EMIF1_RNW", muxValue: "9" },
+            { name: "EMIF1_BA0", muxValue: "10" },
+            { name: "SD1_D1", muxValue: "13" },
+            { name: "ESC_RX1_DATA0", muxValue: "14" },
+            { name: "SPIB_PICO", muxValue: "15" }
         ]
     },
     {
         pin: 26,
         signal: "GPIO64",
         type: "GPIO",
-        function: "eQEP_3S",
-        mcuPin: "TBD",
+        direction: "Bidirectional",
+        function: "EQEP3_STROBE",
+        mcuPin: "59",
+        muxRegister: "GPCGMUX1 / GPCMUX1",
         alternatives: [
-            { name: "GPIO64", muxRegister: "TBD", muxValue: "TBD" },
-            { name: "eQEP_3S", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO64", muxValue: "0" },
+            { name: "EMIF1_D20", muxValue: "2" },
+            { name: "EPWM9B", muxValue: "3" },
+            { name: "EQEP3_STROBE", muxValue: "5" },
+            { name: "SCIA_RX", muxValue: "6" },
+            { name: "EMIF1_WAIT", muxValue: "9" },
+            { name: "EMIF1_BA1", muxValue: "10" },
+            { name: "SD1_C1", muxValue: "13" },
+            { name: "ESC_RX1_DATA1", muxValue: "14" },
+            { name: "SPIB_POCI", muxValue: "15" }
+            
         ]
     },
     {
         pin: 28,
         signal: "GPIO65",
         type: "GPIO",
-        function: "eQEP_3I",
-        mcuPin: "TBD",
+        direction: "Bidirectional",
+        function: "EQEP3_INDEX",
+        mcuPin: "60",
+        muxRegister: "GPCGMUX1 / GPCMUX1",
         alternatives: [
-            { name: "GPIO65", muxRegister: "TBD", muxValue: "TBD" },
-            { name: "eQEP_3I", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO65", muxValue: "0" },
+            { name: "EMIF1_D19", muxValue: "2" },
+            { name: "EPWM10A", muxValue: "3" },
+            { name: "EQEP3_INDEX", muxValue: "5" },
+            { name: "SCIA_TX", muxValue: "6" },
+            { name: "EMIF1_WEn", muxValue: "9" },
+            { name: "FSITXB_CLK", muxValue: "11" },
+            { name: "SD1_D2", muxValue: "13" },
+            { name: "ESC_RX1_DATA2", muxValue: "14" },
+            { name: "SPIB_CLK", muxValue: "15" }
         ]
     },
     {
         pin: 30,
         signal: "GPIO66",
         type: "GPIO",
+        direction: "Bidirectional",
         function: "Digital I/O",
-        mcuPin: "TBD",
+        mcuPin: "61",
+        muxRegister: "GPCGMUX1 / GPCMUX1",
         alternatives: [
-            { name: "GPIO66", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO66", muxValue: "0" },
+            { name: "EQEP6_B", muxValue: "1" },
+            { name: "EMIF1_D18", muxValue: "2" },
+            { name: "EPWM10B", muxValue: "3" },
+            { name: "I2CB_SDA", muxValue: "6" },
+            { name: "EMIF1_OEn", muxValue: "9" },
+            { name: "FSITXB_D1", muxValue: "11" },
+            { name: "SD1_C2", muxValue: "13" },
+            { name: "ESC_RX1_DATA3", muxValue: "14" },
+            { name: "SPIB_PTE", muxValue: "15" }
         ]
     },
     {
         pin: 32,
         signal: "GPIO60",
         type: "GPIO",
+        direction: "Bidirectional",
         function: "Digital I/O",
-        mcuPin: "TBD",
+        mcuPin: "54",
+        muxRegister: "GPBGMUX2 / GPMBUX2",
         alternatives: [
-            { name: "GPIO60", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO60", muxValue: "0" },
+            { name: "EPWM3B", muxValue: "1" },
+            { name: "EMIF1_D24", muxValue: "2" },
+            { name: "ESC_LATCH0", muxValue: "3" },
+            { name: "OUTPUTXBAR3", muxValue: "5" },
+            { name: "SPIB_PICO", muxValue: "6" },
+            { name: "SD2_D3", muxValue: "7" },
+            { name: "EMIF1_D5", muxValue: "9" },
+            { name: "ESC_LED_ERR", muxValue: "10" },
+            { name: "SD2_C4", muxValue: "13" },
+            { name: "FSIRXB_CLK", muxValue: "14" },
+            { name: "SPIA_CLK", muxValue: "15" }
         ]
     },
     {
         pin: 34,
         signal: "GPIO59",
         type: "GPIO",
+        direction: "Bidirectional",
         function: "CANA_TX",
-        mcuPin: "TBD",
+        mcuPin: "53",
+        muxRegister: "GPBGMUX2 / GPMBUX2",
         alternatives: [
-            { name: "GPIO59", muxRegister: "TBD", muxValue: "TBD" },
-            { name: "CANA_TX", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO59", muxValue: "0" },
+            { name: "EPWM5A", muxValue: "1" },
+            { name: "EMIF1_D25", muxValue: "2" },
+            { name: "EPWM8B", muxValue: "3" },
+            { name: "OUTPUTXBAR2", muxValue: "5" },
+            { name: "SPIB_PTE", muxValue: "6" },
+            { name: "SD2_C2", muxValue: "7" },
+            { name: "EMIF1_D4", muxValue: "9" },
+            { name: "ESC_LED_LINK1_ACTIVE", muxValue: "10" },
+            { name: "CANA_TX", muxValue: "11" },
+            { name: "SD2_C3", muxValue: "13" },
+            { name: "FSIRXB_D1", muxValue: "14" },
+            { name: "SPIA_POCI", muxValue: "15" }
         ]
     },
     {
         pin: 36,
         signal: "GPIO58",
         type: "GPIO",
+        direction: "Bidirectional",
         function: "CANA_RX",
-        mcuPin: "TBD",
+        mcuPin: "52",
+        muxRegister: "GPBGMUX2 / GPMBUX2",
         alternatives: [
-            { name: "GPIO58", muxRegister: "TBD", muxValue: "TBD" },
-            { name: "CANA_RX", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO58", muxValue: "0" },
+            { name: "SPIA_PICO", muxValue: "1 or 15" },
+            { name: "EMIF1_D26", muxValue: "2" },
+            { name: "EPWM8A", muxValue: "3" },
+            { name: "OUTPUTXBAR1", muxValue: "5" },
+            { name: "SPIB_CLK", muxValue: "6" },
+            { name: "SD2_D2", muxValue: "7" },
+            { name: "EMIF1_D3", muxValue: "9" },
+            { name: "ESC_LED_LINK0_ACTIVE", muxValue: "10" },
+            { name: "CANA_RX", muxValue: "11" },
+            { name: "SD2_C2", muxValue: "13" },
+            { name: "FSIRXB_D0", muxValue: "14" }
         ]
     },
     {
         pin: 38,
         signal: "GPIO41",
         type: "GPIO",
-        function: "Digital I/O",
-        mcuPin: "TBD",
+        direction: "Bidirectional",
+        function: "GPIO41",
+        mcuPin: "51",
+        muxRegister: "GPBGMUX1 / GPMBUX1",
         alternatives: [
-            { name: "GPIO41", muxRegister: "TBD", muxValue: "TBD" }
+            { name: "GPIO41", muxValue: "0" },
+            { name: "EMIF1_A3", muxValue: "2" },
+            { name: "EPWM13B", muxValue: "3" },
+            { name: "MCANB_TX", muxValue: "5" },
+            { name: "I2CB_SCL", muxValue: "6" },
+            { name: "SD4_D3", muxValue: "7" },
+            { name: "CLB_OUTPUTXBAR2", muxValue: "10" },
+            { name: "SD2_D1", muxValue: "13" },
+            { name: "ESC_I2C_SCL", muxValue: "14" },
+            { name: "FSIRXD_CLK", muxValue: "15" }
         ]
     },
     {
         pin: 40,
         signal: "GND",
         type: "Power",
+        direction: "Input",
         function: "Ground",
         mcuPin: "N/A",
         alternatives: []
@@ -1362,85 +1576,136 @@ const bottomPins = [
         pin: 42,
         signal: "REF_3V0",
         type: "Analog",
-        function: "3.0 V reference output",
-        mcuPin: "TBD",
+        direction: "Output",
+        function: "Precision reference output (3.00V)",
+        mcuPin: "N/A",
+        warning: [
+        "Buffering is required before connecting to external loads.",
+        "Do not drive this pin externally",
+        ],
         alternatives: []
     },
     {
         pin: 44,
         signal: "C6",
         type: "Analog",
+        direction: "Input",
         function: "ADC",
-        mcuPin: "TBD",
+        mcuPin: "11",
+        muxRegister: "N/A",
         alternatives: [
-            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+            { name: "ADC", muxValue: "N/A" },
+            { name: "CMP10_HP1", muxValue: "N/A" },
+            { name: "CMP10_LP1", muxValue: "N/A" },
+            { name: "GPIO203", muxValue: "N/A" }
         ]
     },
     {
         pin: 46,
         signal: "C5",
         type: "Analog",
+        direction: "Input",
         function: "ADC",
-        mcuPin: "TBD",
+        mcuPin: "12",
+        muxRegister: "N/A",
         alternatives: [
-            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+            { name: "ADC", muxValue: "N/A" },
+            { name: "CMP2_LP3", muxValue: "N/A" },
+            { name: "CMP5_HN0", muxValue: "N/A" },
+            { name: "CMP5_LN0", muxValue: "N/A" },
+            { name: "GPIO204", muxValue: "N/A" }
         ]
     },
     {
         pin: 48,
         signal: "C4",
         type: "Analog",
+        direction: "Input",
         function: "ADC",
-        mcuPin: "TBD",
+        mcuPin: "13",
+        muxRegister: "N/A",
         alternatives: [
-            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+            { name: "ADC", muxValue: "N/A" },
+            { name: "CMP5_HP0", muxValue: "N/A" },
+            { name: "CMP5_LP0", muxValue: "N/A" },
+            { name: "CMP10_HN1", muxValue: "N/A" },
+            { name: "CMP10_LN1", muxValue: "N/A" },
+            { name: "GPIO205", muxValue: "N/A" }
         ]
     },
     {
         pin: 50,
         signal: "A3",
         type: "Analog",
+        direction: "Input",
         function: "ADC",
-        mcuPin: "TBD",
+        mcuPin: "22",
+        muxRegister: "N/A",
         alternatives: [
-            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+            { name: "ADC", muxValue: "N/A" },
+            { name: "CMP1_HN0", muxValue: "N/A" },
+            { name: "CMP1_HP3", muxValue: "N/A" },
+            { name: "CMP1_LN0", muxValue: "N/A" },
+            { name: "AIO230", muxValue: "0" }
         ]
     },
     {
         pin: 52,
-        signal: "A2",
+        signal: "A2/B20",
         type: "Analog",
+        direction: "Input",
         function: "ADC",
-        mcuPin: "TBD",
+        mcuPin: "23",
+        muxRegister: "N/A",
         alternatives: [
-            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+            { name: "ADC", muxValue: "N/A" },
+            { name: "CMP1_HP0", muxValue: "N/A" },
+            { name: "CMP1_LP0", muxValue: "N/A" },
+            { name: "CMP2_HN1", muxValue: "N/A" },
+            { name: "CMP2_LN1", muxValue: "N/A" },
+            { name: "AIO229", muxValue: "0" }
         ]
     },
     {
         pin: 54,
-        signal: "A1",
+        signal: "A1/B19",
         type: "Analog",
+        direction: "Input",
         function: "ADC",
-        mcuPin: "TBD",
+        mcuPin: "24",
+        muxRegister: "N/A",
         alternatives: [
-            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" }
+            { name: "ADC", muxValue: "N/A" },
+            { name: "CMP1_HN1", muxValue: "N/A" },
+            { name: "CMP1_HP2", muxValue: "N/A" },
+            { name: "CMP1_LN1", muxValue: "N/A" },
+            { name: "CMP1_LP2", muxValue: "N/A" },
+            { name: "AIO228", muxValue: "0" }
         ]
     },
     {
         pin: 56,
-        signal: "A0/DACA",
+        signal: "A0/A12/B12/C12",
         type: "Analog",
-        function: "ADC / DAC",
-        mcuPin: "TBD",
+        direction: "Input",
+        function: "ADC",
+        mcuPin: "25",
+        muxRegister: "N/A",
         alternatives: [
-            { name: "ADC", muxRegister: "N/A", muxValue: "N/A" },
-            { name: "DAC", muxRegister: "N/A", muxValue: "N/A" }
+            { name: "ADC", muxValue: "N/A" },
+            { name: "CMP1_HP1", muxValue: "N/A" },
+            { name: "CMP1_LP1", muxValue: "N/A" },
+            { name: "CMP9_HN0", muxValue: "N/A" },
+            { name: "CMP9_LN0", muxValue: "N/A" },
+            { name: "DACA_OUT", muxValue: "N/A" },
+            { name: "AIO227", muxValue: "0" }
         ]
     },
     {
         pin: 58,
         signal: "GND",
         type: "Power",
+        direction: "Input",
         function: "Ground",
         mcuPin: "N/A",
         alternatives: []
@@ -1449,6 +1714,7 @@ const bottomPins = [
         pin: 68,
         signal: "GND",
         type: "Power",
+        direction: "Input",
         function: "Ground",
         mcuPin: "N/A",
         alternatives: []
@@ -1457,6 +1723,7 @@ const bottomPins = [
         pin: 70,
         signal: "GND",
         type: "Power",
+        direction: "Input",
         function: "Ground",
         mcuPin: "N/A",
         alternatives: []
@@ -1465,6 +1732,7 @@ const bottomPins = [
         pin: 72,
         signal: "GND",
         type: "Power",
+        direction: "Input",
         function: "Ground",
         mcuPin: "N/A",
         alternatives: []
@@ -1473,6 +1741,7 @@ const bottomPins = [
         pin: 74,
         signal: "GND",
         type: "Power",
+        direction: "Input",
         function: "Ground",
         mcuPin: "N/A",
         alternatives: []
@@ -1534,24 +1803,7 @@ function getAllFunctions(pin) {
 }
 
 function getPinMuxRegister(pin) {
-    const registers = [...new Set(
-        getAllFunctions(pin)
-            .map(fn => fn.muxRegister)
-            .filter(register => register && register !== "TBD" && register !== "N/A")
-    )];
-
-    if (registers.length > 0) {
-        return registers.join(" / ");
-    }
-
-    const alternatives = getAllFunctions(pin);
-
-    if (alternatives.length === 0 ||
-        alternatives.every(fn => fn.muxRegister === "N/A")) {
-        return "N/A";
-    }
-
-    return "TBD";
+    return pin.muxRegister || "N/A";
 }
 
 function matchesSearch(pin, query) {
@@ -1560,7 +1812,6 @@ function matchesSearch(pin, query) {
     const alternatives = getAllFunctions(pin)
         .map(fn => [
             fn.name,
-            fn.muxRegister,
             fn.muxValue
         ].join(" "))
         .join(" ");
@@ -1738,6 +1989,35 @@ function openModal(pin) {
         <div class="detail-label">Hardware revision</div>
         <div class="detail-value">${currentRevision}</div>
     `;
+
+    const warningsContainer = document.getElementById("pinWarnings");
+    warningsContainer.innerHTML = "";
+
+    // Supports either one warning string or an array of warning strings.
+    const warnings = Array.isArray(pin.warning)
+        ? pin.warning
+        : (typeof pin.warning === "string" ? [pin.warning] : []);
+
+    const validWarnings = warnings
+        .filter(warning => typeof warning === "string" && warning.trim() !== "");
+
+    validWarnings.forEach(warning => {
+        const warningItem = document.createElement("div");
+        warningItem.className = "pin-warning";
+
+        const warningIcon = document.createElement("span");
+        warningIcon.className = "warning-icon";
+        warningIcon.textContent = "!";
+
+        const warningText = document.createElement("span");
+        warningText.textContent = warning;
+
+        warningItem.appendChild(warningIcon);
+        warningItem.appendChild(warningText);
+        warningsContainer.appendChild(warningItem);
+    });
+
+    warningsContainer.style.display = validWarnings.length > 0 ? "flex" : "none";
 
     const tableBody = document.getElementById("functionTableBody");
     const isAnalog = pin.type === "Analog";
