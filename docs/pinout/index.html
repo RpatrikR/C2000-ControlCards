@@ -623,7 +623,7 @@ const topPins = [
         type: "GPIO",
         direction: "Bidirectional",
         function: "ePWM3A",
-        mcuPin: "89",
+        mcuPin: "93",
         muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
             { name: "GPIO4", muxValue: "0" },
@@ -1047,7 +1047,11 @@ const topPins = [
         function: "ADC",
         mcuPin: "29",
         muxRegister: "N/A",
-        info: "This pin has an RC filter (100R / 1nF).",
+        info: [
+            "This pin has an RC filter (100R / 1nF).",
+            "Pin operates as an output when DACC_OUT is selected."
+        
+        ],
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP3_HP2", muxValue: "N/A" },
@@ -1745,7 +1749,10 @@ const bottomPins = [
         function: "ADC",
         mcuPin: "25",
         muxRegister: "N/A",
-        info: "This pin has an RC filter (100R / 1nF).",
+        info: [
+            "This pin has an RC filter (100R / 1nF).",
+            "Pin operates as an output when DACA_OUT is selected."
+            ],
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP1_HP1", muxValue: "N/A" },
