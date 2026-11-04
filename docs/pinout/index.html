@@ -572,7 +572,7 @@ select {
         </div>
         <div class="legend-item">
             <span class="legend-color" style="background:var(--power)"></span>
-            3V3
+            Power Input
         </div>
         <div class="legend-item">
             <span class="legend-color" style="background:var(--analog)"></span>
@@ -1212,7 +1212,7 @@ const topPins = [
     },
     {
         pin: 69,
-        signal: "3V3",
+        signal: "3.3V Power Input",
         type: "Power",
         direction: "Input",
         function: "Board power supply",
@@ -1221,7 +1221,7 @@ const topPins = [
     },
     {
         pin: 71,
-        signal: "3V3",
+        signal: "3.3V Power Input",
         type: "Power",
         direction: "Input",
         function: "Board power supply",
@@ -1230,7 +1230,7 @@ const topPins = [
     },
     {
         pin: 73,
-        signal: "3V3",
+        signal: "3.3V Power Input",
         type: "Power",
         direction: "Input",
         function: "Board power supply",
@@ -1239,7 +1239,7 @@ const topPins = [
     },
     {
         pin: 75,
-        signal: "3V3",
+        signal: "3.3V Power Input",
         type: "Power",
         direction: "Input",
         function: "Board power supply",
@@ -1878,7 +1878,7 @@ let currentRevision = revisionSelect.value;
 
 function getPinClass(pin) {
     if (pin.signal === "GND") return "gnd";
-    if (pin.signal === "3V3") return "power";
+    if (pin.signal === "3.3V Power Input") return "power";
     if (pin.type === "Analog") return "analog";
     if (pin.type === "Reset") return "reset";
     return "gpio";
