@@ -423,6 +423,42 @@ select {
     padding-top: 5px;
 }
 
+/* Critical configuration alerts */
+.pin-alerts {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 18px;
+}
+
+.pin-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 10px 12px;
+    border: 1px solid #e5a0a0;
+    border-radius: 8px;
+    background: #fff0f0;
+    color: #8a2525;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.alert-icon {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #c83b3b;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1;
+}
+
 /* Informational notes */
 .pin-infos {
     display: none;
@@ -567,6 +603,7 @@ select {
         </div>
 
         <div class="details" id="modalDetails"></div>
+        <div class="pin-alerts" id="pinAlerts"></div>
         <div class="pin-warnings" id="pinWarnings"></div>
         <div class="pin-infos" id="pinInfos"></div>
 
@@ -700,8 +737,8 @@ const topPins = [
         mcuPin: "89",
         muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            { name: "GPIO0", muxValue: "TBD" },
-            { name: "ePWM1A", muxValue: "TBD" },
+            { name: "GPIO0", muxValue: "0" },
+            { name: "ePWM1A", muxValue: "1" },
             { name: "CLB_OUTPUTXBAR1", muxValue: "5" },
             { name: "I2CA_SDA", muxValue: "6" },
             { name: "EMIF1_A13", muxValue: "9" },
@@ -829,7 +866,7 @@ const topPins = [
             { name: "ERRORSTS", muxValue: "5" },
             { name: "EQEP2_STROBE", muxValue: "6" },
             { name: "SD3_C3", muxValue: "7" },
-            { name: "SD1_C4", muxValue: "10" },
+            { name: "SD1_D4", muxValue: "10" },
             { name: "SD2_C1", muxValue: "13" },
             { name: "ESC_RX0_DATA0", muxValue: "14" }
         ]
@@ -1021,7 +1058,8 @@ const topPins = [
 
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
-            { name: "COMPARATOR", muxValue: "N/A" },
+            { name: "CMP4_HP0", muxValue: "N/A" },
+            { name: "CMP4_LP0", muxValue: "N/A" },
             { name: "AIO225", muxValue: "0" }
         ]
     },
@@ -1036,8 +1074,9 @@ const topPins = [
         info: "This pin has an RC filter (100R / 1nF).",
         alternatives: [
             { name: "ADC", muxValue: "N/A" },
-            { name: "CMP4_HP0", muxValue: "N/A" },
-            { name: "CMP4_LP0", muxValue: "N/A" },
+            { name: "CMP4_HN0", muxValue: "N/A" },
+            { name: "CMP4_HP3", muxValue: "N/A" },
+            { name: "CMP4_LN0", muxValue: "N/A" },
             { name: "AIO226", muxValue: "0" }
         ]
     },
@@ -1067,6 +1106,7 @@ const topPins = [
         signal: "B6",
         type: "Analog",
         direction: "Input",
+        alert: "When using this pin as an analog input, disable the GPIO function for this pin.",
         function: "ADC",
         mcuPin: "36",
         muxRegister: "N/A",
@@ -1077,7 +1117,7 @@ const topPins = [
             { name: "CMP7_HP1", muxValue: "N/A" },
             { name: "CMP7_LN1", muxValue: "N/A" },
             { name: "CMP7_LP1", muxValue: "N/A" },
-            { name: "AIO207", muxValue: "0" }
+            { name: "GPIO207", muxValue: "0" }
         ]
     },
     {
@@ -1085,6 +1125,7 @@ const topPins = [
         signal: "B7",
         type: "Analog",
         direction: "Input",
+        alert: "When using this pin as an analog input, disable the GPIO function for this pin.",
         function: "ADC",
         mcuPin: "37",
         muxRegister: "N/A",
@@ -1095,7 +1136,7 @@ const topPins = [
             { name: "CMP3_LN1", muxValue: "N/A" },
             { name: "CMP7_HP2", muxValue: "N/A" },
             { name: "CMP7_LP2", muxValue: "N/A" },
-            { name: "AIO208", muxValue: "0" }
+            { name: "GPIO208", muxValue: "0" }
         ]
     },
     {
@@ -1103,6 +1144,7 @@ const topPins = [
         signal: "A6",
         type: "Analog",
         direction: "Input",
+        alert: "When using this pin as an analog input, disable the GPIO function for this pin.",
         function: "ADC",
         mcuPin: "38",
         muxRegister: "N/A",
@@ -1111,7 +1153,7 @@ const topPins = [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP7_HP0", muxValue: "N/A" },
             { name: "CMP7_LP0", muxValue: "N/A" },
-            { name: "AIO209", muxValue: "0" }
+            { name: "GPIO209", muxValue: "0" }
         ]
     },
     {
@@ -1119,6 +1161,7 @@ const topPins = [
         signal: "A10",
         type: "Analog",
         direction: "Input",
+        alert: "When using this pin as an analog input, disable the GPIO function for this pin.",
         function: "ADC",
         mcuPin: "39",
         muxRegister: "N/A",
@@ -1129,7 +1172,7 @@ const topPins = [
             { name: "CMP8_HP1", muxValue: "N/A" },
             { name: "CMP8_LN1", muxValue: "N/A" },
             { name: "CMP8_LP1", muxValue: "N/A" },
-            { name: "AIO213", muxValue: "0" }
+            { name: "GPIO213", muxValue: "0" }
         ]
     },
     {
@@ -1137,6 +1180,7 @@ const topPins = [
         signal: "A11",
         type: "Analog",
         direction: "Input",
+        alert: "When using this pin as an analog input, disable the GPIO function for this pin.",
         function: "ADC",
         mcuPin: "40",
         muxRegister: "N/A",
@@ -1145,7 +1189,7 @@ const topPins = [
             { name: "ADC", muxValue: "N/A" },
             { name: "CMP8_HP2", muxValue: "N/A" },
             { name: "CMP8_LP2", muxValue: "N/A" },
-            { name: "AIO214", muxValue: "0" }
+            { name: "GPIO214", muxValue: "0" }
         ]
     },
     {
@@ -1317,7 +1361,7 @@ const bottomPins = [
             { name: "OUTPUTXBAR3", muxValue: "6" },
             { name: "OUTPUTXBAR8", muxValue: "7" },
             { name: "ESC_GPO6", muxValue: "10" },
-            { name: "ESC_PHY_LINKSTATUS", muxValue: "11" },
+            { name: "ESC_PHY1_LINKSTATUS", muxValue: "11" },
             { name: "FSIRXC_CLK", muxValue: "13" },
             { name: "EMIF1_D17", muxValue: "14" },
             { name: "PMBUSA_SCL", muxValue: "15" }
@@ -1403,7 +1447,7 @@ const bottomPins = [
         direction: "Bidirectional",
         function: "GPIO61",
         mcuPin: "56",
-        muxRegister: "GPBGMUX2 / GPMBUX2",
+        muxRegister: "GPBGMUX2 / GPBMUX2",
         alternatives: [
             { name: "GPIO61", muxValue: "0" },
             { name: "EPWM17B", muxValue: "1" },
@@ -1425,7 +1469,7 @@ const bottomPins = [
         direction: "Bidirectional",
         function: "EQEP3_A",
         mcuPin: "57",
-        muxRegister: "GPBGMUX2 / GPMBUX2",
+        muxRegister: "GPBGMUX2 / GPBMUX2",
         alternatives: [
             { name: "GPIO62", muxValue: "0" },
             { name: "SCIA_RX", muxValue: "1" },
@@ -1446,7 +1490,7 @@ const bottomPins = [
         direction: "Bidirectional",
         function: "EQEP3_B",
         mcuPin: "58",
-        muxRegister: "GPBGMUX2 / GPMBUX2",
+        muxRegister: "GPBGMUX2 / GPBMUX2",
         alternatives: [
             { name: "GPIO63", muxValue: "0" },
             { name: "SCIA_TX", muxValue: "1" },
@@ -1533,7 +1577,7 @@ const bottomPins = [
         direction: "Bidirectional",
         function: "Digital I/O",
         mcuPin: "54",
-        muxRegister: "GPBGMUX2 / GPMBUX2",
+        muxRegister: "GPBGMUX2 / GPBMUX2",
         alternatives: [
             { name: "GPIO60", muxValue: "0" },
             { name: "EPWM3B", muxValue: "1" },
@@ -1556,7 +1600,7 @@ const bottomPins = [
         direction: "Bidirectional",
         function: "CANA_TX",
         mcuPin: "53",
-        muxRegister: "GPBGMUX2 / GPMBUX2",
+        muxRegister: "GPBGMUX2 / GPBMUX2",
         alternatives: [
             { name: "GPIO59", muxValue: "0" },
             { name: "EPWM5A", muxValue: "1" },
@@ -1580,7 +1624,7 @@ const bottomPins = [
         direction: "Bidirectional",
         function: "CANA_RX",
         mcuPin: "52",
-        muxRegister: "GPBGMUX2 / GPMBUX2",
+        muxRegister: "GPBGMUX2 / GPBMUX2",
         alternatives: [
             { name: "GPIO58", muxValue: "0" },
             { name: "SPIA_PICO", muxValue: "1 or 15" },
@@ -1603,7 +1647,7 @@ const bottomPins = [
         direction: "Bidirectional",
         function: "GPIO41",
         mcuPin: "51",
-        muxRegister: "GPBGMUX1 / GPMBUX1",
+        muxRegister: "GPBGMUX1 / GPBMUX1",
         alternatives: [
             { name: "GPIO41", muxValue: "0" },
             { name: "EMIF1_A3", muxValue: "2" },
@@ -1633,10 +1677,8 @@ const bottomPins = [
         direction: "Output",
         function: "Precision reference output (3.00V)",
         mcuPin: "N/A",
-        warning: [
-        "Buffering is required before connecting to external loads.",
-        "Do not drive this pin externally",
-        ],
+        alert: "Do not drive this pin externally",
+        warning: "Buffering is required before connecting to external loads.",
         alternatives: []
     },
     {
@@ -1644,6 +1686,7 @@ const bottomPins = [
         signal: "C6",
         type: "Analog",
         direction: "Input",
+        alert: "When using this pin as an analog input, disable the GPIO function for this pin.",
         function: "ADC",
         mcuPin: "11",
         muxRegister: "N/A",
@@ -1660,6 +1703,7 @@ const bottomPins = [
         signal: "C5",
         type: "Analog",
         direction: "Input",
+        alert: "When using this pin as an analog input, disable the GPIO function for this pin.",
         function: "ADC",
         mcuPin: "12",
         muxRegister: "N/A",
@@ -1677,6 +1721,7 @@ const bottomPins = [
         signal: "C4",
         type: "Analog",
         direction: "Input",
+        alert: "When using this pin as an analog input, disable the GPIO function for this pin.",
         function: "ADC",
         mcuPin: "13",
         muxRegister: "N/A",
@@ -2091,6 +2136,36 @@ function openModal(pin) {
     });
 
     warningsContainer.style.display = validWarnings.length > 0 ? "flex" : "none";
+
+    // Supports either one alert string or an array of alert strings.
+    const alertsContainer = document.getElementById("pinAlerts");
+    alertsContainer.innerHTML = "";
+
+    const alerts = Array.isArray(pin.alert)
+        ? pin.alert
+        : (typeof pin.alert === "string" ? [pin.alert] : []);
+
+    const validAlerts = alerts
+        .filter(alert => typeof alert === "string" && alert.trim() !== "");
+
+    validAlerts.forEach(alert => {
+        const alertItem = document.createElement("div");
+        alertItem.className = "pin-alert";
+
+        const alertIcon = document.createElement("span");
+        alertIcon.className = "alert-icon";
+        alertIcon.textContent = "!";
+        alertIcon.setAttribute("aria-hidden", "true");
+
+        const alertText = document.createElement("span");
+        alertText.textContent = alert;
+
+        alertItem.appendChild(alertIcon);
+        alertItem.appendChild(alertText);
+        alertsContainer.appendChild(alertItem);
+    });
+
+    alertsContainer.style.display = validAlerts.length > 0 ? "flex" : "none";
 
     // Supports either one info string or an array of info strings.
     const infosContainer = document.getElementById("pinInfos");
