@@ -497,6 +497,17 @@ select {
     line-height: 1;
 }
 
+.revision-warning {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e5a0a0;
+    border-radius: 8px;
+    background: #fff0f0;
+    color: #8a2525;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
 @media (max-width: 600px) {
     body {
         padding: 12px;
@@ -543,6 +554,11 @@ select {
         <option value="1.0">Hardware Revision 1.0</option>
         <option value="1.1" selected>Hardware Revision 1.1</option>
     </select>
+    
+    <div id="revisionWarning" class="revision-warning" style="display: none;">
+    ⚠ Hardware Revision 1.0 is obsolete and no longer recommended. Please use Hardware Revision 1.1.
+    </div>
+
 </div>
 
 <div class="panel">
@@ -2293,10 +2309,21 @@ document.addEventListener("keydown", event => {
 
 searchInput.addEventListener("input", render);
 
+const revisionWarning = document.getElementById("revisionWarning");
+
+function updateRevisionWarning() {
+    revisionWarning.style.display =
+        currentRevision === "1.0" ? "block" : "none";
+}
+
 revisionSelect.addEventListener("change", () => {
     currentRevision = revisionSelect.value;
+
+    updateRevisionWarning();
     render();
 });
+
+updateRevisionWarning();
 
 render();
 
