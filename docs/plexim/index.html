@@ -653,6 +653,24 @@ select {
     font-size: 12px;
 }
 
+
+/* Per-MUX function notes, independent of pin-level Info/Warning/Alert */
+.function-table { min-width: 570px; table-layout: fixed; }
+.function-table th, .function-table td { vertical-align: middle; }
+.function-table th:nth-child(1) { width: 35%; }
+.function-table th:nth-child(2) { width: 13%; }
+.function-table th:nth-child(3) { width: 52%; }
+.function-table td:nth-child(1), .function-table td:nth-child(2), .function-table td:nth-child(3) { text-align: left; }
+/* Keep the MUX value text flush with its column start; no badge padding/indent. */
+.mux-value { display: inline-block; margin: 0; padding: 0; background: transparent; border-radius: 0; font-family: monospace; }
+.mux-note { display: inline-flex; align-items: center; gap: 7px; width: 100%; min-height: 32px; box-sizing: border-box; margin: 0; border: 1px solid; border-radius: 6px; padding: 5px 9px; line-height: 1.35; overflow-wrap: anywhere; }
+.mux-note-icon { flex: 0 0 16px; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; line-height: 1; }
+.mux-note-text { min-width: 0; }
+.mux-note.info { color: #285b32; background: #edf8ef; border-color: #9ac9a2; }
+.mux-note.warning { color: #765600; background: #fff8dc; border-color: #e7c65c; }
+.mux-note.alert { color: #8a2525; background: #fff0f0; border-color: #e5a0a0; }
+.mux-empty { color: #98a2b3; }
+
 </style>
 </head>
 
@@ -811,6 +829,7 @@ select {
                     <tr>
                         <th>Function</th>
                         <th id="muxValueHeader">MUX Value</th>
+                        <th>Note</th>
                     </tr>
                 </thead>
                 <tbody id="functionTableBody"></tbody>
@@ -856,7 +875,7 @@ const connectorPins = [
         muxRegister: "TBD",
         alternatives: [
             // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            // { name: "ePWM3A", muxValue: "1", note: "Check output routing.", severity: "warning" }
         ],
         info: "",
         warning: "",
@@ -988,8 +1007,16 @@ const connectorPins = [
         function: "TBD",
         muxRegister: "TBD",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO43", muxValue: "0", note: "Safe to use as an input.", severity: "Info" },
+            { name: "EPWM14A", muxValue: "3", note: "Do not use this option.", severity: "Alert" },
+            { name: "EQEP4_B", muxValue: "5", note: "Safe to use.", severity: "Info" },
+            { name: "I2CA_SCL", muxValue: "6", note: "Do not use this option.", severity: "Alert" },
+            { name: "SD4_D4", muxValue: "7", note: "Safe to use.", severity: "Info" },
+            { name: "CLB_OUTPUTXBAR6", muxValue: "10", note: "Do not use this option.", severity: "Alert" },
+            { name: "UARTA_RX", muxValue: "11", note: "Safe to use.", severity: "Info" },
+            { name: "FSIRXD_D1", muxValue: "14", note: "Safe to use.", severity: "Info" },
+            { name: "SCIA_RX", muxValue: "15", note: "Safe to use.", severity: "Info" },
+            { name: "USB0DP", muxValue: "ALT", note: "Do not use this option.", severity: "Alert" }
         ],
         info: "",
         warning: "This pin must be configured as a DSP input.",
@@ -2647,7 +2674,7 @@ function openModal(pin) {
     if (alternatives.length === 0) {
         tableBody.innerHTML = `
             <tr>
-                <td colspan="2">
+                <td colspan="${isAnalog ? 3 : 4}">
                     <div class="no-functions">
                         No alternative functions defined for this pin.
                     </div>
@@ -2703,6 +2730,30 @@ function openModal(pin) {
                 row.appendChild(cell);
             });
 
+            // Each alternative can independently define note and severity.
+            // Example: { name: "ePWM3A", muxValue: "1", note: "Check output routing.", severity: "warning" }
+            const severity = String(fn.severity || "info").toLowerCase();
+            const validSeverity = ["info", "warning", "alert"].includes(severity) ? severity : "info";
+            const noteText = String(fn.note ?? "").trim();
+            const noteCell = document.createElement("td");
+            if (noteText) {
+                const noteBox = document.createElement("div");
+                noteBox.className = `mux-note ${validSeverity}`;
+                const noteIcon = document.createElement("span");
+                noteIcon.className = "mux-note-icon";
+                noteIcon.setAttribute("aria-hidden", "true");
+                noteIcon.textContent = {info: "ⓘ", warning: "⚠", alert: "!"}[validSeverity];
+                const noteContent = document.createElement("span");
+                noteContent.className = "mux-note-text";
+                noteContent.textContent = noteText;
+                noteBox.appendChild(noteIcon);
+                noteBox.appendChild(noteContent);
+                noteCell.appendChild(noteBox);
+            } else {
+                noteCell.className = "mux-empty";
+                noteCell.textContent = "—";
+            }
+            row.appendChild(noteCell);
             tableBody.appendChild(row);
         });
     }
