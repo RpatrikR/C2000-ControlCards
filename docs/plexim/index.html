@@ -1,0 +1,1040 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plexim Control Card – Connector Pinout</title>
+
+<style>
+:root {
+    --bg: #f5f7fa;
+    --panel: #ffffff;
+    --text: #202938;
+    --muted: #697586;
+    --border: #dce2e9;
+
+    --gpio: #b7d9bd;
+    --gpio-border: #78aa82;
+    --gnd: #b8d3ed;
+    --gnd-border: #82acd4;
+    --power: #edbcbc;
+    --power-border: #d99595;
+    --analog: #f1dfaa;
+    --analog-border: #d4bd76;
+    --reset: #d0d3d8;
+    --reset-border: #9ca3af;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 24px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    max-width: 1450px;
+    margin: auto;
+}
+
+header {
+    margin-bottom: 22px;
+}
+
+h1 {
+    margin: 0 0 8px;
+    font-size: 27px;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+input, select {
+    padding: 11px 13px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    color: var(--text);
+    font-size: 14px;
+}
+
+input {
+    width: min(340px, 100%);
+}
+
+select {
+    min-width: 130px;
+}
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.035);
+}
+
+.connector-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 18px;
+    font-size: 17px;
+}
+
+.row-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--muted);
+    margin: 12px 0 7px;
+}
+
+.pin-scroll {
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.pin-grid {
+    display: grid;
+    grid-template-columns: repeat(38, 1fr);
+    gap: 4px;
+    min-width: 1050px;
+}
+
+.pin {
+    height: 52px;
+    min-width: 0;
+    border: 1px solid;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.12s, box-shadow 0.12s;
+    position: relative;
+}
+
+.pin:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 9px rgba(0,0,0,0.18);
+    z-index: 2;
+}
+
+.pin.gpio {
+    background: var(--gpio);
+    border-color: var(--gpio-border);
+    color: #173d20;
+}
+
+.pin.gnd {
+    background: var(--gnd);
+    border-color: var(--gnd-border);
+    color: #173b5c;
+}
+
+.pin.power {
+    background: var(--power);
+    border-color: var(--power-border);
+    color: #652727;
+}
+
+.pin.analog {
+    background: var(--analog);
+    border-color: var(--analog-border);
+    color: #594719;
+}
+
+.pin.reset {
+    background: var(--reset);
+    border-color: var(--reset-border);
+    color: #374151;
+}
+
+.pin.empty {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.pin.key {
+    background: #e8ebef;
+    border: 1px dashed #aab2bd;
+    color: #697586;
+    cursor: default;
+    font-size: 10px;
+}
+
+.pin.key:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.pin.filtered {
+    opacity: 0.12;
+}
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 17px;
+    margin-top: 22px;
+    justify-content: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.legend-color {
+    width: 15px;
+    height: 15px;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 3px;
+}
+
+.info {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+/* Tooltip */
+
+.tooltip {
+    position: fixed;
+    display: none;
+    z-index: 100;
+    background: #202938;
+    color: white;
+    padding: 9px 12px;
+    border-radius: 7px;
+    font-size: 12px;
+    pointer-events: none;
+    max-width: 280px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.tooltip strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
+}
+
+/* Modal */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 30, 45, 0.48);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 16px;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: white;
+    border-radius: 13px;
+    width: 100%;
+    max-width: 850px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 24px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.22);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.close-button {
+    border: none;
+    background: #eef1f5;
+    border-radius: 7px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.details {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 12px;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.detail-label {
+    color: var(--muted);
+}
+
+.detail-value {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.section-title {
+    font-size: 15px;
+    margin: 22px 0 10px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+}
+
+.function-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    min-width: 320px;
+}
+
+.function-table th {
+    background: #f0f3f7;
+    color: #4b5563;
+    text-align: left;
+    padding: 11px 10px;
+    white-space: nowrap;
+}
+
+.function-table td {
+    padding: 11px 10px;
+    border-top: 1px solid var(--border);
+    vertical-align: top;
+}
+
+.function-table tr.primary-row {
+    background: #edf5ef;
+}
+
+.function-name {
+    font-family: monospace;
+    font-weight: bold;
+}
+
+.primary-tag {
+    display: inline-block;
+    margin-left: 5px;
+    color: #47734f;
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    font-weight: bold;
+}
+
+.mux-value {
+    font-family: monospace;
+    background: #f0f3f7;
+    padding: 3px 6px;
+    border-radius: 4px;
+}
+
+.tbd {
+    color: #a16207;
+    font-style: italic;
+}
+
+.no-functions {
+    color: var(--muted);
+    font-size: 13px;
+    padding: 12px;
+    background: #f5f7fa;
+    border-radius: 7px;
+}
+
+.table-note {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 9px;
+}
+
+.pin-warnings {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 18px;
+}
+
+.pin-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 10px 12px;
+    border: 1px solid #e7c65c;
+    border-radius: 8px;
+    background: #fff8dc;
+    color: #765600;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.warning-icon {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #e5ad19;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    padding-top: 5px;
+}
+
+/* Critical configuration alerts */
+.pin-alerts {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 18px;
+}
+
+.pin-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 10px 12px;
+    border: 1px solid #e5a0a0;
+    border-radius: 8px;
+    background: #fff0f0;
+    color: #8a2525;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.alert-icon {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #c83b3b;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+/* Informational notes */
+.pin-infos {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 18px;
+}
+
+.pin-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 10px 12px;
+    border: 1px solid #9ac9a2;
+    border-radius: 8px;
+    background: #edf8ef;
+    color: #285b32;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.info-icon {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #3b9650;
+    color: #fff;
+    font-size: 12px;
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.revision-warning {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e5a0a0;
+    border-radius: 8px;
+    background: #fff0f0;
+    color: #8a2525;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+
+/* PCB connector arrangement */
+.board-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 28px;
+    align-items: start;
+    padding: 8px 4px 4px;
+}
+.connector-pair { display: flex; flex-direction: column; gap: 15px; min-width: 0; }
+.connector {
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: #fbfcfd;
+    padding: 12px 13px 14px;
+    min-width: 0;
+}
+.connector .connector-title {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #344054;
+    letter-spacing: .3px;
+}
+.pin-row { display: grid; grid-template-columns: repeat(10, minmax(20px, 1fr)); gap: 5px; }
+.pin { height: 43px; font-size: 12px; }
+@media (max-width: 900px) { .board-grid { grid-template-columns: 1fr; gap: 14px; } }
+@media (max-width: 600px) {
+    .pin-row { gap: 3px; }
+    .pin { height: 38px; font-size: 11px; }
+    .connector { padding: 10px 8px 12px; }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 12px;
+    }
+
+    .panel {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    .details {
+        grid-template-columns: 110px 1fr;
+    }
+
+    .modal {
+        padding: 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <h1>Plexim Control Card – Connector Pinout</h1>
+    <div class="subtitle">
+        Interactive pinout – 8 connectors, 80 contacts
+    </div>
+</header>
+
+<div class="toolbar">
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Search connector, pin, signal or function..."
+    >
+
+</div>
+
+<div class="panel">
+
+    <div class="connector-title">
+        Plexim Control Card – Connector Pinout
+    </div>
+
+    <div class="board-grid">
+        <section class="connector-pair">
+            <div class="connector"><div class="connector-title">J5</div><div class="pin-row" id="grid-J5"></div></div>
+            <div class="connector"><div class="connector-title">J7</div><div class="pin-row" id="grid-J7"></div></div>
+        </section>
+        <section class="connector-pair">
+            <div class="connector"><div class="connector-title">J1</div><div class="pin-row" id="grid-J1"></div></div>
+            <div class="connector"><div class="connector-title">J3</div><div class="pin-row" id="grid-J3"></div></div>
+        </section>
+        <section class="connector-pair">
+            <div class="connector"><div class="connector-title">J8</div><div class="pin-row" id="grid-J8"></div></div>
+            <div class="connector"><div class="connector-title">J6</div><div class="pin-row" id="grid-J6"></div></div>
+        </section>
+        <section class="connector-pair">
+            <div class="connector"><div class="connector-title">J4</div><div class="pin-row" id="grid-J4"></div></div>
+            <div class="connector"><div class="connector-title">J2</div><div class="pin-row" id="grid-J2"></div></div>
+        </section>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item">
+            <span class="legend-color" style="background:var(--gpio)"></span>
+            GPIO
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background:var(--gnd)"></span>
+            GND
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background:var(--power)"></span>
+            Power Input
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background:var(--analog)"></span>
+            Analog
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background:var(--reset)"></span>
+            Reset
+        </div>
+    </div>
+
+    <div class="info">
+        Hover over a pin for quick information. Click a pin to view its signal attributes.
+    </div>
+</div>
+
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+
+        <div class="modal-header">
+            <h2 id="modalTitle">GPIO</h2>
+            <button class="close-button" id="closeModal">&times;</button>
+        </div>
+
+        <div class="details" id="modalDetails"></div>
+        <div class="pin-alerts" id="pinAlerts"></div>
+        <div class="pin-warnings" id="pinWarnings"></div>
+        <div class="pin-infos" id="pinInfos"></div>
+
+        <h3 class="section-title" id="availableFunctionsTitle"> Available Functions and MUX Configuration</h3>
+
+        <div class="table-wrapper">
+            <table class="function-table">
+                <thead>
+                    <tr>
+                        <th>Function</th>
+                        <th id="muxValueHeader">MUX Value</th>
+                    </tr>
+                </thead>
+                <tbody id="functionTableBody"></tbody>
+            </table>
+        </div>
+
+        <div class="table-note">
+            MUX values and registers must be verified against the datasheet
+            and technical reference manual of the selected C2000 device.
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+/*
+=========================================================
+CONNECTOR PIN DATA
+
+Each connector contains 10 contacts. Generic placeholder
+assignments are provided until the actual pinout is defined.
+
+Retained attributes:
+connector, pin, signal, type, direction, function, mcuPin,
+muxRegister, alternatives, info, warning, alert.
+=========================================================
+*/
+
+const connectorNames = ["J5", "J7", "J1", "J3", "J8", "J6", "J4", "J2"];
+
+const connectorPins = connectorNames.flatMap(connector =>
+    Array.from({ length: 10 }, (_, index) => ({
+        connector,
+        pin: index + 1,
+        signal: `${connector}_${index + 1}`,
+        type: "GPIO",
+        direction: "Bidirectional",
+        function: "TBD",
+        mcuPin: "TBD",
+        muxRegister: "TBD",
+        alternatives: [{ name: "TBD", muxValue: "TBD" }],
+        info: "",
+        warning: "",
+        alert: ""
+    }))
+);
+
+const searchInput = document.getElementById("searchInput");
+const tooltip = document.getElementById("tooltip");
+const modalOverlay = document.getElementById("modalOverlay");
+
+function getPinClass(pin) {
+    if (pin.signal === "GND") return "gnd";
+    if (pin.signal === "3.3V Power Input" || pin.signal === "5V Power Input") return "power";
+    if (pin.type === "Analog") return "analog";
+    if (pin.type === "Reset") return "reset";
+    return "gpio";
+}
+function getPinFunction(pin) { return pin.function || "TBD"; }
+function getPinSignal(pin) { return pin.signal || "TBD"; }
+function getAllFunctions(pin) { return pin.alternatives || []; }
+function getPinMuxRegister(pin) { return pin.muxRegister || "N/A"; }
+
+function matchesSearch(pin, query) {
+    if (!query) return true;
+    const alternatives = getAllFunctions(pin).map(fn => [fn.name, fn.muxValue].join(" ")).join(" ");
+    const text = [
+        pin.connector, pin.pin, `${pin.connector}-${pin.pin}`, pin.signal,
+        pin.type, pin.direction, pin.mcuPin, getPinFunction(pin),
+        pin.muxRegister, alternatives
+    ].join(" ").toLowerCase();
+    return text.includes(query.toLowerCase());
+}
+
+function createPinElement(pin, query) {
+    const element = document.createElement("div");
+    element.className = "pin " + getPinClass(pin);
+    element.textContent = pin.pin;
+    if (!matchesSearch(pin, query)) element.classList.add("filtered");
+    element.addEventListener("mouseenter", event => showTooltip(event, pin));
+    element.addEventListener("mousemove", moveTooltip);
+    element.addEventListener("mouseleave", () => tooltip.style.display = "none");
+    element.addEventListener("click", () => openModal(pin));
+    return element;
+}
+
+function render() {
+    const query = searchInput.value.trim();
+    connectorNames.forEach(connector => {
+        const grid = document.getElementById(`grid-${connector}`);
+        grid.innerHTML = "";
+        connectorPins.filter(pin => pin.connector === connector)
+            .forEach(pin => grid.appendChild(createPinElement(pin, query)));
+    });
+}
+
+function showTooltip(event, pin) {
+    tooltip.innerHTML = `
+        <strong>${pin.connector} – Pin ${pin.pin}: ${getPinSignal(pin)}</strong>
+        <br>MCU Pin: ${pin.mcuPin || "TBD"}<br>
+        Type: ${pin.type}<br>
+        Function: ${getPinFunction(pin)}
+    `;
+
+    tooltip.style.display = "block";
+    moveTooltip(event);
+}
+
+function getMcuPin(pin) {
+    return pin.mcuPin || "TBD";
+}
+
+
+
+function moveTooltip(event) {
+    const margin = 14;
+    const edge = 8;
+
+    let x = event.clientX + margin;
+    let y = event.clientY + margin;
+
+    // Dočasne nastav pozíciu, aby sme zistili skutočnú veľkosť tooltipu.
+    tooltip.style.left = x + "px";
+    tooltip.style.top = y + "px";
+
+    const rect = tooltip.getBoundingClientRect();
+
+    // Posun iba o nevyhnutnú vzdialenosť, aby tooltip zostal na obrazovke.
+    if (x + rect.width > window.innerWidth - edge) {
+        x = window.innerWidth - rect.width - edge;
+    }
+
+    if (y + rect.height > window.innerHeight - edge) {
+        y = window.innerHeight - rect.height - edge;
+    }
+
+    tooltip.style.left = Math.max(edge, x) + "px";
+    tooltip.style.top = Math.max(edge, y) + "px";
+}
+
+function openModal(pin) {
+
+    tooltip.style.display = "none";
+
+    const signal = getPinSignal(pin);
+    const primaryFunction = getPinFunction(pin);
+    const alternatives = getAllFunctions(pin);
+    const mcuPin = pin.mcuPin || "TBD";
+
+    document.getElementById("modalTitle").textContent = `${pin.connector} – Pin ${pin.pin} (${signal})`;
+
+    document.getElementById("modalDetails").innerHTML = `
+        <div class="detail-label">Connector</div>
+        <div class="detail-value">${pin.connector}</div>
+
+        <div class="detail-label">Connector pin</div>
+        <div class="detail-value">${pin.pin}</div>
+
+        <div class="detail-label">Pin ID</div>
+        <div class="detail-value">${pin.connector}-${pin.pin}</div>
+
+        ${pin.type !== "Power" ? `
+        <div class="detail-label">MCU physical pin</div>
+        <div class="detail-value">${mcuPin}</div>
+        ` : ""}
+        
+        <div class="detail-label">Direction</div>
+        <div class="detail-value">${pin.direction || "N/A"}</div>
+<!--
+        <div class="detail-label">Signal</div>
+        <div class="detail-value">${signal}</div>
+-->
+        
+
+        <div class="detail-label">Signal type</div>
+        <div class="detail-value">${pin.type}</div>
+
+        <div class="detail-label">Primary function</div>
+        <div class="detail-value">${primaryFunction}</div>
+
+        ${pin.type !== "Analog" && pin.type !== "Power" ? `
+            <div class="detail-label">MUX Register</div>
+            <div class="detail-value">${getPinMuxRegister(pin)}</div>
+        ` : ""}
+    `;
+
+    const warningsContainer = document.getElementById("pinWarnings");
+    warningsContainer.innerHTML = "";
+
+    // Supports either one warning string or an array of warning strings.
+    const warnings = Array.isArray(pin.warning)
+        ? pin.warning
+        : (typeof pin.warning === "string" ? [pin.warning] : []);
+
+    const validWarnings = warnings
+        .filter(warning => typeof warning === "string" && warning.trim() !== "");
+
+    validWarnings.forEach(warning => {
+        const warningItem = document.createElement("div");
+        warningItem.className = "pin-warning";
+
+        const warningIcon = document.createElement("span");
+        warningIcon.className = "warning-icon";
+        warningIcon.textContent = "!";
+
+        const warningText = document.createElement("span");
+        warningText.textContent = warning;
+
+        warningItem.appendChild(warningIcon);
+        warningItem.appendChild(warningText);
+        warningsContainer.appendChild(warningItem);
+    });
+
+    warningsContainer.style.display = validWarnings.length > 0 ? "flex" : "none";
+
+    // Supports either one alert string or an array of alert strings.
+    const alertsContainer = document.getElementById("pinAlerts");
+    alertsContainer.innerHTML = "";
+
+    const alerts = Array.isArray(pin.alert)
+        ? pin.alert
+        : (typeof pin.alert === "string" ? [pin.alert] : []);
+
+    const validAlerts = alerts
+        .filter(alert => typeof alert === "string" && alert.trim() !== "");
+
+    validAlerts.forEach(alert => {
+        const alertItem = document.createElement("div");
+        alertItem.className = "pin-alert";
+
+        const alertIcon = document.createElement("span");
+        alertIcon.className = "alert-icon";
+        alertIcon.textContent = "!";
+        alertIcon.setAttribute("aria-hidden", "true");
+
+        const alertText = document.createElement("span");
+        alertText.textContent = alert;
+
+        alertItem.appendChild(alertIcon);
+        alertItem.appendChild(alertText);
+        alertsContainer.appendChild(alertItem);
+    });
+
+    alertsContainer.style.display = validAlerts.length > 0 ? "flex" : "none";
+
+    // Supports either one info string or an array of info strings.
+    const infosContainer = document.getElementById("pinInfos");
+    infosContainer.innerHTML = "";
+
+    const infos = Array.isArray(pin.info)
+        ? pin.info
+        : (typeof pin.info === "string" ? [pin.info] : []);
+
+    const validInfos = infos
+        .filter(info => typeof info === "string" && info.trim() !== "");
+
+    validInfos.forEach(info => {
+        const infoItem = document.createElement("div");
+        infoItem.className = "pin-info";
+
+        const infoIcon = document.createElement("span");
+        infoIcon.className = "info-icon";
+        infoIcon.textContent = "i";
+        infoIcon.setAttribute("aria-hidden", "true");
+
+        const infoText = document.createElement("span");
+        infoText.textContent = info;
+
+        infoItem.appendChild(infoIcon);
+        infoItem.appendChild(infoText);
+        infosContainer.appendChild(infoItem);
+    });
+
+    infosContainer.style.display = validInfos.length > 0 ? "flex" : "none";
+
+    const tableBody = document.getElementById("functionTableBody");
+    const isAnalog = pin.type === "Analog";
+    document.getElementById("availableFunctionsTitle").textContent = isAnalog
+    ? "Available Functions"
+    : "Available Functions and MUX Configuration";
+    document.getElementById("muxValueHeader").style.display = isAnalog ? "none" : "";
+    tableBody.innerHTML = "";
+
+    if (alternatives.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="2">
+                    <div class="no-functions">
+                        No alternative functions defined for this pin.
+                    </div>
+                </td>
+            </tr>
+        `;
+    } else {
+
+        alternatives.forEach(fn => {
+
+            const row = document.createElement("tr");
+
+            if (fn.name === primaryFunction) {
+                row.classList.add("primary-row");
+            }
+
+            const values = isAnalog
+                ? [fn.name || "TBD"]
+                : [fn.name || "TBD", fn.muxValue ?? "TBD"];
+
+            values.forEach((value, index) => {
+
+                const cell = document.createElement("td");
+
+                if (index === 0) {
+                    const name = document.createElement("span");
+                    name.className = "function-name";
+                    name.textContent = value;
+                    cell.appendChild(name);
+
+                    if (fn.name === primaryFunction) {
+                        const tag = document.createElement("span");
+                        tag.className = "primary-tag";
+                        tag.textContent = "PRIMARY";
+                        cell.appendChild(tag);
+                    }
+                } else {
+                    cell.textContent = value;
+
+                    if (value === "TBD") {
+                        cell.classList.add("tbd");
+                    }
+
+                    if (index === 1 && value !== "TBD" && value !== "N/A") {
+                        cell.innerHTML = "";
+                        const code = document.createElement("span");
+                        code.className = "mux-value";
+                        code.textContent = value;
+                        cell.appendChild(code);
+                    }
+                }
+
+                row.appendChild(cell);
+            });
+
+            tableBody.appendChild(row);
+        });
+    }
+
+    modalOverlay.classList.add("active");
+    tooltip.style.display = "none";
+}
+
+function closeModal() {
+    modalOverlay.classList.remove("active");
+}
+
+document.getElementById("closeModal")
+    .addEventListener("click", closeModal);
+
+modalOverlay.addEventListener("click", event => {
+    if (event.target === modalOverlay) {
+        closeModal();
+    }
+});
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+        closeModal();
+    }
+});
+
+searchInput.addEventListener("input", render);
+render();
+
+</script>
+</body>
+</html>
