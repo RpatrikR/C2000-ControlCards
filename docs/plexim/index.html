@@ -14,16 +14,18 @@
     --muted: #697586;
     --border: #dce2e9;
 
-    --gpio: #b7d9bd;
-    --gpio-border: #78aa82;
+    --input: #c7e6d1;
+    --input-border: #80b995;
+    --output: #d9d2f0;
+    --output-border: #a99bd5;
     --gnd: #b8d3ed;
     --gnd-border: #82acd4;
     --power: #edbcbc;
     --power-border: #d99595;
     --analog: #f1dfaa;
     --analog-border: #d4bd76;
-    --reset: #d0d3d8;
-    --reset-border: #9ca3af;
+    --not-connected: #e5e7eb;
+    --not-connected-border: #b8bec8;
 }
 
 * {
@@ -137,10 +139,16 @@ select {
     z-index: 2;
 }
 
-.pin.gpio {
-    background: var(--gpio);
-    border-color: var(--gpio-border);
-    color: #173d20;
+.pin.input {
+    background: var(--input);
+    border-color: var(--input-border);
+    color: #17452b;
+}
+
+.pin.output {
+    background: var(--output);
+    border-color: var(--output-border);
+    color: #3d315f;
 }
 
 .pin.gnd {
@@ -161,10 +169,17 @@ select {
     color: #594719;
 }
 
-.pin.reset {
-    background: var(--reset);
-    border-color: var(--reset-border);
-    color: #374151;
+.pin.not-connected {
+    background: var(--not-connected);
+    border-color: var(--not-connected-border);
+    color: #737b87;
+    cursor: default;
+    opacity: 0.65;
+}
+
+.pin.not-connected:hover {
+    transform: none;
+    box-shadow: none;
 }
 
 .pin.empty {
@@ -517,23 +532,50 @@ select {
     align-items: start;
     padding: 8px 4px 4px;
 }
-.connector-pair { display: flex; flex-direction: column; gap: 15px; min-width: 0; }
-.connector {
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    background: #fbfcfd;
-    padding: 12px 13px 14px;
+.connector-pair {
     min-width: 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fbfcfd;
+    padding: 13px;
+}
+.connector-unit {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+}
+.connector {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+    padding: 2px 0;
+    border: 0;
+    background: transparent;
 }
 .connector .connector-title {
-    margin-bottom: 10px;
+    margin: 0;
     font-size: 14px;
     color: #344054;
     letter-spacing: .3px;
+    text-align: left;
 }
-.pin-row { display: grid; grid-template-columns: repeat(10, minmax(20px, 1fr)); gap: 5px; }
+.pin-row {
+    display: grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: 4px;
+}
 .pin { height: 43px; font-size: 12px; }
-@media (max-width: 900px) { .board-grid { grid-template-columns: 1fr; gap: 14px; } }
+@media (max-width: 900px) {
+    .board-grid { grid-template-columns: 1fr; gap: 14px; }
+}
+@media (max-width: 520px) {
+    .connector-unit { grid-template-columns: 1fr; gap: 12px; }
+    .connector { grid-template-columns: 30px minmax(0, 1fr); gap: 7px; }
+    .pin-row { grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 3px; }
+}
 @media (max-width: 600px) {
     .pin-row { gap: 3px; }
     .pin { height: 38px; font-size: 11px; }
@@ -592,27 +634,66 @@ select {
 
     <div class="board-grid">
         <section class="connector-pair">
-            <div class="connector"><div class="connector-title">J5</div><div class="pin-row" id="grid-J5"></div></div>
-            <div class="connector"><div class="connector-title">J7</div><div class="pin-row" id="grid-J7"></div></div>
+            <div class="connector-unit">
+                <div class="connector">
+                    <div class="connector-title">J5</div>
+                    <div class="pin-row" id="grid-J5"></div>
+                </div>
+                <div class="connector">
+                    <div class="connector-title">J7</div>
+                    <div class="pin-row" id="grid-J7"></div>
+                </div>
+            </div>
         </section>
+
         <section class="connector-pair">
-            <div class="connector"><div class="connector-title">J1</div><div class="pin-row" id="grid-J1"></div></div>
-            <div class="connector"><div class="connector-title">J3</div><div class="pin-row" id="grid-J3"></div></div>
+            <div class="connector-unit">
+                <div class="connector">
+                    <div class="connector-title">J1</div>
+                    <div class="pin-row" id="grid-J1"></div>
+                </div>
+                <div class="connector">
+                    <div class="connector-title">J3</div>
+                    <div class="pin-row" id="grid-J3"></div>
+                </div>
+            </div>
         </section>
+
         <section class="connector-pair">
-            <div class="connector"><div class="connector-title">J8</div><div class="pin-row" id="grid-J8"></div></div>
-            <div class="connector"><div class="connector-title">J6</div><div class="pin-row" id="grid-J6"></div></div>
+            <div class="connector-unit">
+                <div class="connector">
+                    <div class="connector-title">J8</div>
+                    <div class="pin-row" id="grid-J8"></div>
+                </div>
+                <div class="connector">
+                    <div class="connector-title">J6</div>
+                    <div class="pin-row" id="grid-J6"></div>
+                </div>
+            </div>
         </section>
+
         <section class="connector-pair">
-            <div class="connector"><div class="connector-title">J4</div><div class="pin-row" id="grid-J4"></div></div>
-            <div class="connector"><div class="connector-title">J2</div><div class="pin-row" id="grid-J2"></div></div>
+            <div class="connector-unit">
+                <div class="connector">
+                    <div class="connector-title">J4</div>
+                    <div class="pin-row" id="grid-J4"></div>
+                </div>
+                <div class="connector">
+                    <div class="connector-title">J2</div>
+                    <div class="pin-row" id="grid-J2"></div>
+                </div>
+            </div>
         </section>
     </div>
 
     <div class="legend">
         <div class="legend-item">
-            <span class="legend-color" style="background:var(--gpio)"></span>
-            GPIO
+            <span class="legend-color" style="background:var(--input)"></span>
+            Input
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background:var(--output)"></span>
+            Output
         </div>
         <div class="legend-item">
             <span class="legend-color" style="background:var(--gnd)"></span>
@@ -620,15 +701,15 @@ select {
         </div>
         <div class="legend-item">
             <span class="legend-color" style="background:var(--power)"></span>
-            Power Input
+            Power
         </div>
         <div class="legend-item">
             <span class="legend-color" style="background:var(--analog)"></span>
             Analog
         </div>
         <div class="legend-item">
-            <span class="legend-color" style="background:var(--reset)"></span>
-            Reset
+            <span class="legend-color" style="background:var(--not-connected)"></span>
+            Not Connected
         </div>
     </div>
 
@@ -645,7 +726,7 @@ select {
     <div class="modal">
 
         <div class="modal-header">
-            <h2 id="modalTitle">GPIO</h2>
+            <h2 id="modalTitle">Input</h2>
             <button class="close-button" id="closeModal">&times;</button>
         </div>
 
@@ -656,7 +737,7 @@ select {
 
         <h3 class="section-title" id="availableFunctionsTitle"> Available Functions and MUX Configuration</h3>
 
-        <div class="table-wrapper">
+        <div class="table-wrapper" id="functionsTableWrapper">
             <table class="function-table">
                 <thead>
                     <tr>
@@ -668,7 +749,7 @@ select {
             </table>
         </div>
 
-        <div class="table-note">
+        <div class="table-note" id="functionsTableNote">
             MUX values and registers must be verified against the datasheet
             and technical reference manual of the selected C2000 device.
         </div>
@@ -686,43 +767,1551 @@ Each connector contains 10 contacts. Generic placeholder
 assignments are provided until the actual pinout is defined.
 
 Retained attributes:
-connector, pin, signal, type, direction, function, mcuPin,
-muxRegister, alternatives, info, warning, alert.
+connector, connectorPin, dspSignal, dspPhysicalPin, dspDirection, pleximSignal,
+pleximDirection, signalType, function, muxRegister, alternatives, info, warning, alert.
 =========================================================
 */
 
 const connectorNames = ["J5", "J7", "J1", "J3", "J8", "J6", "J4", "J2"];
 
-const connectorPins = connectorNames.flatMap(connector =>
-    Array.from({ length: 10 }, (_, index) => ({
-        connector,
-        pin: index + 1,
-        signal: `${connector}_${index + 1}`,
-        type: "GPIO",
-        direction: "Bidirectional",
+const connectorPins = [
+    {
+        connector: "J5",
+        connectorPin: 50,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Not Connected",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
         function: "TBD",
-        mcuPin: "TBD",
         muxRegister: "TBD",
-        alternatives: [{ name: "TBD", muxValue: "TBD" }],
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
         info: "",
         warning: "",
         alert: ""
-    }))
-);
+    },
+    {
+        connector: "J5",
+        connectorPin: 49,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Not Connected",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J5",
+        connectorPin: 48,
+        dspSignal: "GPIO80",
+        dspPhysicalPin: "83",
+        pleximDirection: "Output", // smer z pohľadu PLEXIM
+        dspDirection: "Input",   // smer z pohľadu DSP/MCU
+        signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "DO-19",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J5",
+        connectorPin: 47,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Not Connected",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J5",
+        connectorPin: 46,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Not Connected",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J5",
+        connectorPin: 45,
+        dspSignal: "GPIO42",
+        dspPhysicalPin: "73",
+        pleximDirection: "Output", // smer z pohľadu PLEXIM
+        dspDirection: "Input",   // smer z pohľadu DSP/MCU
+        signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "DO-18",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J5",
+        connectorPin: 44,
+        dspSignal: "GPIO69",
+        dspPhysicalPin: "75",
+        pleximDirection: "Output", // smer z pohľadu PLEXIM
+        dspDirection: "Input",   // smer z pohľadu DSP/MCU
+        signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "DO-17",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J5",
+        connectorPin: 43,
+        dspSignal: "GPIO43",
+        dspPhysicalPin: "74",
+        pleximDirection: "Output", // smer z pohľadu PLEXIM
+        dspDirection: "Input",   // smer z pohľadu DSP/MCU
+        signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "DO-16",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J5",
+        connectorPin: 42,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Not Connected",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J5",
+        connectorPin: 41,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Not Connected",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J7",
+        connectorPin: 70,
+        dspSignal: "A14",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Output", // smer z pohľadu PLEXIM
+        dspDirection: "Input",   // smer z pohľadu DSP/MCU
+        signalType: "Analog",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "AO-15",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J7",
+        connectorPin: 69,
+        dspSignal: "A15",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Output", // smer z pohľadu PLEXIM
+        dspDirection: "Input",   // smer z pohľadu DSP/MCU
+        signalType: "Analog",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "AO-14",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J7",
+        connectorPin: 68,
+        dspSignal: "B1",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Output", // smer z pohľadu PLEXIM
+        dspDirection: "Input",   // smer z pohľadu DSP/MCU
+        signalType: "Analog",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "AO-13",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J7",
+        connectorPin: 67,
+        dspSignal: "B6",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Output", // smer z pohľadu PLEXIM
+        dspDirection: "Input",   // smer z pohľadu DSP/MCU
+        signalType: "Analog",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "AO-12",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J7",
+        connectorPin: 66,
+        dspSignal: "B7",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Output", // smer z pohľadu PLEXIM
+        dspDirection: "Input",   // smer z pohľadu DSP/MCU
+        signalType: "Analog",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "AO-11",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J7",
+        connectorPin: 65,
+        dspSignal: "A6",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Output", // smer z pohľadu PLEXIM
+        dspDirection: "Input",   // smer z pohľadu DSP/MCU
+        signalType: "Analog",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "AO-10",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J7",
+        connectorPin: 64,
+        dspSignal: "A10",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Output", // smer z pohľadu PLEXIM
+        dspDirection: "Input",   // smer z pohľadu DSP/MCU
+        signalType: "Analog",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "AO-9",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J7",
+        connectorPin: 63,
+        dspSignal: "A11",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Output", // smer z pohľadu PLEXIM
+        dspDirection: "Input",   // smer z pohľadu DSP/MCU
+        signalType: "Analog",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "AO-8",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J7",
+        connectorPin: 62,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "GND",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "Ground",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J7",
+        connectorPin: 61,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Not Connected",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J1",
+        connectorPin: 1,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Power",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "3.3 Power supply from RTBOX",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "This pin is not used",
+        alert: ""
+    },
+    {
+        connector: "J1",
+        connectorPin: 2,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Not Connected",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J1",
+        connectorPin: 3,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J1",
+        connectorPin: 4,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J1",
+        connectorPin: 5,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J1",
+        connectorPin: 6,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Not Connected",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J1",
+        connectorPin: 7,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J1",
+        connectorPin: 8,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J1",
+        connectorPin: 9,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J1",
+        connectorPin: 10,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J3",
+        connectorPin: 1,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J3",
+        connectorPin: 2,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J3",
+        connectorPin: 3,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J3",
+        connectorPin: 4,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J3",
+        connectorPin: 5,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J3",
+        connectorPin: 6,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J3",
+        connectorPin: 7,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J3",
+        connectorPin: 8,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J3",
+        connectorPin: 9,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J3",
+        connectorPin: 10,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J8",
+        connectorPin: 1,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J8",
+        connectorPin: 2,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J8",
+        connectorPin: 3,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J8",
+        connectorPin: 4,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J8",
+        connectorPin: 5,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J8",
+        connectorPin: 6,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J8",
+        connectorPin: 7,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J8",
+        connectorPin: 8,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J8",
+        connectorPin: 9,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J8",
+        connectorPin: 10,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J6",
+        connectorPin: 1,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J6",
+        connectorPin: 2,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J6",
+        connectorPin: 3,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J6",
+        connectorPin: 4,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J6",
+        connectorPin: 5,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J6",
+        connectorPin: 6,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J6",
+        connectorPin: 7,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J6",
+        connectorPin: 8,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J6",
+        connectorPin: 9,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J6",
+        connectorPin: 10,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J4",
+        connectorPin: 1,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J4",
+        connectorPin: 2,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J4",
+        connectorPin: 3,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J4",
+        connectorPin: 4,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J4",
+        connectorPin: 5,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J4",
+        connectorPin: 6,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J4",
+        connectorPin: 7,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J4",
+        connectorPin: 8,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J4",
+        connectorPin: 9,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J4",
+        connectorPin: 10,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J2",
+        connectorPin: 1,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J2",
+        connectorPin: 2,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J2",
+        connectorPin: 3,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J2",
+        connectorPin: 4,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J2",
+        connectorPin: 5,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J2",
+        connectorPin: 6,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J2",
+        connectorPin: 7,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J2",
+        connectorPin: 8,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J2",
+        connectorPin: 9,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    },
+    {
+        connector: "J2",
+        connectorPin: 10,
+        dspSignal: "TBD",
+        dspPhysicalPin: "TBD",
+        pleximDirection: "Input", // smer z pohľadu PLEXIM
+        dspDirection: "Output",   // smer z pohľadu DSP/MCU
+        signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
+        pleximSignal: "TBD",
+        function: "TBD",
+        muxRegister: "TBD",
+        alternatives: [
+            // { name: "GPIO4", muxValue: "0" },
+            // { name: "ePWM3A", muxValue: "1" }
+        ],
+        info: "",
+        warning: "",
+        alert: ""
+    }
+];
 
 const searchInput = document.getElementById("searchInput");
 const tooltip = document.getElementById("tooltip");
 const modalOverlay = document.getElementById("modalOverlay");
 
 function getPinClass(pin) {
-    if (pin.signal === "GND") return "gnd";
-    if (pin.signal === "3.3V Power Input" || pin.signal === "5V Power Input") return "power";
-    if (pin.type === "Analog") return "analog";
-    if (pin.type === "Reset") return "reset";
-    return "gpio";
+    if (pin.signalType === "GND") return "gnd";
+    if (pin.signalType === "Power") return "power";
+    if (pin.signalType === "Input") return "input";
+    if (pin.signalType === "Output") return "output";
+    if (pin.signalType === "Analog") return "analog";
+    if (pin.signalType === "Not Connected") return "not-connected";
+    return "input";
 }
 function getPinFunction(pin) { return pin.function || "TBD"; }
-function getPinSignal(pin) { return pin.signal || "TBD"; }
+function getPinSignal(pin) { return pin.dspSignal || "TBD"; }
 function getAllFunctions(pin) { return pin.alternatives || []; }
 function getPinMuxRegister(pin) { return pin.muxRegister || "N/A"; }
 
@@ -730,8 +2319,8 @@ function matchesSearch(pin, query) {
     if (!query) return true;
     const alternatives = getAllFunctions(pin).map(fn => [fn.name, fn.muxValue].join(" ")).join(" ");
     const text = [
-        pin.connector, pin.pin, `${pin.connector}-${pin.pin}`, pin.signal,
-        pin.type, pin.direction, pin.mcuPin, getPinFunction(pin),
+        pin.connector, pin.connectorPin, pin.dspSignal, pin.dspPhysicalPin, pin.dspDirection,
+        pin.pleximSignal, pin.pleximDirection, pin.signalType, getPinFunction(pin),
         pin.muxRegister, alternatives
     ].join(" ").toLowerCase();
     return text.includes(query.toLowerCase());
@@ -740,12 +2329,19 @@ function matchesSearch(pin, query) {
 function createPinElement(pin, query) {
     const element = document.createElement("div");
     element.className = "pin " + getPinClass(pin);
-    element.textContent = pin.pin;
+    element.textContent = pin.connectorPin;
     if (!matchesSearch(pin, query)) element.classList.add("filtered");
-    element.addEventListener("mouseenter", event => showTooltip(event, pin));
-    element.addEventListener("mousemove", moveTooltip);
-    element.addEventListener("mouseleave", () => tooltip.style.display = "none");
-    element.addEventListener("click", () => openModal(pin));
+
+    // Not Connected pins are intentionally inert: no tooltip and no detail modal.
+    if (pin.signalType !== "Not Connected") {
+        element.addEventListener("mouseenter", event => showTooltip(event, pin));
+        element.addEventListener("mousemove", moveTooltip);
+        element.addEventListener("mouseleave", () => tooltip.style.display = "none");
+        element.addEventListener("click", () => openModal(pin));
+    } else {
+        element.setAttribute("aria-label", `${pin.connector} pin ${pin.connectorPin}: Not Connected`);
+        element.setAttribute("title", "Not Connected");
+    }
     return element;
 }
 
@@ -760,19 +2356,30 @@ function render() {
 }
 
 function showTooltip(event, pin) {
-    tooltip.innerHTML = `
-        <strong>${pin.connector} – Pin ${pin.pin}: ${getPinSignal(pin)}</strong>
-        <br>MCU Pin: ${pin.mcuPin || "TBD"}<br>
-        Type: ${pin.type}<br>
-        Function: ${getPinFunction(pin)}
-    `;
+    const isPowerOrGnd = pin.signalType === "Power" || pin.signalType === "GND";
+    tooltip.innerHTML = isPowerOrGnd
+        ? `
+            <strong>Connector ${pin.connector} – Pin ${pin.connectorPin}</strong>
+            <br>Signal type: ${pin.signalType}
+            <br>Function: ${getPinFunction(pin)}
+        `
+        : `
+            <strong>Connector ${pin.connector} – Pin ${pin.connectorPin}</strong>
+            <br>DSP Signal: ${pin.dspSignal || "TBD"}
+            <br>DSP Physical pin: ${pin.dspPhysicalPin || "TBD"}
+            <br>DSP Direction: ${pin.dspDirection || "N/A"}
+            <br>PLEXIM Signal: ${pin.pleximSignal || "TBD"}
+            <br>PLEXIM Direction: ${pin.pleximDirection || "N/A"}
+            <br>Signal type: ${pin.signalType}<br>
+            Function: ${getPinFunction(pin)}
+        `;
 
     tooltip.style.display = "block";
     moveTooltip(event);
 }
 
 function getMcuPin(pin) {
-    return pin.mcuPin || "TBD";
+    return pin.dspPhysicalPin || "TBD";
 }
 
 
@@ -810,44 +2417,57 @@ function openModal(pin) {
     const signal = getPinSignal(pin);
     const primaryFunction = getPinFunction(pin);
     const alternatives = getAllFunctions(pin);
-    const mcuPin = pin.mcuPin || "TBD";
+    const dspPhysicalPin = pin.dspPhysicalPin || "TBD";
 
-    document.getElementById("modalTitle").textContent = `${pin.connector} – Pin ${pin.pin} (${signal})`;
+    document.getElementById("modalTitle").textContent = `${pin.connector} – Pin ${pin.connectorPin}`;
 
-    document.getElementById("modalDetails").innerHTML = `
-        <div class="detail-label">Connector</div>
-        <div class="detail-value">${pin.connector}</div>
+    const isPowerOrGnd = pin.signalType === "Power" || pin.signalType === "GND";
 
-        <div class="detail-label">Connector pin</div>
-        <div class="detail-value">${pin.pin}</div>
+    document.getElementById("modalDetails").innerHTML = isPowerOrGnd
+        ? `
+            <div class="detail-label">Connector</div>
+            <div class="detail-value">${pin.connector}</div>
 
-        <div class="detail-label">Pin ID</div>
-        <div class="detail-value">${pin.connector}-${pin.pin}</div>
+            <div class="detail-label">Connector pin</div>
+            <div class="detail-value">${pin.connectorPin}</div>
 
-        ${pin.type !== "Power" ? `
-        <div class="detail-label">MCU physical pin</div>
-        <div class="detail-value">${mcuPin}</div>
-        ` : ""}
-        
-        <div class="detail-label">Direction</div>
-        <div class="detail-value">${pin.direction || "N/A"}</div>
-<!--
-        <div class="detail-label">Signal</div>
-        <div class="detail-value">${signal}</div>
--->
-        
+            <div class="detail-label">Function</div>
+            <div class="detail-value">${primaryFunction}</div>
 
-        <div class="detail-label">Signal type</div>
-        <div class="detail-value">${pin.type}</div>
+            <div class="detail-label">Signal type</div>
+            <div class="detail-value">${pin.signalType}</div>
+        `
+        : `
+            <div class="detail-label">Connector</div>
+            <div class="detail-value">${pin.connector}</div>
 
-        <div class="detail-label">Primary function</div>
-        <div class="detail-value">${primaryFunction}</div>
+            <div class="detail-label">Connector pin</div>
+            <div class="detail-value">${pin.connectorPin}</div>
 
-        ${pin.type !== "Analog" && pin.type !== "Power" ? `
+            <div class="detail-label">DSP Signal</div>
+            <div class="detail-value">${pin.dspSignal || "TBD"}</div>
+
+            <div class="detail-label">DSP Physical pin</div>
+            <div class="detail-value">${dspPhysicalPin}</div>
+
+            <div class="detail-label">DSP Direction</div>
+            <div class="detail-value">${pin.dspDirection || "N/A"}</div>
+
+            <div class="detail-label">PLEXIM Signal</div>
+            <div class="detail-value">${pin.pleximSignal || "TBD"}</div>
+
+            <div class="detail-label">PLEXIM Direction</div>
+            <div class="detail-value">${pin.pleximDirection || "N/A"}</div>
+
+            <div class="detail-label">Signal type</div>
+            <div class="detail-value">${pin.signalType}</div>
+
+            <div class="detail-label">Function</div>
+            <div class="detail-value">${primaryFunction}</div>
+
             <div class="detail-label">MUX Register</div>
             <div class="detail-value">${getPinMuxRegister(pin)}</div>
-        ` : ""}
-    `;
+        `;
 
     const warningsContainer = document.getElementById("pinWarnings");
     warningsContainer.innerHTML = "";
@@ -939,7 +2559,17 @@ function openModal(pin) {
     infosContainer.style.display = validInfos.length > 0 ? "flex" : "none";
 
     const tableBody = document.getElementById("functionTableBody");
-    const isAnalog = pin.type === "Analog";
+    const functionsTitle = document.getElementById("availableFunctionsTitle");
+    const functionsTable = document.getElementById("functionsTableWrapper");
+    const functionsNote = document.getElementById("functionsTableNote");
+
+    // Power and GND pins only show the basic pin attributes; informational
+    // messages (Info, Warning and Alert) above remain fully enabled.
+    functionsTitle.style.display = isPowerOrGnd ? "none" : "";
+    functionsTable.style.display = isPowerOrGnd ? "none" : "";
+    functionsNote.style.display = isPowerOrGnd ? "none" : "";
+
+    const isAnalog = pin.signalType === "Analog";
     document.getElementById("availableFunctionsTitle").textContent = isAnalog
     ? "Available Functions"
     : "Available Functions and MUX Configuration";
