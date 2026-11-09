@@ -910,7 +910,7 @@ const connectorPins = [
         signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DO-19",
         function: "GPIO80",
-        muxRegister: "TBD",
+        muxRegister: "GPCGMUX2 / GPCMUX2",
         alternatives: [
             { name: "GPIO80", muxValue: "0", note: "Safe for input use only. Configure the GPIO as an input.", severity: "Warning" },
             { name: "EPWM11A", muxValue: "3", note: "Do not use this option.", severity: "Alert" },
@@ -1003,7 +1003,7 @@ const connectorPins = [
         signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DO-17",
         function: "GPIO69",
-        muxRegister: "TBD",
+        muxRegister: "GPCGMUX1 / GPCMUX1",
         alternatives: [
             { name: "GPIO69", muxValue: "0", note: "Safe for input use only. Configure the GPIO as an input.", severity: "Warning" },
             { name: "EMIF1_D15", muxValue: "2", note: "Do not use this option.", severity: "Alert" },
@@ -1334,7 +1334,7 @@ const connectorPins = [
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-26",
         function: "GPIO58",
-        muxRegister: "TBD",
+        muxRegister: "GPBGMUX2 / GPBMUX2",
         alternatives: [
             { name: "GPIO58", muxValue: "0", note: "Safe to use.", severity: "Info" },
             { name: "SPIA_PICO", muxValue: "1", note: "Safe to use.", severity: "Info" },
@@ -1363,7 +1363,7 @@ const connectorPins = [
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-25",
         function: "GPIO59",
-        muxRegister: "TBD",
+        muxRegister: "GPBGMUX2 / GPBMUX2",
         alternatives: [
             { name: "GPIO59", muxValue: "0", note: "Safe to use.", severity: "Info" },
             { name: "EPWM5A", muxValue: "1", note: "Safe to use.", severity: "Info" },
@@ -1393,7 +1393,7 @@ const connectorPins = [
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-24",
         function: "GPIO60",
-        muxRegister: "TBD",
+        muxRegister: "GPBGMUX2 / GPBMUX2",
         alternatives: [
             { name: "GPIO60", muxValue: "0", note: "Safe to use.", severity: "Info" },
             { name: "EPWM3B", muxValue: "1", note: "Safe to use.", severity: "Info" },
@@ -1479,7 +1479,7 @@ const connectorPins = [
         signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DO-0",
         function: "GPIO41",
-        muxRegister: "TBD",
+        muxRegister: "GPBGMUX1 / GPBMUX1",
         alternatives: [
             { name: "GPIO41", muxValue: "0", note: "Safe for input use only. Configure the GPIO as an input.", severity: "Warning" },
             { name: "EMIF1_A3", muxValue: "2", note: "Do not use this option.", severity: "Alert" },
@@ -1537,17 +1537,22 @@ const connectorPins = [
     {
         connector: "J3",
         connectorPin: 30,
-        dspSignal: "A1",
-        dspPhysicalPin: "TBD",
+        dspSignal: "A0/A12/B12/C12",
+        dspPhysicalPin: "25",
         pleximDirection: "Output", // smer z pohľadu PLEXIM
         dspDirection: "Input",   // smer z pohľadu DSP/MCU
         signalType: "Analog",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "AO-7",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "ADC",
+        muxRegister: "None",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+             { name: "ADC", muxValue: "0",note: "Safe to use.", severity: "Info" },
+             { name: "CMP1_HP1", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP1_LP1", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP9_HN0", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP9_LN0", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "DACA_OUT", muxValue: "1" , note: "Do not use this function.", severity: "Alert"},
+             { name: "AIO227", muxValue: "1" , note: "Do not use this function.", severity: "Alert"}
         ],
         info: "",
         warning: "",
@@ -1556,17 +1561,21 @@ const connectorPins = [
     {
         connector: "J3",
         connectorPin: 29,
-        dspSignal: "A1",
-        dspPhysicalPin: "TBD",
+        dspSignal: "A1/B19",
+        dspPhysicalPin: "24",
         pleximDirection: "Output", // smer z pohľadu PLEXIM
         dspDirection: "Input",   // smer z pohľadu DSP/MCU
         signalType: "Analog",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "AO-6",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "ADC",
+        muxRegister: "None",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+             { name: "ADC", muxValue: "0",note: "Safe to use.", severity: "Info" },
+             { name: "CMP1_HN1", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP1_HP2", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP1_LN1", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP1_LP2", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "AIO228", muxValue: "1" , note: "Do not use this function.", severity: "Alert"}
         ],
         info: "",
         warning: "",
@@ -1575,17 +1584,21 @@ const connectorPins = [
     {
         connector: "J3",
         connectorPin: 28,
-        dspSignal: "A2",
-        dspPhysicalPin: "TBD",
+        dspSignal: "A2/B20",
+        dspPhysicalPin: "23",
         pleximDirection: "Output", // smer z pohľadu PLEXIM
         dspDirection: "Input",   // smer z pohľadu DSP/MCU
         signalType: "Analog",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "AO-5",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "ADC",
+        muxRegister: "None",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+             { name: "ADC", muxValue: "0",note: "Safe to use.", severity: "Info" },
+             { name: "CMP1_HP0", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP1_LP0", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP2_HN1", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP2_LN1", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "AIO229", muxValue: "1" , note: "Do not use this function.", severity: "Alert"}
         ],
         info: "",
         warning: "",
@@ -1595,16 +1608,19 @@ const connectorPins = [
         connector: "J3",
         connectorPin: 27,
         dspSignal: "A3",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "22",
         pleximDirection: "Output", // smer z pohľadu PLEXIM
         dspDirection: "Input",   // smer z pohľadu DSP/MCU
         signalType: "Analog",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "AO-4",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "ADC",
+        muxRegister: "None",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+             { name: "ADC", muxValue: "0",note: "Safe to use.", severity: "Info" },
+             { name: "CMP1_HN0", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP1_HP3", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP1_LN0", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "AIO230", muxValue: "1" , note: "Do not use this function.", severity: "Alert"}
         ],
         info: "",
         warning: "",
@@ -1614,16 +1630,20 @@ const connectorPins = [
         connector: "J3",
         connectorPin: 26,
         dspSignal: "C4",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "13",
         pleximDirection: "Output", // smer z pohľadu PLEXIM
         dspDirection: "Input",   // smer z pohľadu DSP/MCU
         signalType: "Analog",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "AO-3",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "ADC",
+        muxRegister: "None",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+             { name: "ADC", muxValue: "0",note: "Safe to use.", severity: "Info" },
+             { name: "CMP5_HP0", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP5_LP0", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP10_HN1", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP10_LN1", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "GPIO205", muxValue: "1" , note: "Do not use this function.", severity: "Alert"}
         ],
         info: "",
         warning: "",
@@ -1633,16 +1653,19 @@ const connectorPins = [
         connector: "J3",
         connectorPin: 25,
         dspSignal: "C5",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "12",
         pleximDirection: "Output", // smer z pohľadu PLEXIM
         dspDirection: "Input",   // smer z pohľadu DSP/MCU
         signalType: "Analog",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "AO-2",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "ADC",
+        muxRegister: "None",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+             { name: "ADC", muxValue: "0",note: "Safe to use.", severity: "Info" },
+             { name: "CMP2_LP3", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP5_HN0", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "CMP5_LN0", muxValue: "1",note: "Safe to use.", severity: "Info" },
+             { name: "GPIO204", muxValue: "1" , note: "Do not use this function.", severity: "Alert"}
         ],
         info: "",
         warning: "",
@@ -1804,16 +1827,23 @@ const connectorPins = [
         connector: "J8",
         connectorPin: 75,
         dspSignal: "GPIO90",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "97",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-21",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EPWM15B",
+        muxRegister: "GPCGMUX2 / GPCMUX2",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO90", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM15B", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_A17", muxValue: "2", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_DQM2", muxValue: "3", note: "Safe to use.", severity: "Info" },
+            { name: "SD1_C3", muxValue: "7", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "EMIF1_RAS", muxValue: "9", note: "Safe to use.", severity: "Info" },
+            { name: "SD4_C1", muxValue: "13", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "ESC0_TX0_DATA3", muxValue: "14", note: "Safe to use.", severity: "Info" },
+            { name: "SPID_CLK", muxValue: "15", note: "Safe to use.", severity: "Info" }
         ],
         info: "",
         warning: "",
@@ -1823,16 +1853,21 @@ const connectorPins = [
         connector: "J8",
         connectorPin: 76,
         dspSignal: "GPIO0",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "89",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-20",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EPWM1A",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO0", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM1A", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "CLB_OUTPUTXBAR1", muxValue: "5", note: "Safe to use.", severity: "Info" },
+            { name: "I2CA_SDA", muxValue: "6", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_A13", muxValue: "9", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_GPI0", muxValue: "10", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "FSITXA_D0", muxValue: "13", note: "Safe to use.", severity: "Info" }
         ],
         info: "",
         warning: "",
@@ -1842,16 +1877,21 @@ const connectorPins = [
         connector: "J8",
         connectorPin: 77,
         dspSignal: "GPIO1",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "90",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-19",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EPWM1B",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO1", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM1B", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "CLB_OUTPUTXBAR2", muxValue: "5", note: "Safe to use.", severity: "Info" },
+            { name: "I2CA_SCL", muxValue: "6", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_A14", muxValue: "9", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_GPI1", muxValue: "10", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "FSITXA_D1", muxValue: "13", note: "Safe to use.", severity: "Info" }
         ],
         info: "",
         warning: "",
@@ -1861,16 +1901,22 @@ const connectorPins = [
         connector: "J8",
         connectorPin: 78,
         dspSignal: "GPIO2",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "91",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-18",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EPWM2A",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO2", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM2A", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "OUTPUTXBAR1", muxValue: "5", note: "Safe to use.", severity: "Info" },
+            { name: "I2CB_SDA", muxValue: "6", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "UARTA_TX", muxValue: "7", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_A15", muxValue: "9", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_GPI2", muxValue: "10", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "FSITXA_CLK", muxValue: "13", note: "Safe to use.", severity: "Info" }
         ],
         info: "",
         warning: "",
@@ -1880,16 +1926,21 @@ const connectorPins = [
         connector: "J8",
         connectorPin: 79,
         dspSignal: "GPIO3",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "92",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-17",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EPWM2B",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO3", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM2B", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "OUTPUTXBAR2", muxValue: "5", note: "Safe to use.", severity: "Info" },
+            { name: "I2CB_SCL", muxValue: "6", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "UARTA_RX", muxValue: "7", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_GPI3", muxValue: "10", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "FSIRXA_D0", muxValue: "13", note: "Not useful – RTBOX side is also an input.", severity: "Warning" }
         ],
         info: "",
         warning: "",
@@ -1899,16 +1950,21 @@ const connectorPins = [
         connector: "J8",
         connectorPin: 80,
         dspSignal: "GPIO4",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "93",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-16",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EPWM3A",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO4", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM3A", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "OUTPUTXBAR3", muxValue: "5", note: "Safe to use.", severity: "Info" },
+            { name: "CANA_TX", muxValue: "6", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "MCANA_TX", muxValue: "9", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "ESC_GPI4", muxValue: "10", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "FSIRXA_D1", muxValue: "13", note: "Not useful – RTBOX side is also an input.", severity: "Warning" }
         ],
         info: "",
         warning: "",
@@ -1918,16 +1974,21 @@ const connectorPins = [
         connector: "J6",
         connectorPin: 51,
         dspSignal: "GPIO47",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "72",
         pleximDirection: "Output", // smer z pohľadu PLEXIM
         dspDirection: "Input",   // smer z pohľadu DSP/MCU
         signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DO-24",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "GPIO47",
+        muxRegister: "GPBGMUX1 / GPBMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO47", muxValue: "0", note: "Safe for input use only. Configure the GPIO as an input.", severity: "Warning" },
+            { name: "EPWM4B", muxValue: "1", note: "Do not use this option.", severity: "Alert" },
+            { name: "EMIF1_A7", muxValue: "2", note: "Do not use this option.", severity: "Alert" },
+            { name: "EPWM14B", muxValue: "3", note: "Do not use this option.", severity: "Alert" },
+            { name: "SCIA_TX", muxValue: "6", note: "Do not use this option.", severity: "Alert" },
+            { name: "SD4_C3", muxValue: "7", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_MDIO_DATA", muxValue: "14", note: "Do not use this option.", severity: "Alert" }
         ],
         info: "",
         warning: "This pin must be configured as a DSP input.",
@@ -1937,16 +1998,25 @@ const connectorPins = [
         connector: "J6",
         connectorPin: 52,
         dspSignal: "GPIO70",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "76",
         pleximDirection: "Output", // smer z pohľadu PLEXIM
         dspDirection: "Input",   // smer z pohľadu DSP/MCU
         signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DO-23",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "GPIO70",
+        muxRegister: "GPCGMUX1 / GPCMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO70", muxValue: "0", note: "Safe for input use only. Configure the GPIO as an input.", severity: "Warning" },
+            { name: "EMIF1_D14", muxValue: "2", note: "Do not use this option.", severity: "Alert" },
+            { name: "EPWM11B", muxValue: "3", note: "Do not use this option.", severity: "Alert" },
+            { name: "CANA_RX", muxValue: "5", note: "Do not use this option.", severity: "Alert" },
+            { name: "SCIB_TX", muxValue: "6", note: "Do not use this option.", severity: "Alert" },
+            { name: "UARTB_TX", muxValue: "7", note: "Do not use this option.", severity: "Alert" },
+            { name: "MCANA_RX", muxValue: "9", note: "Safe to use.", severity: "Info" },
+            { name: "FSIRXB_D0", muxValue: "11", note: "Safe to use.", severity: "Info" },
+            { name: "SD1_C4", muxValue: "13", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_RX1_DV", muxValue: "14", note: "Safe to use.", severity: "Info" },
+            { name: "SPIC_POCI", muxValue: "15", note: "Do not use this option.", severity: "Alert" }
         ],
         info: "",
         warning: "This pin must be configured as a DSP input.",
@@ -1956,16 +2026,24 @@ const connectorPins = [
         connector: "J6",
         connectorPin: 53,
         dspSignal: "GPIO71",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "77",
         pleximDirection: "Output", // smer z pohľadu PLEXIM
         dspDirection: "Input",   // smer z pohľadu DSP/MCU
         signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DO-22",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "GPIO71",
+        muxRegister: "GPCGMUX1 / GPCMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO71", muxValue: "0", note: "Safe for input use only. Configure the GPIO as an input.", severity: "Warning" },
+            { name: "EMIF1_D13", muxValue: "2", note: "Do not use this option.", severity: "Alert" },
+            { name: "EPWM12A", muxValue: "3", note: "Do not use this option.", severity: "Alert" },
+            { name: "CANA_TX", muxValue: "5", note: "Do not use this option.", severity: "Alert" },
+            { name: "SCIB_RX", muxValue: "6", note: "Safe to use.", severity: "Info" },
+            { name: "UARTB_RX", muxValue: "7", note: "Do not use this option.", severity: "Alert" },
+            { name: "MCANA_TX", muxValue: "9", note: "Do not use this option.", severity: "Alert" },
+            { name: "SD3_D1", muxValue: "13", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_RX1_ERR", muxValue: "14", note: "Safe to use.", severity: "Info" },
+            { name: "SPIC_CLK", muxValue: "15", note: "Do not use this option.", severity: "Alert" }
         ],
         info: "",
         warning: "This pin must be configured as a DSP input.",
@@ -1975,16 +2053,25 @@ const connectorPins = [
         connector: "J6",
         connectorPin: 54,
         dspSignal: "GPIO73",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "81",
         pleximDirection: "Output", // smer z pohľadu PLEXIM
         dspDirection: "Input",   // smer z pohľadu DSP/MCU
         signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DO-21",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "GPIO73",
+        muxRegister: "GPCGMUX1 / GPCMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO73", muxValue: "0", note: "Safe for input use only. Configure the GPIO as an input.", severity: "Warning" },
+            { name: "EQEP6_INDEX", muxValue: "1", note: "Do not use this option.", severity: "Alert" },
+            { name: "EMIF1_D11", muxValue: "2", note: "Do not use this option.", severity: "Alert" },
+            { name: "XCLKOUT", muxValue: "3", note: "Do not use this option.", severity: "Alert" },
+            { name: "OUTPUTXBAR6", muxValue: "5", note: "Do not use this option.", severity: "Alert" },
+            { name: "UARTA_RX", muxValue: "6", note: "Do not use this option.", severity: "Alert" },
+            { name: "EPWM5B", muxValue: "7", note: "Do not use this option.", severity: "Alert" },
+            { name: "MCANB_TX", muxValue: "9", note: "Do not use this option.", severity: "Alert" },
+            { name: "SD4_D4", muxValue: "10", note: "Safe to use.", severity: "Info" },
+            { name: "SD2_D2", muxValue: "13", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_TX1_DATA2", muxValue: "14", note: "Do not use this option.", severity: "Alert" },
         ],
         info: "",
         warning: "This pin must be configured as a DSP input.",
@@ -1994,16 +2081,22 @@ const connectorPins = [
         connector: "J6",
         connectorPin: 55,
         dspSignal: "GPIO78",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "82",
         pleximDirection: "Output", // smer z pohľadu PLEXIM
         dspDirection: "Input",   // smer z pohľadu DSP/MCU
         signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DO-20",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "GPIO78",
+        muxRegister: "GPCGMUX1 / GPCMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO78", muxValue: "0", note: "Safe for input use only. Configure the GPIO as an input.", severity: "Warning" },
+            { name: "EPWM10A", muxValue: "1", note: "Do not use this option.", severity: "Alert" },
+            { name: "EMIF1_D6", muxValue: "2", note: "Do not use this option.", severity: "Alert" },
+            { name: "EQEP2A", muxValue: "6", note: "Safe to use.", severity: "Info" },
+            { name: "SD3_C2", muxValue: "7", note: "Safe to use.", severity: "Info" },
+            { name: "SD4_D4", muxValue: "10", note: "Safe to use.", severity: "Info" },
+            { name: "SD2_C4", muxValue: "13", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_RX0_DV", muxValue: "14", note: "Safe to use.", severity: "Info" },
         ],
         info: "",
         warning: "This pin must be configured as a DSP input.",
@@ -2051,16 +2144,26 @@ const connectorPins = [
         connector: "J6",
         connectorPin: 58,
         dspSignal: "GPIO25",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "84",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-23",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EPWM13B",
+        muxRegister: "GPAGMUX2 / GPAMUX2",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO25", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "OUTPUTXBAR2", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "EQEP2B", muxValue: "2", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "LINB_RX", muxValue: "5", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "SPIB_POCI", muxValue: "6", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "SD2_C1", muxValue: "7", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "PMBUSA_SDA", muxValue: "9", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "EMIF1_DQM1", muxValue: "10", note: "Safe to use.", severity: "Info" },
+            { name: "EQEP5B", muxValue: "11", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "EPWM13B", muxValue: "13", note: "Safe to use.", severity: "Info" },
+            { name: "FSITXA_D1", muxValue: "14", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_RX0_DV", muxValue: "15", note: "Not useful – RTBOX side is also an input.", severity: "Warning" }
         ],
         info: "",
         warning: "",
@@ -2070,16 +2173,24 @@ const connectorPins = [
         connector: "J6",
         connectorPin: 59,
         dspSignal: "GPIO85",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "86",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-22",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EPWM13A",
+        muxRegister: "GPCGMUX2 / GPCMUX2",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO85", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM13A", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_D0", muxValue: "2", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "SCIA_RX", muxValue: "5", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "EQEP6B", muxValue: "6", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "SD3_D1", muxValue: "7", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "UARTA_RX", muxValue: "11", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "SD3_D3", muxValue: "13", note: "Not useful – RTBOX side is also an input", severity: "Warning" },
+            { name: "ESC_TX0_CLK", muxValue: "14", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "EMIF1_DQM2", muxValue: "15", note: "Safe to use.", severity: "Info" },
         ],
         info: "",
         warning: "",
@@ -2146,16 +2257,24 @@ const connectorPins = [
         connector: "J4",
         connectorPin: 33,
         dspSignal: "GPIO64",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "59",
         pleximDirection: "Output", // smer z pohľadu PLEXIM
         dspDirection: "Input",   // smer z pohľadu DSP/MCU
         signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DO-5",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EQEP3_STROBE",
+        muxRegister: "GPCGMUX1 / GPCMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO64", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_D20", muxValue: "2", note: "Do not use this option.", severity: "Alert" },
+            { name: "EPWM9B", muxValue: "3", note: "Do not use this option.", severity: "Alert" },
+            { name: "EQEP3_STROBE", muxValue: "5", note: "Safe to use.", severity: "Info" },
+            { name: "SCIA_RX", muxValue: "6", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_WAIT", muxValue: "9", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_BA1", muxValue: "10", note: "Do not use this option.", severity: "Alert" },
+            { name: "SD1_C1", muxValue: "13", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_RX1_DATA1", muxValue: "14", note: "Safe to use.", severity: "Info" },
+            { name: "SPIB_POCI", muxValue: "15", note: "Do not use this option.", severity: "Alert" },
         ],
         info: "",
         warning: "This pin must be configured as a DSP input.",
@@ -2165,16 +2284,24 @@ const connectorPins = [
         connector: "J4",
         connectorPin: 34,
         dspSignal: "GPIO65",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "60",
         pleximDirection: "Output", // smer z pohľadu PLEXIM
         dspDirection: "Input",   // smer z pohľadu DSP/MCU
         signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DO-4",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EQEP3_INDEX",
+        muxRegister: "GPCGMUX1 / GPCMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO65", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_D19", muxValue: "2", note: "Do not use this option.", severity: "Alert" },
+            { name: "EPWM10A", muxValue: "3", note: "Do not use this option.", severity: "Alert" },
+            { name: "EQEP3_INDEX", muxValue: "5", note: "Safe to use.", severity: "Info" },
+            { name: "SCIA_TX", muxValue: "6", note: "Do not use this option.", severity: "Alert" },
+            { name: "EMIF1_WEn", muxValue: "9", note: "Do not use this option.", severity: "Alert" },
+            { name: "FSITXB_CLK", muxValue: "11", note: "Do not use this option.", severity: "Alert" },
+            { name: "SD1_D2", muxValue: "13", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_RX1_DATA2", muxValue: "14", note: "Safe to use.", severity: "Info" },
+            { name: "SPIB_CLK", muxValue: "15", note: "Do not use this option.", severity: "Alert" },
         ],
         info: "",
         warning: "This pin must be configured as a DSP input.",
@@ -2184,16 +2311,27 @@ const connectorPins = [
         connector: "J4",
         connectorPin: 35,
         dspSignal: "GPIO10",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "100",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-5",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EPWM6A",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO10", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM6A", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_CAS", muxValue: "2", note: "Safe to use.", severity: "Info" },
+            { name: "ADCSOCBO", muxValue: "3", note: "Safe to use.", severity: "Info" },
+            { name: "EQEP1A", muxValue: "5", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "SCIB_TX", muxValue: "6", note: "Safe to use.", severity: "Info" },
+            { name: "SD4_C1", muxValue: "7", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "MCANA_RX", muxValue: "9", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "CLB_OUTPUTXBAR5", muxValue: "10", note: "Safe to use", severity: "Info" },
+            { name: "ESC_TX0_DATA0", muxValue: "11", note: "Safe to use.", severity: "Info" },
+            { name: "FSIRXB_D1", muxValue: "13", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "FSITXA_CLK", muxValue: "14", note: "Safe to use.", severity: "Info" },
+            { name: "FSIRXA_D1", muxValue: "15", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
         ],
         info: "",
         warning: "",
@@ -2203,16 +2341,25 @@ const connectorPins = [
         connector: "J4",
         connectorPin: 36,
         dspSignal: "GPIO11",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "1",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-4",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EPWM6B",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO11", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM6B", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "SCIB_RX", muxValue: "2", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "OUTPUTXBAR7", muxValue: "3", note: "Safe to use.", severity: "Info" },
+            { name: "EQEP1B", muxValue: "5", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "SD4_D1", muxValue: "7", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "ESC_GPO3", muxValue: "10", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_TX0_DATA1", muxValue: "11", note: "Safe to use", severity: "Info" },
+            { name: "FSIRXB_CLK", muxValue: "13", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "FSIRXA_D1", muxValue: "14", note: "Safe to use.", severity: "Info" },
+            { name: "PMBUSA_ALERT", muxValue: "15", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
         ],
         info: "",
         warning: "",
@@ -2222,16 +2369,27 @@ const connectorPins = [
         connector: "J4",
         connectorPin: 37,
         dspSignal: "GPIO12",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "3",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-3",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EPWM7A",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO12", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM7A", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "CLB_OUTPUTXBAR6", muxValue: "2", note: "Safe to use.", severity: "Info" },
+            { name: "ADCSOCAO", muxValue: "3", note: "Safe to use.", severity: "Info" },
+            { name: "EQEP1_STROBE", muxValue: "5", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "SCIA_TX", muxValue: "6", note: "Safe to use.", severity: "Info" },
+            { name: "SD4_C2", muxValue: "7", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "EMIF1_A1", muxValue: "9", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_GPO4", muxValue: "10", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_TX0_DATA2", muxValue: "11", note: "Safe to use.", severity: "Info" },
+            { name: "FSIRXC_D0", muxValue: "13", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "FSIRXA_D0", muxValue: "14", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "PMBUSA_CTL", muxValue: "15", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
         ],
         info: "",
         warning: "",
@@ -2241,16 +2399,27 @@ const connectorPins = [
         connector: "J4",
         connectorPin: 38,
         dspSignal: "GPIO13",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "4",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-2",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EPWM7B",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO13", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM7B", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "CLB_OUTPUTXBAR7", muxValue: "2", note: "Safe to use.", severity: "Info" },
+            { name: "EQEP5_STROBE", muxValue: "3", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "EQEP1_INDEX", muxValue: "5", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "SCIA_RX", muxValue: "6", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "SD4_D2", muxValue: "7", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "EMIF1_CS0n", muxValue: "9", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_GPO5", muxValue: "10", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_TX0_DATA3", muxValue: "11", note: "Safe to use.", severity: "Info" },
+            { name: "FSIRXC_D1", muxValue: "13", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "FSIRXA_CLK", muxValue: "14", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "PMBUSA_SDA", muxValue: "15", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
         ],
         info: "",
         warning: "",
@@ -2260,16 +2429,26 @@ const connectorPins = [
         connector: "J4",
         connectorPin: 39,
         dspSignal: "GPIO14",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "5",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-1",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EPWM8A",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO14", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM8A", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "SCIB_TX", muxValue: "2", note: "Safe to use.", severity: "Info" },
+            { name: "EQEP5_INDEX", muxValue: "3", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "LINA_TX", muxValue: "5", note: "Safe to use.", severity: "Info" },
+            { name: "OUTPUTXBAR3", muxValue: "6", note: "Safe to use.", severity: "Info" },
+            { name: "OUTPUTXBAR8", muxValue: "7", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_GPO6", muxValue: "10", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_PHY1_LINKSTATUS", muxValue: "11", note: "Not useful – RTBOX side is also an input.", severity: "Info" },
+            { name: "FSIRXC_CLK", muxValue: "13", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "EMIF1_D17", muxValue: "14", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "PMBUSA_SCL", muxValue: "15", note: "Not useful – RTBOX side is also an input.", severity: "Warning" }
         ],
         info: "",
         warning: "",
@@ -2279,16 +2458,24 @@ const connectorPins = [
         connector: "J4",
         connectorPin: 40,
         dspSignal: "GPIO15",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "6",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-0",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EPWM8B",
+        muxRegister: "GPAGMUX1 / GPAMUX1",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO15", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM8B", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "SCIB_RX", muxValue: "2", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "LINA_RX", muxValue: "5", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "OUTPUTXBAR4", muxValue: "6", note: "Safe to use.", severity: "Info" },
+            { name: "CLB_OUTPUTXBAR8", muxValue: "7", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_GPO7", muxValue: "10", note: "Safe to use.", severity: "Info" },
+            { name: "EQEP5A", muxValue: "11", note: "Not useful – RTBOX side is also an input.", severity: "Info" },
+            { name: "FSIRXD_D0", muxValue: "13", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "EMIF1_DQM2", muxValue: "15", note: "Not useful – RTBOX side is also an input.", severity: "Warning" }
         ],
         info: "",
         warning: "",
@@ -2298,16 +2485,24 @@ const connectorPins = [
         connector: "J2",
         connectorPin: 11,
         dspSignal: "GPIO62",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "57",
         pleximDirection: "Output", // smer z pohľadu PLEXIM
         dspDirection: "Input",   // smer z pohľadu DSP/MCU
         signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DO-3",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EQEP3_A",
+        muxRegister: "GPBGMUX2 / GPBMUX2",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO62", muxValue: "0", note: "Safe for input use only. Configure the GPIO as an input.", severity: "Warning" },
+            { name: "SCIA_RX", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_D22", muxValue: "2", note: "Do not use this option.", severity: "Alert" },
+            { name: "ESC_MDIO_CLK", muxValue: "3", note: "Do not use this option.", severity: "Alert" },
+            { name: "EQEP3_A", muxValue: "5", note: "Safe to use.", severity: "Info" },
+            { name: "CANA_RX", muxValue: "6", note: "Safe to use.", severity: "Info" },
+            { name: "SD2_D4", muxValue: "7", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_D7", muxValue: "9", note: "Do not use this option.", severity: "Alert" },
+            { name: "ESC_LED_STATE_RUN", muxValue: "10", note: "Do not use this option.", severity: "Alert" },
+            { name: "CANA_TX", muxValue: "14", note: "Do not use this option.", severity: "Alert" }
         ],
         info: "",
         warning: "This pin must be configured as a DSP input.",
@@ -2317,16 +2512,26 @@ const connectorPins = [
         connector: "J2",
         connectorPin: 12,
         dspSignal: "GPIO63",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "58",
         pleximDirection: "Output", // smer z pohľadu PLEXIM
         dspDirection: "Input",   // smer z pohľadu DSP/MCU
         signalType: "Output",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DO-7",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "EQEP3_B",
+        muxRegister: "GPBGMUX2 / GPBMUX2",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO63", muxValue: "0", note: "Safe for input use only. Configure the GPIO as an input.", severity: "Warning" },
+            { name: "SCIA_TX", muxValue: "1", note: "Do not use this option.", severity: "Alert" },
+            { name: "EMIF1_D22", muxValue: "2", note: "Do not use this option.", severity: "Alert" },
+            { name: "EPWM9A", muxValue: "3", note: "Do not use this option.", severity: "Alert" },
+            { name: "EQEP3_B", muxValue: "5", note: "Safe to use.", severity: "Info" },
+            { name: "CANA_TX", muxValue: "6", note: "Do not use this option.", severity: "Alert" },
+            { name: "SD2_C4", muxValue: "7", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_RNW", muxValue: "9", note: "Do not use this option.", severity: "Alert" },
+            { name: "EMIF1_BA0", muxValue: "10", note: "Do not use this option.", severity: "Alert" },
+            { name: "SD1_D1", muxValue: "13", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_RX1_DATA0", muxValue: "14", note: "Safe to use.", severity: "Info" },
+            { name: "SPIB_PICO", muxValue: "15", note: "Do not use this option.", severity: "Alert" }
         ],
         info: "",
         warning: "This pin must be configured as a DSP input.",
@@ -2374,16 +2579,25 @@ const connectorPins = [
         connector: "J2",
         connectorPin: 15,
         dspSignal: "GPIO61",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "56",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-27",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "GPIO61",
+        muxRegister: "GPBGMUX2 / GPBMUX2",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO61", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM17B", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_D23", muxValue: "2", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_LATCH1", muxValue: "3", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "OUTPUTXBAR4", muxValue: "5", note: "Safe to use.", severity: "Info" },
+            { name: "SPIB_POCI", muxValue: "6", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "SD2_C3", muxValue: "7", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "EMIF1_D6", muxValue: "9", note: "Safe to use.", severity: "Info" },
+            { name: "ESC_LED_RUN", muxValue: "10", note: "Safe to use.", severity: "Info" },
+            { name: "CANA_RX", muxValue: "14", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "SPIA_PTE", muxValue: "15", note: "Not useful – RTBOX side is also an input.", severity: "Warning" }
         ],
         info: "",
         warning: "",
@@ -2431,16 +2645,24 @@ const connectorPins = [
         connector: "J2",
         connectorPin: 18,
         dspSignal: "GPIO91",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "98",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-7",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "GPIO91",
+        muxRegister: "GPCGMUX2 / GPCMUX2",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO91", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM16A", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_A18", muxValue: "2", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_DQM3", muxValue: "3", note: "Safe to use.", severity: "Info" },
+            { name: "I2CA_SDA", muxValue: "6", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "SD4_D2", muxValue: "7", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "EMIF1_DQM2", muxValue: "9", note: "Safe to use.", severity: "Info" },
+            { name: "PMBUSA_SCL", muxValue: "10", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "CLB_OUTPUTXBAR1", muxValue: "14", note: "Safe to use.", severity: "Info" },
+            { name: "SPID_PICO", muxValue: "15", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
         ],
         info: "",
         warning: "",
@@ -2450,16 +2672,25 @@ const connectorPins = [
         connector: "J2",
         connectorPin: 19,
         dspSignal: "GPIO92",
-        dspPhysicalPin: "TBD",
+        dspPhysicalPin: "99",
         pleximDirection: "Input", // smer z pohľadu PLEXIM
         dspDirection: "Output",   // smer z pohľadu DSP/MCU
         signalType: "Input",      // Input, Output, GND, Power, Analog alebo Not Connected
         pleximSignal: "DI-6",
-        function: "TBD",
-        muxRegister: "TBD",
+        function: "GPIO92",
+        muxRegister: "GPCGMUX2 / GPCMUX2",
         alternatives: [
-            // { name: "GPIO4", muxValue: "0" },
-            // { name: "ePWM3A", muxValue: "1" }
+            { name: "GPIO92", muxValue: "0", note: "Safe to use.", severity: "Info" },
+            { name: "EPWM16B", muxValue: "1", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_A19", muxValue: "2", note: "Safe to use.", severity: "Info" },
+            { name: "EMIF1_BA1", muxValue: "3", note: "Safe to use.", severity: "Info" },
+            { name: "I2CA_SCL", muxValue: "6", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "SD4_C2", muxValue: "7", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "EMIF1_DQM0", muxValue: "9", note: "Safe to use.", severity: "Info" },
+            { name: "PMBUSA_SDA", muxValue: "10", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "FSIRXD_CLK", muxValue: "11", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
+            { name: "CLB_OUTPUTXBAR2", muxValue: "14", note: "Safe to use.", severity: "Info" },
+            { name: "SPID_POCI", muxValue: "15", note: "Not useful – RTBOX side is also an input.", severity: "Warning" },
         ],
         info: "",
         warning: "",
