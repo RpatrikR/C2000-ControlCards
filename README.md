@@ -4,7 +4,6 @@ Documentation and hardware resources for a family of TI C2000-based control card
 
 ## Supported Boards
 
-- PCIe x16 *(available)*
 - M.2 *(available)*
 
 ## Documentation
